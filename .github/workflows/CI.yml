@@ -1,0 +1,34 @@
+name: CI
+on:
+  pull_request:
+    branches: main
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - ubuntu-latest
+        python-version:
+        - '3.10'
+        - '3.11'
+        - '3.12'
+    runs-on: ${{ matrix.os }}
+    container: mrbuche/exodus
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: install and test
+      run: |
+        python -m venv venv
+        . venv/bin/activate
+        pip install .[cpu,test]
+        JAX_ENABLE_X64=true pytest test --cov=pancax
+    # - name: test-exodus
+    #   run: |
+    #     python -c 'import exodus3 as exodus'
+    # - name: pytest
+    #   run: pytest test --cov=pancax

@@ -1,0 +1,53 @@
+[project]
+name = 'pancax'
+version = '0.0.2'
+authors = [
+  {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
+]
+dependencies = [
+  'matplotlib',
+  'netCDF4',
+  'pandas',
+  'scipy'
+]
+
+[project.optional-dependencies]
+cpu = [
+  'chex',
+  'equinox',
+  'jax==0.4.33',
+  'jaxtyping',
+  'optax'
+]
+cuda = [
+  'chex',
+  'equinox',
+  'jax[cuda12]==0.4.33',
+  'jaxtyping',
+  'optax'
+]
+docs = [
+  'sphinx',
+  'sphinx-copybutton',
+  'sphinx-rtd-theme',
+  'sphinxcontrib-bibtex',
+  'sphinxcontrib-napoleon'
+]
+test = [
+    'pytest',
+    'pytest-cov',
+]
+
+[tool.setuptools]
+packages = [
+  'pancax'
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no coverage",
+  "if __name__ == '__main__'",
+  "def main",
+  "def __repr__",
+  "pass"
+]
