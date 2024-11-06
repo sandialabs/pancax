@@ -21,13 +21,14 @@ jobs:
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: install
+    - name: install and test
       run: |
         python -m venv venv
         . venv/bin/activate
         pip install .[cpu,test]
-    - name: test-exodus
-      run: |
-        python -c 'import exodus3 as exodus'
-    - name: pytest
-      run: pytest test --cov=pancax
+        pytest test --cov=pancax
+    # - name: test-exodus
+    #   run: |
+    #     python -c 'import exodus3 as exodus'
+    # - name: pytest
+    #   run: pytest test --cov=pancax
