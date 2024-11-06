@@ -15,7 +15,7 @@ dependencies = [
 cpu = [
   'chex',
   'equinox',
-  'jax[cpu]==0.4.33',
+  'jax==0.4.33',
   'jaxtyping',
   'optax'
 ]
