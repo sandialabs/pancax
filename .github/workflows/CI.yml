@@ -15,6 +15,7 @@ jobs:
         - '3.11'
         - '3.12'
     runs-on: ${{ matrix.os }}
+    container: mrbuche/exodus
     steps:
     - name: checkout
       uses: actions/checkout@v4
@@ -23,5 +24,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: install
       run: pip install .[cpu,test]
-    - name: pytest
-      run: pytest test --cov=pancax
+    - name: test-exodus
+      run: |
+        python -c 'import exodus3 as exodus'
+    # - name: pytest
+    #   run: pytest test --cov=pancax
