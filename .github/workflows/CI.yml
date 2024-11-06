@@ -26,7 +26,7 @@ jobs:
         python -m venv venv
         . venv/bin/activate
         pip install .[cpu,test]
-        pytest test --cov=pancax
+        JAX_ENABLE_X64=true pytest test --cov=pancax
     # - name: test-exodus
     #   run: |
     #     python -c 'import exodus3 as exodus'
