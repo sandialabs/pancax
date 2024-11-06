@@ -30,4 +30,4 @@ jobs:
       run: |
         python -c 'import exodus3 as exodus'
     - name: pytest
-      run: pytest test --cov=pancax
+      run: python -m pytest test --cov=pancax
