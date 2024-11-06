@@ -6,4 +6,18 @@
 # Pancax ("PANCAKES")
 Physics augment neural computations in jax
 
+If you leverage these tools for your own research, please cite the following article
+
+
+@article{hamel2023calibrating,
+  title={Calibrating constitutive models with full-field data via physics informed neural networks},
+  author={Hamel, Craig M and Long, Kevin N and Kramer, Sharlotte LB},
+  journal={Strain},
+  volume={59},
+  number={2},
+  pages={e12431},
+  year={2023},
+  publisher={Wiley Online Library}
+}
+
 SCR #3050.0
