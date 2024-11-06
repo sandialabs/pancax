@@ -41,7 +41,7 @@ def create_mesh_and_disp(Nx, Ny, xRange, yRange, initial_disp_func, setNamePostF
     sideSets['bottom'+setNamePostFix] = create_edges(coords, conns, is_edge_on_bottom)
     sideSets['right'+setNamePostFix] = create_edges(coords, conns, is_edge_on_right)
     sideSets['top'+setNamePostFix] = create_edges(coords, conns, is_edge_on_top)
-    
+    print(sideSets)
     allBoundaryEdges = np.vstack([s for s in sideSets.values()])
     sideSets['all_boundary'+setNamePostFix] = allBoundaryEdges
 
