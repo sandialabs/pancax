@@ -23,7 +23,10 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: install
-      run: pip install .[cpu,test]
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install .[cpu,test]
     - name: test-exodus
       run: |
         python -c 'import exodus3 as exodus'
