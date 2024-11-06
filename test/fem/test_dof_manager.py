@@ -37,13 +37,13 @@ def create_mesh_and_disp(Nx, Ny, xRange, yRange, initial_disp_func, setNamePostF
         return np.all( xyOnEdge[:,1] > yRange[1] - tol  )
 
     sideSets = {}
-    sideSets['left'+setNamePostFix] = create_edges(coords, conns, is_edge_on_left)
-    sideSets['bottom'+setNamePostFix] = create_edges(coords, conns, is_edge_on_bottom)
-    sideSets['right'+setNamePostFix] = create_edges(coords, conns, is_edge_on_right)
-    sideSets['top'+setNamePostFix] = create_edges(coords, conns, is_edge_on_top)
-    print(sideSets)
-    allBoundaryEdges = np.vstack([s for s in sideSets.values()])
-    sideSets['all_boundary'+setNamePostFix] = allBoundaryEdges
+    # sideSets['left'+setNamePostFix] = create_edges(coords, conns, is_edge_on_left)
+    # sideSets['bottom'+setNamePostFix] = create_edges(coords, conns, is_edge_on_bottom)
+    # sideSets['right'+setNamePostFix] = create_edges(coords, conns, is_edge_on_right)
+    # sideSets['top'+setNamePostFix] = create_edges(coords, conns, is_edge_on_top)
+    # print(sideSets)
+    # allBoundaryEdges = np.vstack([s for s in sideSets.values()])
+    # sideSets['all_boundary'+setNamePostFix] = allBoundaryEdges
 
     blocks = {'block'+setNamePostFix: np.arange(conns.shape[0])}
     mesh = construct_mesh_from_basic_data(coords, conns, blocks, nodeSets, sideSets)
