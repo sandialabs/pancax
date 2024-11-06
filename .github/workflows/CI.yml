@@ -27,8 +27,8 @@ jobs:
         . venv/bin/activate
         pip install .[cpu,test]
         JAX_ENABLE_X64=true pytest test --cov=pancax
-    # - name: test-exodus
-    #   run: |
-    #     python -c 'import exodus3 as exodus'
-    # - name: pytest
-    #   run: pytest test --cov=pancax
+    - name: codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: .coverage
+        token: ${{ secrets.CODECOV_TOKEN }}
