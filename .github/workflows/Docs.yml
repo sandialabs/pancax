@@ -8,14 +8,14 @@ permissions:
 jobs:
   docs:
     runs-on: ubuntu-latest
-    container: mrbuche/exodus
+    # container: mrbuche/exodus
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
     - name: Install
       run: |
-        python -m venv venv
-        . venv/bin/activate
+        # python -m venv venv
+        # . venv/bin/activate
         pip install .[cpu,docs]
         cd docs
         sphinx-apidoc -o source/ ../pancax -P
