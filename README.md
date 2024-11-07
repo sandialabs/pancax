@@ -6,6 +6,8 @@
 # Pancax ("PANCAKES")
 Physics augment neural computations in jax
 
+![Pancax](https://github.com/sandialabs/pancax/blob/main/assets/pancax.png?raw=true)
+
 If you leverage these tools for your own research, please cite the following article
 
 ```bibtex
