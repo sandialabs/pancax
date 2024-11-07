@@ -1,0 +1,7 @@
+pancax
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   pancax

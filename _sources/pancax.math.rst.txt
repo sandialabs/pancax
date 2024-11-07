@@ -1,0 +1,32 @@
+pancax.math package
+===================
+
+Submodules
+----------
+
+pancax.math.math module
+-----------------------
+
+.. automodule:: pancax.math.math
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.math.tensor\_math module
+-------------------------------
+
+.. automodule:: pancax.math.tensor_math
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.math
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.kinematics &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.kinematics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.kinematics</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">hessian</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jacfwd</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">vmap</span>
+<span class="kn">from</span> <span class="nn">.math.tensor_math</span> <span class="kn">import</span> <span class="n">tensor_2D_to_3D</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+
+
+<span class="c1"># single point methods</span>
+<span class="c1"># def field_value(network, x, t):e</span>
+
+<div class="viewcode-block" id="create_field_methods">
+<a class="viewcode-back" href="../../pancax.html#pancax.kinematics.create_field_methods">[docs]</a>
+<span class="k">def</span> <span class="nf">create_field_methods</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">bc_func</span><span class="p">):</span>
+  <span class="c1"># normalization up front</span>
+  <span class="c1"># TODO currently hard-coded to min-max normalization</span>
+  <span class="c1"># TODO make this selectable</span>
+  <span class="n">x_mins</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">x_maxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+  <span class="c1"># single point methods</span>
+  <span class="k">def</span> <span class="nf">field_value</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="n">x_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_mins</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_maxs</span> <span class="o">-</span> <span class="n">x_mins</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">network</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x_normalized</span><span class="p">,</span> <span class="n">t</span><span class="p">)))</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">bc_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u</span>
+
+  <span class="k">def</span> <span class="nf">field_gradient</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jacfwd</span><span class="p">(</span><span class="n">field_value</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">field_hessian</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hessian</span><span class="p">(</span><span class="n">field_value</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">field_time_derivative</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jacfwd</span><span class="p">(</span><span class="n">field_value</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">network</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">field_value</span><span class="p">,</span> <span class="n">field_gradient</span><span class="p">,</span> <span class="n">field_hessian</span><span class="p">,</span> <span class="n">field_time_derivative</span></div>
+
+  <span class="c1"># all point methods at single time step</span>
+  <span class="c1"># def field_values(network, xs, t):</span>
+  <span class="c1">#   return vmap(field_value, in_axes=(None, 0, None))(network, xs, t)</span>
+  
+  <span class="c1"># def field_gradients(network, xs, t):</span>
+  <span class="c1">#   return vmap(field_gradient, in_axes=(None, 0, None))(network, xs, t)</span>
+
+  <span class="c1"># def field_hessians(network, xs, t):</span>
+  <span class="c1">#   return vmap(field_hessian, in_axes=(None, 0, None))(network, xs, t)</span>
+
+  <span class="c1"># def field_time_derivatives(network, xs, t):</span>
+  <span class="c1">#   return vmap(field_time_derivative, in_axes=(None, 0, None))(network, xs, t)</span>
+
+  <span class="c1"># return field_values, field_gradients, field_hessians, field_time_derivatives</span>
+
+
+<div class="viewcode-block" id="deformation_gradients">
+<a class="viewcode-back" href="../../pancax.html#pancax.kinematics.deformation_gradients">[docs]</a>
+<span class="k">def</span> <span class="nf">deformation_gradients</span><span class="p">(</span><span class="n">grad_us</span><span class="p">,</span> <span class="n">formulation</span><span class="p">):</span>
+  <span class="n">temp</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">tensor_2D_to_3D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">))(</span><span class="n">grad_us</span><span class="p">)</span>
+  <span class="c1"># temp = tensor_2D_to_3D(grad_us) + jnp.eye(3)</span>
+  <span class="n">Fs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">formulation</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">temp</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">Fs</span></div>
+
+
+
+<div class="viewcode-block" id="invariants_old">
+<a class="viewcode-back" href="../../pancax.html#pancax.kinematics.invariants_old">[docs]</a>
+<span class="k">def</span> <span class="nf">invariants_old</span><span class="p">(</span><span class="n">grad_us</span><span class="p">,</span> <span class="n">formulation</span><span class="p">):</span>
+  <span class="n">Fs</span>         <span class="o">=</span> <span class="n">deformation_gradients</span><span class="p">(</span><span class="n">grad_us</span><span class="p">,</span> <span class="n">formulation</span><span class="p">)</span>
+  <span class="n">Cs</span>         <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">F</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">F</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">Fs</span><span class="p">)</span>
+  <span class="n">Cs_squared</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">C</span><span class="p">:</span> <span class="n">C</span> <span class="o">@</span> <span class="n">C</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">Cs</span><span class="p">)</span>
+  <span class="n">I1s</span>        <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">C</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">C</span><span class="p">),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">Cs</span><span class="p">)</span>
+  <span class="n">I2s</span>        <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">I1</span><span class="p">,</span> <span class="n">C_squared</span><span class="p">:</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">I1</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">C_squared</span><span class="p">)),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">I1s</span><span class="p">,</span> <span class="n">Cs_squared</span><span class="p">)</span>
+  <span class="n">I3s</span>        <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">C</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">C</span><span class="p">),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">Cs</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">I1s</span><span class="p">,</span> <span class="n">I2s</span><span class="p">,</span> <span class="n">I3s</span></div>
+
+
+
+<div class="viewcode-block" id="invariants">
+<a class="viewcode-back" href="../../pancax.html#pancax.kinematics.invariants">[docs]</a>
+<span class="k">def</span> <span class="nf">invariants</span><span class="p">(</span><span class="n">grad_u</span><span class="p">):</span>
+  <span class="n">F</span>         <span class="o">=</span> <span class="n">grad_u</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">C</span>         <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">F</span>
+  <span class="n">C_squared</span> <span class="o">=</span> <span class="n">C</span> <span class="o">@</span> <span class="n">C</span>
+  <span class="n">I1</span>        <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+  <span class="n">I2</span>        <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">I1</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">C_squared</span><span class="p">))</span>
+  <span class="n">I3</span>        <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">I1</span><span class="p">,</span> <span class="n">I2</span><span class="p">,</span> <span class="n">I3</span></div>
+
+
+
+<div class="viewcode-block" id="plane_strain">
+<a class="viewcode-back" href="../../pancax.html#pancax.kinematics.plane_strain">[docs]</a>
+<span class="k">def</span> <span class="nf">plane_strain</span><span class="p">(</span><span class="n">F</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">F</span></div>
+
+
+
+<div class="viewcode-block" id="incompressible_plane_stress">
+<a class="viewcode-back" href="../../pancax.html#pancax.kinematics.incompressible_plane_stress">[docs]</a>
+<span class="k">def</span> <span class="nf">incompressible_plane_stress</span><span class="p">(</span><span class="n">F</span><span class="p">):</span>
+  <span class="n">F_33</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">F</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">F</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">F</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="p">[</span>
+      <span class="p">[</span><span class="n">F</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">F</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">],</span>
+      <span class="p">[</span><span class="n">F</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">F</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">],</span>
+      <span class="p">[</span><span class="mf">0.0</span>    <span class="p">,</span> <span class="mf">0.0</span>    <span class="p">,</span> <span class="n">F_33</span><span class="p">]</span>
+    <span class="p">]</span>
+  <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

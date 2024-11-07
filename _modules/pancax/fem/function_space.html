@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.fem.function_space &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.fem.function_space</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.fem.function_space</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jaxtyping</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">.mesh</span> <span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span> <span class="nn">pancax.fem.quadrature_rules</span> <span class="kn">import</span> <span class="n">QuadratureRule</span>
+<span class="kn">from</span> <span class="nn">pancax.fem.elements.base_element</span> <span class="kn">import</span> <span class="n">ShapeFunctions</span>
+<span class="kn">from</span> <span class="nn">pancax.timer</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">import</span> <span class="nn">equinox</span> <span class="k">as</span> <span class="nn">eqx</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="c1"># TODO need to do checks on inputs to make sure they&#39;re compatable</span>
+<div class="viewcode-block" id="NonAllocatedFunctionSpace">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace">[docs]</a>
+<span class="k">class</span> <span class="nc">NonAllocatedFunctionSpace</span><span class="p">(</span><span class="n">eqx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="n">quadrature_rule</span><span class="p">:</span> <span class="n">QuadratureRule</span>
+    <span class="n">shape_functions</span><span class="p">:</span> <span class="n">ShapeFunctions</span>
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.__init__">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">q_rule</span><span class="p">:</span> <span class="n">QuadratureRule</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;NonAllocatedFunctionSpace.__init__&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">quadrature_rule</span> <span class="o">=</span> <span class="n">q_rule</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="o">.</span><span class="n">compute_shapes</span><span class="p">(</span>
+                <span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">q_rule</span><span class="o">.</span><span class="n">xigauss</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.compute_field_gradient">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.compute_field_gradient">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_field_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes in element level coordinates X and field u</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grad_Ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_function_gradients</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">,</span> <span class="n">grad_N</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">grad_N</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">u</span><span class="p">,</span> <span class="n">grad_Ns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.evaluate_on_element">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.evaluate_on_element">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate_on_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes in element level field, coordinates, states, etc.</span>
+<span class="sd">        and evaluates the function func</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_function_values</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">grad_Ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_function_gradients</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="n">u_qs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">N</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">U</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
+        <span class="n">grad_u_qs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">,</span> <span class="n">grad_N</span><span class="p">:</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">grad_N</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">U</span><span class="p">,</span> <span class="n">grad_Ns</span><span class="p">)</span>
+        <span class="n">X_qs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">X</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">N</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ns</span><span class="p">)</span>
+        <span class="n">func_vals</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+            <span class="n">u_qs</span><span class="p">,</span> <span class="n">grad_u_qs</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">X_qs</span><span class="p">,</span> <span class="n">dt</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">func_vals</span></div>
+
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.integrate_on_element">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.integrate_on_element">[docs]</a>
+    <span class="k">def</span> <span class="nf">integrate_on_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="n">func_vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_on_element</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="n">JxWs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">JxWs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">JxWs</span><span class="p">,</span> <span class="n">func_vals</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.integrate_on_elements">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.integrate_on_elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">integrate_on_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="n">el_vals</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">integrate_on_element</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+            <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">func</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">el_vals</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.JxWs">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.JxWs">[docs]</a>
+    <span class="k">def</span> <span class="nf">JxWs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn nd&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nq&quot;</span><span class="p">]:</span>
+        <span class="n">Js</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">dN</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dN</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">gradients</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">J</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">Js</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadrature_rule</span><span class="o">.</span><span class="n">wgauss</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.shape_function_values">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.shape_function_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">shape_function_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn nd&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nq nnpe&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">values</span></div>
+
+    
+<div class="viewcode-block" id="NonAllocatedFunctionSpace.shape_function_gradients">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.NonAllocatedFunctionSpace.shape_function_gradients">[docs]</a>
+    <span class="k">def</span> <span class="nf">shape_function_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn nd&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nq nnpe nd&quot;</span><span class="p">]:</span>
+        <span class="n">Js</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">dN</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dN</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">gradients</span><span class="p">)</span>
+        <span class="n">Jinvs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">J</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">J</span><span class="p">),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">Js</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">Jinv</span><span class="p">,</span> <span class="n">dN</span><span class="p">:</span> <span class="p">(</span><span class="n">Jinv</span> <span class="o">@</span> <span class="n">dN</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">Jinvs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_functions</span><span class="o">.</span><span class="n">gradients</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FunctionSpace">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.FunctionSpace">[docs]</a>
+<span class="k">class</span> <span class="nc">FunctionSpace</span><span class="p">(</span><span class="n">eqx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data needed for calculus on functions in the discrete function space.</span>
+
+<span class="sd">    In describing the shape of the attributes, ``ne`` is the number of</span>
+<span class="sd">    elements in the mesh, ``nqpe`` is the number of quadrature points per</span>
+<span class="sd">    element, ``npe`` is the number of nodes per element, and ``nd`` is the</span>
+<span class="sd">    spatial dimension of the domain.</span>
+
+<span class="sd">    :param shapes: Shape function values on each element, shape (ne, nqpe, npe)</span>
+<span class="sd">    :param vols: Volume attributed to each quadrature point. That is, the </span>
+<span class="sd">        quadrature weight (on the parameteric element domain) multiplied by</span>
+<span class="sd">        the Jacobian determinant of the map from the parent element to the</span>
+<span class="sd">        element in the domain. Shape (ne, nqpe).</span>
+<span class="sd">    :param shapeGrads: Derivatives of the shape functions with respect to the</span>
+<span class="sd">        spatial coordinates of the domain. Shape (ne, nqpe, npe, nd).</span>
+<span class="sd">    :param mesh: The ``Mesh`` object of the domain.</span>
+<span class="sd">    :param quadratureRule: The ``QuadratureRule`` on which to sample the shape </span>
+<span class="sd">        functions.</span>
+<span class="sd">    :param isAxisymmetric: boolean indicating if the function space data are </span>
+<span class="sd">        axisymmetric.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shapes</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;ne nqpe npe&quot;</span><span class="p">]</span>
+    <span class="n">vols</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;ne nqpe&quot;</span><span class="p">]</span>
+    <span class="n">shapeGrads</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;ne nqpe npe nd&quot;</span><span class="p">]</span>
+    <span class="c1"># mesh: any</span>
+    <span class="n">conns</span><span class="p">:</span> <span class="n">Int</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;ne nnpe&quot;</span><span class="p">]</span>
+    <span class="n">quadratureRule</span><span class="p">:</span> <span class="n">QuadratureRule</span>
+    <span class="n">isAxisymmetric</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+
+<div class="viewcode-block" id="construct_function_space">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.construct_function_space">[docs]</a>
+<span class="k">def</span> <span class="nf">construct_function_space</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">quadratureRule</span><span class="p">,</span> <span class="n">mode2D</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct a discrete function space.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    :param mesh: The mesh of the domain.</span>
+<span class="sd">    :param quadratureRule: The quadrature rule to be used for integrating on the</span>
+<span class="sd">    domain.</span>
+<span class="sd">    :param mode2D: A string indicating how the 2D domain is interpreted for</span>
+<span class="sd">    integration. Valid values are ``cartesian`` and ``axisymmetric``.</span>
+<span class="sd">    Axisymetric mode will include the factor of 2*pi*r in the ``vols``</span>
+<span class="sd">    attribute.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The ``FunctionSpace`` object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;construct_function_space&#39;</span><span class="p">):</span>
+        <span class="c1"># shapeOnRef = interpolants.compute_shapes(mesh.parentElement, quadratureRule.xigauss)</span>
+        <span class="n">shapeOnRef</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="o">.</span><span class="n">compute_shapes</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">quadratureRule</span><span class="o">.</span><span class="n">xigauss</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">construct_function_space_from_parent_element</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">shapeOnRef</span><span class="p">,</span> <span class="n">quadratureRule</span><span class="p">,</span> <span class="n">mode2D</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="construct_function_space_from_parent_element">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.construct_function_space_from_parent_element">[docs]</a>
+<span class="k">def</span> <span class="nf">construct_function_space_from_parent_element</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">shapeOnRef</span><span class="p">,</span> <span class="n">quadratureRule</span><span class="p">,</span> <span class="n">mode2D</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct a function space with precomputed shape function data on the parent element.</span>
+
+<span class="sd">    This version of the function space constructor is Jax-transformable,</span>
+<span class="sd">    and in particular can be jitted. The computation of the shape function</span>
+<span class="sd">    values and derivatives on the parent element is not transformable in</span>
+<span class="sd">    general. However, the mapping of the shape function data to the elements in</span>
+<span class="sd">    the mesh is transformable. One can precompute the parent element shape</span>
+<span class="sd">    functions once and for all, and then use this special factory function to</span>
+<span class="sd">    construct the function space and avoid the non-transformable part of the</span>
+<span class="sd">    operation. The primary use case is for shape sensitivities: the coordinates</span>
+<span class="sd">    of the mesh change, and we want Jax to pick up the sensitivities of the</span>
+<span class="sd">    shape function derivatives in space to the coordinate changes</span>
+<span class="sd">    (which occurs through the mapping from the parent element to the spatial</span>
+<span class="sd">    domain).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    :param mesh: The mesh of the domain.</span>
+<span class="sd">    :param shapeOnRef: A tuple of the shape function values and gradients on the</span>
+<span class="sd">    parent element, evaluated at the quadrature points. The caller must</span>
+<span class="sd">    take care to ensure the shape functions are evaluated at the same</span>
+<span class="sd">    points as contained in the ``quadratureRule`` parameter.</span>
+<span class="sd">    :param quadratureRule: The quadrature rule to be used for integrating on the</span>
+<span class="sd">        domain.</span>
+<span class="sd">    :param mode2D: A string indicating how the 2D domain is interpreted for</span>
+<span class="sd">    integration. See the default factory function for details.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The ``FunctionSpace`` object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">shapes</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">elConns</span><span class="p">,</span> <span class="n">elShape</span><span class="p">:</span> <span class="n">elShape</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">mesh</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="n">shapeOnRef</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="n">shapeGrads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">map_element_shape_grads</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="p">,</span> <span class="n">shapeOnRef</span><span class="o">.</span><span class="n">gradients</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mode2D</span> <span class="o">==</span> <span class="s1">&#39;cartesian&#39;</span><span class="p">:</span>
+        <span class="n">el_vols</span> <span class="o">=</span> <span class="n">compute_element_volumes</span>
+        <span class="n">isAxisymmetric</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">elif</span> <span class="n">mode2D</span> <span class="o">==</span> <span class="s1">&#39;axisymmetric&#39;</span><span class="p">:</span>
+        <span class="n">el_vols</span> <span class="o">=</span> <span class="n">compute_element_volumes_axisymmetric</span>
+        <span class="n">isAxisymmetric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">vols</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">el_vols</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="p">,</span> <span class="n">shapeOnRef</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">shapeOnRef</span><span class="o">.</span><span class="n">gradients</span><span class="p">,</span> <span class="n">quadratureRule</span><span class="o">.</span><span class="n">wgauss</span>
+    <span class="p">)</span>
+
+    <span class="c1"># return FunctionSpace(shapes, vols, shapeGrads, mesh, quadratureRule, isAxisymmetric)</span>
+    <span class="k">return</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">shapes</span><span class="p">,</span> <span class="n">vols</span><span class="p">,</span> <span class="n">shapeGrads</span><span class="p">,</span> <span class="n">mesh</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="n">quadratureRule</span><span class="p">,</span> <span class="n">isAxisymmetric</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="map_element_shape_grads">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.map_element_shape_grads">[docs]</a>
+<span class="k">def</span> <span class="nf">map_element_shape_grads</span><span class="p">(</span><span class="n">coordField</span><span class="p">,</span> <span class="n">nodeOrdinals</span><span class="p">,</span> <span class="n">parentElement</span><span class="p">,</span> <span class="n">shapeGradients</span><span class="p">):</span>
+    <span class="c1"># coords here should be 3 x 2</span>
+    <span class="c1"># shapegrads shoudl be 3 x 2</span>
+    <span class="c1"># need J to be 2 x 2 but be careful about transpose</span>
+    <span class="c1"># below from Cthonios</span>
+    <span class="c1"># J    = (X_el * ∇N_ξ)&#39;</span>
+    <span class="c1"># J_inv = inv(J)</span>
+    <span class="c1"># ∇N_X = (J_inv * ∇N_ξ&#39;)&#39;</span>
+    <span class="n">Xn</span> <span class="o">=</span> <span class="n">coordField</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">nodeOrdinals</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Js</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">dN</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dN</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">Xn</span><span class="p">,</span> <span class="n">shapeGradients</span><span class="p">)</span>
+    <span class="n">Jinvs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">J</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">J</span><span class="p">),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">Js</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">Jinv</span><span class="p">,</span> <span class="n">dN</span><span class="p">:</span> <span class="p">(</span><span class="n">Jinv</span> <span class="o">@</span> <span class="n">dN</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">Jinvs</span><span class="p">,</span> <span class="n">shapeGradients</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compute_element_volumes">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.compute_element_volumes">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_element_volumes</span><span class="p">(</span><span class="n">coordField</span><span class="p">,</span> <span class="n">nodeOrdinals</span><span class="p">,</span> <span class="n">parentElement</span><span class="p">,</span> <span class="n">shapes</span><span class="p">,</span> <span class="n">shapeGradients</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+    <span class="n">Xn</span> <span class="o">=</span> <span class="n">coordField</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">nodeOrdinals</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Js</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">dN</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dN</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">Xn</span><span class="p">,</span> <span class="n">shapeGradients</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">J</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">Js</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># TODO make this work for arbitrary elements</span>
+<span class="c1"># currently not used for any PINN stuff</span>
+<div class="viewcode-block" id="compute_element_volumes_axisymmetric">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.compute_element_volumes_axisymmetric">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_element_volumes_axisymmetric</span><span class="p">(</span><span class="n">coordField</span><span class="p">,</span> <span class="n">nodeOrdinals</span><span class="p">,</span> <span class="n">parentElement</span><span class="p">,</span> <span class="n">shapes</span><span class="p">,</span> <span class="n">shapeGradients</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+    <span class="n">vols</span> <span class="o">=</span> <span class="n">compute_element_volumes</span><span class="p">(</span><span class="n">coordField</span><span class="p">,</span> <span class="n">nodeOrdinals</span><span class="p">,</span> <span class="n">parentElement</span><span class="p">,</span> <span class="n">shapes</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="n">Xn</span> <span class="o">=</span> <span class="n">coordField</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">nodeOrdinals</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Rs</span> <span class="o">=</span> <span class="n">shapes</span><span class="nd">@Xn</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">Rs</span><span class="o">*</span><span class="n">vols</span></div>
+
+
+
+<div class="viewcode-block" id="default_modify_element_gradient">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.default_modify_element_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">default_modify_element_gradient</span><span class="p">(</span><span class="n">elemGrads</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemNodalDisps</span><span class="p">,</span> <span class="n">elemNodalCoords</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">elemGrads</span></div>
+
+
+
+<div class="viewcode-block" id="compute_field_gradient">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.compute_field_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_field_gradient</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">nodalField</span><span class="p">,</span> <span class="n">nodalCoords</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="o">=</span><span class="n">default_modify_element_gradient</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">compute_element_field_gradient</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="kc">None</span><span class="p">))(</span><span class="n">nodalField</span><span class="p">,</span> <span class="n">nodalCoords</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">shapes</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">shapeGrads</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">vols</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="interpolate_to_points">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.interpolate_to_points">[docs]</a>
+<span class="k">def</span> <span class="nf">interpolate_to_points</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">nodalField</span><span class="p">):</span>
+    <span class="c1"># return jax.vmap(interpolate_to_element_points, (None, 0, 0))(nodalField, functionSpace.shapes, functionSpace.mesh.conns)</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">interpolate_to_element_points</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">nodalField</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">shapes</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">conns</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="integrate_over_block">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.integrate_over_block">[docs]</a>
+<span class="k">def</span> <span class="nf">integrate_over_block</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">stateVars</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span>
+                         <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="o">=</span><span class="n">default_modify_element_gradient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Integrates a density function over a block of the mesh.</span>
+
+<span class="sd">    :param functionSpace: Function space object to do the integration with.</span>
+<span class="sd">    :param U: The vector of dofs for the primal field in the functional.</span>
+<span class="sd">    :param X: Nodal coordinates</span>
+<span class="sd">    :param stateVars: Internal state variable array.</span>
+<span class="sd">    :param dt: Current time increment</span>
+<span class="sd">    :param func: Lagrangian density function to integrate, Must have the signature</span>
+<span class="sd">        ``func(u, dudx, q, x, *params) -&gt; scalar``, where ``u`` is the primal field, ``q`` is the</span>
+<span class="sd">        value of the internal variables, ``x`` is the current point coordinates, and ``*params`` is</span>
+<span class="sd">        a variadic set of additional parameters, which correspond to the ``*params`` argument.</span>
+<span class="sd">        block: Group of elements to integrate over. This is an array of element indices. For</span>
+<span class="sd">        performance, the elements within the block should be numbered consecutively.</span>
+<span class="sd">    :param modify_element_gradient: Optional function that modifies the gradient at the element level.</span>
+<span class="sd">        This can be to set the particular 2D mode, and additionally to enforce volume averaging</span>
+<span class="sd">        on the gradient operator. This is a keyword-only argument.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    A scalar value for the integral of the density functional ``func`` integrated over the</span>
+<span class="sd">    block of elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># below breaks the sphinx doc stuff</span>
+    <span class="c1"># :param *params: Optional parameter fields to pass into Lagrangian density function. These are </span>
+    
+    
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">evaluate_on_block</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">stateVars</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="o">=</span><span class="n">modify_element_gradient</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">vols</span><span class="p">[</span><span class="n">block</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span></div>
+
+
+
+<span class="c1"># def evaluate_on_block(functionSpace, U, stateVars, dt, props, func, block,</span>
+<span class="c1">#                       *params, modify_element_gradient=default_modify_element_gradient):</span>
+<div class="viewcode-block" id="evaluate_on_block">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.evaluate_on_block">[docs]</a>
+<span class="k">def</span> <span class="nf">evaluate_on_block</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">stateVars</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">block</span><span class="p">,</span>
+                      <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="o">=</span><span class="n">default_modify_element_gradient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluates a density function at every quadrature point in a block of the mesh.</span>
+
+<span class="sd">    :param functionSpace: Function space object to do the evaluation with.</span>
+<span class="sd">    :param U: The vector of dofs for the primal field in the functional.</span>
+<span class="sd">    :param X: Nodal coordinates</span>
+<span class="sd">    :param stateVars: Internal state variable array.</span>
+<span class="sd">    :param dt: Current time increment</span>
+<span class="sd">    :param func: Lagrangian density function to evaluate, Must have the signature</span>
+<span class="sd">        ```func(u, dudx, q, x, *params) -&gt; scalar```, where ```u``` is the primal field, ```q``` is the </span>
+<span class="sd">        value of the internal variables, ```x``` is the current point coordinates, and ```*params``` is </span>
+<span class="sd">        a variadic set of additional parameters, which correspond to the ```*params``` argument.</span>
+<span class="sd">    :param block: Group of elements to evaluate over. This is an array of element indices. For </span>
+<span class="sd">        performance, the elements within the block should be numbered consecutively.</span>
+<span class="sd">    </span>
+<span class="sd">    :param modify_element_gradient: Optional function that modifies the gradient at the element level. </span>
+<span class="sd">        This can be to set the particular 2D mode, and additionally to enforce volume averaging </span>
+<span class="sd">        on the gradient operator. This is a keyword-only argument.</span>
+
+<span class="sd">    Returns </span>
+<span class="sd">    An array of shape (numElements, numQuadPtsPerElement) that contains the scalar values of the </span>
+<span class="sd">    density functional ```func``` at every quadrature point in the block.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># below breaks sphinx doc stuff</span>
+    <span class="c1"># :param *params: Optional parameter fields to pass into Lagrangian density function. These are </span>
+    <span class="c1">#     represented as a single value per element. </span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">functionSpace</span>
+    <span class="n">compute_elem_values</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">evaluate_on_element</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="mi">0</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)))</span>
+    
+    <span class="n">blockValues</span> <span class="o">=</span> <span class="n">compute_elem_values</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">stateVars</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">props</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">fs</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">block</span><span class="p">],</span>
+                                      <span class="n">fs</span><span class="o">.</span><span class="n">shapeGrads</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">fs</span><span class="o">.</span><span class="n">vols</span><span class="p">[</span><span class="n">block</span><span class="p">],</span>
+                                      <span class="n">fs</span><span class="o">.</span><span class="n">conns</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">func</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">blockValues</span></div>
+
+
+
+<div class="viewcode-block" id="integrate_element_from_local_field">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.integrate_element_from_local_field">[docs]</a>
+<span class="k">def</span> <span class="nf">integrate_element_from_local_field</span><span class="p">(</span><span class="n">elemNodalField</span><span class="p">,</span> <span class="n">elemNodalCoords</span><span class="p">,</span> <span class="n">elemStates</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="o">=</span><span class="n">default_modify_element_gradient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Integrate over element with element nodal field as input.</span>
+<span class="sd">    This allows element residuals and element stiffness matrices to computed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">elemVals</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">interpolate_to_point</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="mi">0</span><span class="p">))(</span><span class="n">elemNodalField</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">)</span>
+    <span class="n">elemGrads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">compute_quadrature_point_field_gradient</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="mi">0</span><span class="p">))(</span><span class="n">elemNodalField</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">)</span>
+    <span class="n">elemGrads</span> <span class="o">=</span> <span class="n">modify_element_gradient</span><span class="p">(</span><span class="n">elemGrads</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemNodalField</span><span class="p">,</span> <span class="n">elemNodalCoords</span><span class="p">)</span>
+    <span class="n">elemPoints</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">interpolate_to_point</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="mi">0</span><span class="p">))(</span><span class="n">elemNodalCoords</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">)</span>
+    <span class="n">fVals</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">elemVals</span><span class="p">,</span> <span class="n">elemGrads</span><span class="p">,</span> <span class="n">elemStates</span><span class="p">,</span> <span class="n">elemPoints</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fVals</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="compute_element_field_gradient">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.compute_element_field_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_element_field_gradient</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemConnectivity</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">):</span>
+    <span class="n">elemNodalDisps</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">elemConnectivity</span><span class="p">]</span>
+    <span class="n">elemGrads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">compute_quadrature_point_field_gradient</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">elemNodalDisps</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">)</span>
+    <span class="n">elemNodalCoords</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">elemConnectivity</span><span class="p">]</span>
+    <span class="n">elemGrads</span> <span class="o">=</span> <span class="n">modify_element_gradient</span><span class="p">(</span><span class="n">elemGrads</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemNodalDisps</span><span class="p">,</span> <span class="n">elemNodalCoords</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">elemGrads</span></div>
+
+
+
+<div class="viewcode-block" id="compute_quadrature_point_field_gradient">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.compute_quadrature_point_field_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_quadrature_point_field_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">shapeGrad</span><span class="p">):</span>
+    <span class="n">dg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">shapeGrad</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">dg</span></div>
+
+
+
+<div class="viewcode-block" id="interpolate_to_point">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.interpolate_to_point">[docs]</a>
+<span class="k">def</span> <span class="nf">interpolate_to_point</span><span class="p">(</span><span class="n">elementNodalValues</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">elementNodalValues</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="interpolate_to_element_points">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.interpolate_to_element_points">[docs]</a>
+<span class="k">def</span> <span class="nf">interpolate_to_element_points</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemConnectivity</span><span class="p">):</span>
+    <span class="n">elemU</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="n">elemConnectivity</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">interpolate_to_point</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">elemU</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="integrate_element">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.integrate_element">[docs]</a>
+<span class="k">def</span> <span class="nf">integrate_element</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">elemStates</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">):</span>
+    <span class="n">elemVals</span> <span class="o">=</span> <span class="n">interpolate_to_element_points</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">)</span>
+    <span class="n">elemGrads</span> <span class="o">=</span> <span class="n">compute_element_field_gradient</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">)</span>
+    <span class="n">elemXs</span> <span class="o">=</span> <span class="n">interpolate_to_element_points</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">)</span>
+    <span class="n">fVals</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">)(</span><span class="n">elemVals</span><span class="p">,</span> <span class="n">elemGrads</span><span class="p">,</span> <span class="n">elemStates</span><span class="p">,</span> <span class="n">elemXs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">fVals</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="evaluate_on_element">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.evaluate_on_element">[docs]</a>
+<span class="k">def</span> <span class="nf">evaluate_on_element</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">elemStates</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">,</span> <span class="n">kernelFunc</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">elemVals</span> <span class="o">=</span> <span class="n">interpolate_to_element_points</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">)</span>
+    <span class="n">elemGrads</span> <span class="o">=</span> <span class="n">compute_element_field_gradient</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemShapeGrads</span><span class="p">,</span> <span class="n">elemVols</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">,</span> <span class="n">modify_element_gradient</span><span class="p">)</span>
+    <span class="n">elemXs</span> <span class="o">=</span> <span class="n">interpolate_to_element_points</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">elemShapes</span><span class="p">,</span> <span class="n">elemConn</span><span class="p">)</span>
+    <span class="n">vmapArgs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="kc">None</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+    <span class="n">fVals</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">kernelFunc</span><span class="p">,</span> <span class="n">vmapArgs</span><span class="p">)(</span><span class="n">elemVals</span><span class="p">,</span> <span class="n">elemGrads</span><span class="p">,</span> <span class="n">elemStates</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">elemXs</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fVals</span></div>
+
+
+
+<div class="viewcode-block" id="project_quadrature_field_to_element_field">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.project_quadrature_field_to_element_field">[docs]</a>
+<span class="k">def</span> <span class="nf">project_quadrature_field_to_element_field</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">quadField</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">average_quadrature_field_over_element</span><span class="p">)(</span><span class="n">quadField</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">vols</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="average_quadrature_field_over_element">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.average_quadrature_field_over_element">[docs]</a>
+<span class="k">def</span> <span class="nf">average_quadrature_field_over_element</span><span class="p">(</span><span class="n">elemQPData</span><span class="p">,</span> <span class="n">vols</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">vols</span><span class="p">,</span> <span class="n">elemQPData</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">elVol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vols</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">S</span><span class="o">/</span><span class="n">elVol</span></div>
+
+
+
+<div class="viewcode-block" id="get_nodal_values_on_edge">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.get_nodal_values_on_edge">[docs]</a>
+<span class="k">def</span> <span class="nf">get_nodal_values_on_edge</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">nodalField</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get nodal values of a field on an element edge.</span>
+
+<span class="sd">    :param functionSpace: a FunctionSpace object</span>
+<span class="sd">    :param nodalField: The nodal vector defined over the mesh (shape is number of</span>
+<span class="sd">        nodes by number of field components)</span>
+<span class="sd">    :param edge: tuple containing the element number containing the edge and the</span>
+<span class="sd">        permutation (0, 1, or 2) of the edge within the triangle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">edgeNodes</span> <span class="o">=</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="o">.</span><span class="n">faceNodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:]</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">conns</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edgeNodes</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">nodalField</span><span class="p">[</span><span class="n">nodes</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="interpolate_nodal_field_on_edge">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.interpolate_nodal_field_on_edge">[docs]</a>
+<span class="k">def</span> <span class="nf">interpolate_nodal_field_on_edge</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">interpolationPoints</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interpolate a nodal field to specified points on an element edge.</span>
+
+<span class="sd">    :param functionSpace: a FunctionSpace object</span>
+<span class="sd">    :param U: the nodal values array</span>
+<span class="sd">    :param interpolationPoints: coordinates of points (in the 1D parametric space) to</span>
+<span class="sd">        interpolate to</span>
+<span class="sd">    :param edge: tuple containing the element number containing the edge and the</span>
+<span class="sd">        permutation (0, 1, or 2) of the edge within the triangle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># edgeShapes = interpolants.compute_shapes(functionSpace.mesh.parentElement1d, interpolationPoints)</span>
+    <span class="n">edgeShapes</span> <span class="o">=</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parentElement1d</span><span class="o">.</span><span class="n">compute_shapes</span><span class="p">(</span>
+        <span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parentElement1d</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">interpolationPoints</span>
+    <span class="p">)</span>
+    <span class="n">edgeU</span> <span class="o">=</span> <span class="n">get_nodal_values_on_edge</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">edgeShapes</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="nd">@edgeU</span></div>
+
+
+
+<div class="viewcode-block" id="integrate_function_on_edge">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.integrate_function_on_edge">[docs]</a>
+<span class="k">def</span> <span class="nf">integrate_function_on_edge</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">quadRule</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">interpolate_nodal_field_on_edge</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">quadRule</span><span class="o">.</span><span class="n">xigauss</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+    <span class="n">Xq</span> <span class="o">=</span> <span class="n">interpolate_nodal_field_on_edge</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">quadRule</span><span class="o">.</span><span class="n">xigauss</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+    <span class="n">edgeCoords</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">get_edge_coords</span><span class="p">(</span><span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">jac</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">compute_edge_vectors</span><span class="p">(</span><span class="n">functionSpace</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="n">edgeCoords</span><span class="p">)</span>
+    <span class="n">integrand</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">uq</span><span class="p">,</span> <span class="n">Xq</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">integrand</span><span class="p">,</span> <span class="n">jac</span><span class="o">*</span><span class="n">quadRule</span><span class="o">.</span><span class="n">wgauss</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="integrate_function_on_edges">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.function_space.integrate_function_on_edges">[docs]</a>
+<span class="k">def</span> <span class="nf">integrate_function_on_edges</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">quadRule</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+    <span class="n">integrate_on_edges</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">integrate_function_on_edge</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">integrate_on_edges</span><span class="p">(</span><span class="n">functionSpace</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">quadRule</span><span class="p">,</span> <span class="n">edges</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

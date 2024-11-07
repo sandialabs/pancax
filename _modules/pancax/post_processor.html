@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.post_processor &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.post_processor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.post_processor</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pancax.physics</span> <span class="kn">import</span> <span class="n">incompressible_internal_force</span><span class="p">,</span> <span class="n">internal_force</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">exodus3</span> <span class="k">as</span> <span class="nn">exodus</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+
+<div class="viewcode-block" id="PostProcessor">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor">[docs]</a>
+<span class="k">class</span> <span class="nc">PostProcessor</span><span class="p">:</span>
+<div class="viewcode-block" id="PostProcessor.__init__">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.__init__">[docs]</a>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span> <span class="o">=</span> <span class="n">mesh_file</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">exo</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">node_variables</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">element_variables</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.check_variable_names">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.check_variable_names">[docs]</a>
+  <span class="k">def</span> <span class="nf">check_variable_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;internal_force&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;incompressible_internal_force&#39;</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+      <span class="k">if</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Unsupported variable requested for output </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="nb">str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;Supported variables include:</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+          <span class="nb">str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.close">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.close">[docs]</a>
+  <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.copy_mesh">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.copy_mesh">[docs]</a>
+  <span class="k">def</span> <span class="nf">copy_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_file</span><span class="p">):</span>
+      <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+
+    <span class="n">exo_temp</span> <span class="o">=</span> <span class="n">exodus</span><span class="o">.</span><span class="n">copy_mesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+    <span class="n">exo_temp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">exo</span> <span class="o">=</span> <span class="n">exodus</span><span class="o">.</span><span class="n">exodus</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">array_type</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.get_node_variable_number">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.get_node_variable_number">[docs]</a>
+  <span class="k">def</span> <span class="nf">get_node_variable_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;internal_force&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;incompressible_internal_force&#39;</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">field_value_names</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;names&#39;</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">n</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.get_element_variable_number">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.get_element_variable_number">[docs]</a>
+  <span class="k">def</span> <span class="nf">get_element_variable_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+      <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;names&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">q_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">quadrature_rule</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">q_points</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.init">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.init">[docs]</a>
+  <span class="k">def</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> 
+    <span class="n">domain</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+    <span class="n">node_variables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">element_variables</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">copy_mesh</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">check_variable_names</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">node_variables</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">check_variable_names</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">element_variables</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">node_variables</span> <span class="o">=</span> <span class="n">node_variables</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">element_variables</span> <span class="o">=</span> <span class="n">element_variables</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">set_node_variable_number</span><span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">get_node_variable_number</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">node_variables</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">set_element_variable_number</span><span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">get_element_variable_number</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">element_variables</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_variables</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;internal_force&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;incompressible_internal_force&#39;</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_name</span><span class="p">(</span><span class="s1">&#39;internal_force_x&#39;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_name</span><span class="p">(</span><span class="s1">&#39;internal_force_y&#39;</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_name</span><span class="p">(</span><span class="s1">&#39;internal_force_z&#39;</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">3</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;names&#39;</span><span class="p">]:</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_name</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+          <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">element_variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">q_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">quadrature_rule</span><span class="p">)</span>
+      <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_variables</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;names&#39;</span><span class="p">]:</span>
+          <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">q_points</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">q</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_element_variable_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.index_to_component">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.index_to_component">[docs]</a>
+  <span class="k">def</span> <span class="nf">index_to_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+    <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+      <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+    <span class="k">elif</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+      <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Should be 0, 1, or 2&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">string</span></div>
+
+
+<div class="viewcode-block" id="PostProcessor.write_outputs">
+<a class="viewcode-back" href="../../pancax.html#pancax.post_processor.PostProcessor.write_outputs">[docs]</a>
+  <span class="k">def</span> <span class="nf">write_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">physics</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">times</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_time</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+
+      <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_variables</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;internal_force&#39;</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">==</span> <span class="s1">&#39;incompressible_internal_force&#39;</span><span class="p">:</span>
+          <span class="n">us</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">physics</span><span class="o">.</span><span class="n">field_values</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">params</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span>
+          <span class="n">fs</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">internal_force</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">properties</span><span class="p">()))</span>
+          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_values</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;internal_force_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">index_to_component</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fs</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">output</span> <span class="o">=</span> <span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+          <span class="n">pred</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">](</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+          <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+              <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_values</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;names&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+          <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_node_variable_values</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;names&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pred</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element_variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">n_q_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="o">.</span><span class="n">quadrature_rule</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">element_variables</span><span class="p">:</span>
+          <span class="n">output</span> <span class="o">=</span> <span class="n">physics</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+          <span class="n">pred</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">](</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+          <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_q_points</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+              <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">output</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">q</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span>
+              <span class="c1"># NOTE this will only work on a single block </span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">exo</span><span class="o">.</span><span class="n">put_element_variable_values</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pred</span><span class="p">[:,</span> <span class="n">q</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

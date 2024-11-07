@@ -1,0 +1,41 @@
+pancax.bvps package
+===================
+
+Submodules
+----------
+
+pancax.bvps.biaxial\_tension module
+-----------------------------------
+
+.. automodule:: pancax.bvps.biaxial_tension
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.bvps.simple\_shear module
+--------------------------------
+
+.. automodule:: pancax.bvps.simple_shear
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.bvps.uniaxial\_tension module
+------------------------------------
+
+.. automodule:: pancax.bvps.uniaxial_tension
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.bvps
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

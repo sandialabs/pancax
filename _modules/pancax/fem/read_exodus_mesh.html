@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.fem.read_exodus_mesh &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.fem.read_exodus_mesh</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.fem.read_exodus_mesh</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.elements</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.mesh</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pancax.timer</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+<span class="n">exodusToNativeTri6NodeOrder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="read_exodus_mesh">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh.read_exodus_mesh">[docs]</a>
+<span class="k">def</span> <span class="nf">read_exodus_mesh</span><span class="p">(</span><span class="n">fileName</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param fileName: file name of exodus mesh to read</span>
+<span class="sd">    :return: A mesh object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;read_exodus_mesh&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span> <span class="k">as</span> <span class="n">exData</span><span class="p">:</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">_read_coordinates</span><span class="p">(</span><span class="n">exData</span><span class="p">)</span>
+            <span class="n">conns</span><span class="p">,</span> <span class="n">blocks</span> <span class="o">=</span> <span class="n">_read_blocks</span><span class="p">(</span><span class="n">exData</span><span class="p">)</span>
+            <span class="n">nodeSets</span> <span class="o">=</span> <span class="n">_read_node_sets</span><span class="p">(</span><span class="n">exData</span><span class="p">)</span>
+            <span class="n">sideSets</span> <span class="o">=</span> <span class="n">_read_side_sets</span><span class="p">(</span><span class="n">exData</span><span class="p">)</span>
+
+            <span class="n">elementType</span> <span class="o">=</span> <span class="n">_read_element_type</span><span class="p">(</span><span class="n">exData</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;hex8&quot;</span> <span class="ow">or</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;hex&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">Hex8Element</span><span class="p">()</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">Quad4Element</span><span class="p">()</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;quad4&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">Quad4Element</span><span class="p">()</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">LineElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;quad9&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">Quad9Element</span><span class="p">()</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">LineElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;tet4&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">Tet4Element</span><span class="p">()</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">SimplexTriElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;tet10&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">Tet10Element</span><span class="p">()</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">SimplexTriElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;tri3&quot;</span> <span class="ow">or</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;tri&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">SimplexTriElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">LineElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">elementType</span> <span class="o">==</span> <span class="s2">&quot;tri6&quot;</span><span class="p">:</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="n">SimplexTriElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">basis1d</span> <span class="o">=</span> <span class="n">LineElement</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">simplexNodesOrdinals</span> <span class="o">=</span> <span class="n">_get_vertex_nodes_from_exodus_tri6_mesh</span><span class="p">(</span><span class="n">conns</span><span class="p">)</span>
+                <span class="n">conns</span> <span class="o">=</span> <span class="n">conns</span><span class="p">[:,</span> <span class="n">exodusToNativeTri6NodeOrder</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported element type: </span><span class="si">{</span><span class="n">elementType</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">conns</span><span class="p">,</span> <span class="n">simplexNodesOrdinals</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">basis1d</span><span class="p">,</span>
+                        <span class="n">blocks</span><span class="p">,</span> <span class="n">nodeSets</span><span class="p">,</span> <span class="n">sideSets</span><span class="p">)</span></div>
+
+        
+        
+<span class="c1"># TODO add support for 3D</span>
+<div class="viewcode-block" id="_read_coordinates">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_coordinates">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_coordinates</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">):</span>
+    <span class="n">nNodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">])</span>
+    <span class="n">nDims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_dim&#39;</span><span class="p">])</span>
+    <span class="c1"># assert nDims == 2</span>
+
+    <span class="n">coordsX</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;coordx&#39;</span><span class="p">][:]</span>
+    <span class="n">coordsY</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;coordy&#39;</span><span class="p">][:]</span>
+    
+    <span class="k">if</span> <span class="n">nDims</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">onp</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">coordsX</span><span class="p">,</span> <span class="n">coordsY</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">nDims</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">coordsZ</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;coordz&#39;</span><span class="p">][:]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">onp</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">coordsX</span><span class="p">,</span> <span class="n">coordsY</span><span class="p">,</span> <span class="n">coordsZ</span><span class="p">]))</span></div>
+
+
+
+
+<div class="viewcode-block" id="_read_block_conns">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_block_conns">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_block_conns</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">,</span> <span class="n">blockOrdinal</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;connect&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockOrdinal</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">set_auto_mask</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">nElemsInBlock</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_el_in_blk&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockOrdinal</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">record</span><span class="p">[:]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="_read_blocks">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_blocks">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_blocks</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">):</span>
+    <span class="n">nodesPerElem</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_nod_per_el1&#39;</span><span class="p">])</span>
+
+    <span class="n">blockNames</span> <span class="o">=</span> <span class="n">_read_names_list</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">,</span> <span class="s1">&#39;eb_names&#39;</span><span class="p">)</span>
+    <span class="c1"># give unnamed blocks an auto-generated name</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">blockNames</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">blockNames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;block_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+    <span class="n">nBlocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_el_blk&#39;</span><span class="p">])</span>
+    <span class="n">blockConns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">firstElemInBlock</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nBlocks</span><span class="p">):</span>
+        <span class="n">nodesPerElemInBlock</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_nod_per_el&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+        <span class="k">assert</span> <span class="n">nodesPerElemInBlock</span> <span class="o">==</span> <span class="n">nodesPerElem</span>
+
+        <span class="n">blockConns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_read_block_conns</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        
+        <span class="n">nElemsInBlock</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_el_in_blk&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+        <span class="n">elemRange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">firstElemInBlock</span><span class="p">,</span> <span class="n">firstElemInBlock</span> <span class="o">+</span> <span class="n">nElemsInBlock</span><span class="p">)</span>
+        <span class="n">blocks</span><span class="p">[</span><span class="n">blockNames</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">elemRange</span>
+        <span class="n">firstElemInBlock</span> <span class="o">+=</span> <span class="n">nElemsInBlock</span>
+
+    <span class="n">conns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">blockConns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">conns</span><span class="p">,</span> <span class="n">blocks</span></div>
+
+
+
+<div class="viewcode-block" id="_read_node_sets">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_node_sets">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_node_sets</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;num_node_sets&quot;</span> <span class="ow">in</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+        <span class="n">nodeSetNames</span> <span class="o">=</span> <span class="n">_read_names_list</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">,</span> <span class="s2">&quot;ns_names&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodeSetNames</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">nodeSetNames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;nodeset_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            
+        <span class="n">nodeSetNodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nNodeSets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s2">&quot;num_node_sets&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nNodeSets</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;node_ns&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">set_auto_mask</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">nodeSetNodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">[:]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">nodeSets</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nodeSetNames</span><span class="p">,</span> <span class="n">nodeSetNodes</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">nodeSets</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">return</span> <span class="n">nodeSets</span></div>
+
+
+
+<div class="viewcode-block" id="_read_side_sets">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_side_sets">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_side_sets</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;num_side_sets&quot;</span> <span class="ow">in</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+        <span class="n">sideSetNames</span> <span class="o">=</span> <span class="n">_read_names_list</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">,</span> <span class="s1">&#39;ss_names&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sideSetNames</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">sideSetNames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sideset_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">nSideSets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_side_sets&#39;</span><span class="p">])</span>
+        <span class="n">sideSetEntries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nSideSets</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;elem_ss&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">set_auto_mask</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">sideSetElems</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">record</span><span class="p">[:]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;side_ss&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">set_auto_mask</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">sideSetSides</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">record</span><span class="p">[:]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">sideSetEntries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">sideSetElems</span><span class="p">,</span> <span class="n">sideSetSides</span><span class="p">)))</span>
+        <span class="n">sideSets</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">sideSetNames</span><span class="p">,</span> <span class="n">sideSetEntries</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sideSets</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">return</span> <span class="n">sideSets</span></div>
+
+
+
+<div class="viewcode-block" id="_read_element_type">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_element_type">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_element_type</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">):</span>
+    <span class="n">elemType</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;connect1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">elem_type</span>
+
+    <span class="n">nBlocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exodusDataset</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;num_el_blk&#39;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nBlocks</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;connect&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">blockElemType</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">elem_type</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">blockElemType</span> <span class="o">==</span> <span class="n">elemType</span><span class="p">),</span> <span class="s1">&#39;Different element types present in exodus file&#39;</span>
+    <span class="k">return</span> <span class="n">elemType</span></div>
+
+
+
+<div class="viewcode-block" id="_read_names_list">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._read_names_list">[docs]</a>
+<span class="k">def</span> <span class="nf">_read_names_list</span><span class="p">(</span><span class="n">exodusDataset</span><span class="p">,</span> <span class="n">recordName</span><span class="p">):</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">exodusDataset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">recordName</span><span class="p">]</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">set_auto_mask</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">namesList</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">record</span><span class="p">[:]]</span>
+    <span class="k">return</span> <span class="n">namesList</span></div>
+
+
+
+<div class="viewcode-block" id="_get_vertex_nodes_from_exodus_tri6_mesh">
+<a class="viewcode-back" href="../../../pancax.fem.html#pancax.fem.read_exodus_mesh._get_vertex_nodes_from_exodus_tri6_mesh">[docs]</a>
+<span class="k">def</span> <span class="nf">_get_vertex_nodes_from_exodus_tri6_mesh</span><span class="p">(</span><span class="n">conns</span><span class="p">):</span>
+    <span class="n">vertexSet</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">conns</span><span class="p">[:,:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vertexSet</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

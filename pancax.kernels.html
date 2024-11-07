@@ -1,0 +1,879 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.kernels package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.loss_functions package" href="pancax.loss_functions.html" />
+    <link rel="prev" title="pancax.fem.elements package" href="pancax.fem.elements.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax.kernels package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.kernels.base_kernel">pancax.kernels.base_kernel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.vector_names"><code class="docutils literal notranslate"><span class="pre">vector_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.full_tensor_names"><code class="docutils literal notranslate"><span class="pre">full_tensor_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.full_tensor_names_2D"><code class="docutils literal notranslate"><span class="pre">full_tensor_names_2D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.element_pp"><code class="docutils literal notranslate"><span class="pre">element_pp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.nodal_pp"><code class="docutils literal notranslate"><span class="pre">nodal_pp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.standard_pp"><code class="docutils literal notranslate"><span class="pre">standard_pp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel.n_dofs"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel.field_value_names"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel.field_value_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel.var_name_to_method"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel.var_name_to_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel.__init__"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel.bc_func"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel.bc_func</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel._abc_impl"><code class="docutils literal notranslate"><span class="pre">PhysicsKernel._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.n_dofs"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_value_names"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.field_value_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.bc_func"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.bc_func</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.__init__"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_gradients"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.field_gradients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_hessians"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.field_hessians()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_laplacians"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.field_laplacians()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_time_derivatives"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.field_time_derivatives()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_second_time_derivatives"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.field_second_time_derivatives()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.strong_form_neumann_bc"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.strong_form_neumann_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.strong_form_residual"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel.strong_form_residual()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel._abc_impl"><code class="docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.n_dofs"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.field_value_names"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.field_value_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.bc_func"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.bc_func</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.__init__"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_field_gradient"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.element_field_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.element_quantity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity_grad"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.element_quantity_grad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel._abc_impl"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity_hessian"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.element_quantity_hessian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.energy"><code class="docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel.energy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.kernels.laplace_beltrami">pancax.kernels.laplace_beltrami module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.n_dofs"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.field_names"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami.field_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.__init__"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.energy"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.kinetic_energy"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami.kinetic_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami._abc_impl"><code class="docutils literal notranslate"><span class="pre">LaplaceBeltrami._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.kernels.linear_elasticity">pancax.kernels.linear_elasticity module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.n_dofs"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.field_value_names"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.field_value_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.__init__"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.energy"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.strong_form_residual"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.strong_form_residual()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.strong_form_neumann_bc"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.strong_form_neumann_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.linear_strain"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.linear_strain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.cauchy_stress"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D.cauchy_stress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.linear_elasticity.LinearElasticity2D._abc_impl"><code class="docutils literal notranslate"><span class="pre">LinearElasticity2D._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.kernels.poisson">pancax.kernels.poisson module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.poisson.Poisson"><code class="docutils literal notranslate"><span class="pre">Poisson</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.n_dofs"><code class="docutils literal notranslate"><span class="pre">Poisson.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.field_value_names"><code class="docutils literal notranslate"><span class="pre">Poisson.field_value_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">Poisson.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.__init__"><code class="docutils literal notranslate"><span class="pre">Poisson.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.energy"><code class="docutils literal notranslate"><span class="pre">Poisson.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.strong_form_residual"><code class="docutils literal notranslate"><span class="pre">Poisson.strong_form_residual()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson.strong_form_neumann_bc"><code class="docutils literal notranslate"><span class="pre">Poisson.strong_form_neumann_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.poisson.Poisson._abc_impl"><code class="docutils literal notranslate"><span class="pre">Poisson._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.kernels.solid_mechanics">pancax.kernels.solid_mechanics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation"><code class="docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation.n_dimensions"><code class="docutils literal notranslate"><span class="pre">BaseMechanicsFormulation.n_dimensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation.modify_field_gradient"><code class="docutils literal notranslate"><span class="pre">BaseMechanicsFormulation.modify_field_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseMechanicsFormulation._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress"><code class="docutils literal notranslate"><span class="pre">IncompressiblePlaneStress</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.n_dimensions"><code class="docutils literal notranslate"><span class="pre">IncompressiblePlaneStress.n_dimensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.__init__"><code class="docutils literal notranslate"><span class="pre">IncompressiblePlaneStress.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.deformation_gradient"><code class="docutils literal notranslate"><span class="pre">IncompressiblePlaneStress.deformation_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.modify_field_gradient"><code class="docutils literal notranslate"><span class="pre">IncompressiblePlaneStress.modify_field_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress._abc_impl"><code class="docutils literal notranslate"><span class="pre">IncompressiblePlaneStress._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.solid_mechanics.PlaneStrain"><code class="docutils literal notranslate"><span class="pre">PlaneStrain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.PlaneStrain.n_dimensions"><code class="docutils literal notranslate"><span class="pre">PlaneStrain.n_dimensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.PlaneStrain.extract_stress"><code class="docutils literal notranslate"><span class="pre">PlaneStrain.extract_stress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.PlaneStrain.modify_field_gradient"><code class="docutils literal notranslate"><span class="pre">PlaneStrain.modify_field_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.PlaneStrain._abc_impl"><code class="docutils literal notranslate"><span class="pre">PlaneStrain._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.solid_mechanics.ThreeDimensional"><code class="docutils literal notranslate"><span class="pre">ThreeDimensional</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.ThreeDimensional.n_dimensions"><code class="docutils literal notranslate"><span class="pre">ThreeDimensional.n_dimensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.ThreeDimensional.modify_field_gradient"><code class="docutils literal notranslate"><span class="pre">ThreeDimensional.modify_field_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.ThreeDimensional._abc_impl"><code class="docutils literal notranslate"><span class="pre">ThreeDimensional._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics"><code class="docutils literal notranslate"><span class="pre">SolidMechanics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.field_values_names"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.field_values_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.bc_func"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.bc_func</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.use_delta_pinn"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.use_delta_pinn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.__init__"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.n_dofs"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.n_dofs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.constitutive_model"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.constitutive_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.formulation"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.formulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.element_field_gradient"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.element_field_gradient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.element_quantity_from_func"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.element_quantity_from_func()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.energy"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.nodal_incompressibility_constraint"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.nodal_incompressibility_constraint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.quadrature_incompressibility_constraint"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.quadrature_incompressibility_constraint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics._abc_impl"><code class="docutils literal notranslate"><span class="pre">SolidMechanics._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.pk1_stress_weak_form"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.pk1_stress_weak_form()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.strong_form_residual"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.strong_form_residual()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.strong_form_neumann_bc"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.strong_form_neumann_bc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.kernels.solid_mechanics.SolidMechanics.pk1_stress"><code class="docutils literal notranslate"><span class="pre">SolidMechanics.pk1_stress()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.kernels">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.kernels package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.kernels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-kernels-package">
+<h1>pancax.kernels package<a class="headerlink" href="#pancax-kernels-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.kernels.base_kernel">
+<span id="pancax-kernels-base-kernel-module"></span><h2>pancax.kernels.base_kernel module<a class="headerlink" href="#module-pancax.kernels.base_kernel" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.vector_names">
+<span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">vector_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#vector_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.vector_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.full_tensor_names">
+<span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">full_tensor_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#full_tensor_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.full_tensor_names" title="Link to this definition"></a></dt>
+<dd><p>Provides a full list of tensorial variable component names
+:param base_name: base name for a tensor variable e.g. base_name_xx</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.full_tensor_names_2D">
+<span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">full_tensor_names_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#full_tensor_names_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.full_tensor_names_2D" title="Link to this definition"></a></dt>
+<dd><p>Provides a full list of tensorial variable component names
+:param base_name: base name for a tensor variable e.g. base_name_xx</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.element_pp">
+<span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">element_pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#element_pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.element_pp" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – Function to use for an element property output variable</p></li>
+<li><p><strong>has_props</strong> – Whether or not this function need properties</p></li>
+<li><p><strong>jit</strong> – Whether or not to jit this function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.nodal_pp">
+<span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">nodal_pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#nodal_pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.nodal_pp" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – Function to use for a nodal property output variable</p></li>
+<li><p><strong>has_props</strong> – Whether or not this function need properties</p></li>
+<li><p><strong>jit</strong> – Whether or not to jit this function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.standard_pp">
+<span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">standard_pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#standard_pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.standard_pp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">PhysicsKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#PhysicsKernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel.var_name_to_method">
+<span class="sig-name descname"><span class="pre">var_name_to_method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel.var_name_to_method" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#PhysicsKernel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel.bc_func">
+<span class="sig-name descname"><span class="pre">bc_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel.bc_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.PhysicsKernel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.PhysicsKernel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">StrongFormPhysicsKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel" title="pancax.kernels.base_kernel.PhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsKernel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.bc_func">
+<span class="sig-name descname"><span class="pre">bc_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.bc_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_gradients">
+<span class="sig-name descname"><span class="pre">field_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.field_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_gradients" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_hessians">
+<span class="sig-name descname"><span class="pre">field_hessians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.field_hessians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_hessians" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_laplacians">
+<span class="sig-name descname"><span class="pre">field_laplacians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.field_laplacians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_laplacians" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_time_derivatives">
+<span class="sig-name descname"><span class="pre">field_time_derivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.field_time_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_time_derivatives" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_second_time_derivatives">
+<span class="sig-name descname"><span class="pre">field_second_time_derivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.field_second_time_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.field_second_time_derivatives" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.strong_form_neumann_bc">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel.strong_form_residual">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#StrongFormPhysicsKernel.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.StrongFormPhysicsKernel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.base_kernel.</span></span><span class="sig-name descname"><span class="pre">WeakFormPhysicsKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.base_kernel.PhysicsKernel" title="pancax.kernels.base_kernel.PhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsKernel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.bc_func">
+<span class="sig-name descname"><span class="pre">bc_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.bc_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_field_gradient">
+<span class="sig-name descname"><span class="pre">element_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel.element_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity">
+<span class="sig-name descname"><span class="pre">element_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel.element_quantity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity_grad">
+<span class="sig-name descname"><span class="pre">element_quantity_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel.element_quantity_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity_grad" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity_hessian">
+<span class="sig-name descname"><span class="pre">element_quantity_hessian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel.element_quantity_hessian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.element_quantity_hessian" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.base_kernel.WeakFormPhysicsKernel.energy">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/base_kernel.html#WeakFormPhysicsKernel.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.kernels.laplace_beltrami">
+<span id="pancax-kernels-laplace-beltrami-module"></span><h2>pancax.kernels.laplace_beltrami module<a class="headerlink" href="#module-pancax.kernels.laplace_beltrami" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.laplace_beltrami.</span></span><span class="sig-name descname"><span class="pre">LaplaceBeltrami</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_eigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/laplace_beltrami.html#LaplaceBeltrami"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel" title="pancax.kernels.base_kernel.WeakFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami.field_names">
+<span class="sig-name descname"><span class="pre">field_names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['eigenvector']</span></em><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.field_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_eigs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/laplace_beltrami.html#LaplaceBeltrami.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/laplace_beltrami.html#LaplaceBeltrami.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami.kinetic_energy">
+<span class="sig-name descname"><span class="pre">kinetic_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/laplace_beltrami.html#LaplaceBeltrami.kinetic_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami.kinetic_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.laplace_beltrami.LaplaceBeltrami._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.laplace_beltrami.LaplaceBeltrami._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.kernels.linear_elasticity">
+<span id="pancax-kernels-linear-elasticity-module"></span><h2>pancax.kernels.linear_elasticity module<a class="headerlink" href="#module-pancax.kernels.linear_elasticity" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.linear_elasticity.</span></span><span class="sig-name descname"><span class="pre">LinearElasticity2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func:</span> <span class="pre">~typing.Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_force:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">LinearElasticity2D.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn:</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel" title="pancax.kernels.base_kernel.StrongFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel</span></code></a>, <a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel" title="pancax.kernels.base_kernel.WeakFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['displ_x',</span> <span class="pre">'displ_y']</span></em><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func:</span> <span class="pre">~typing.Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_force:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">LinearElasticity2D.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn:</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.strong_form_residual">
+<span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.strong_form_neumann_bc">
+<span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.linear_strain">
+<span class="sig-name descname"><span class="pre">linear_strain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D.linear_strain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.linear_strain" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D.cauchy_stress">
+<span class="sig-name descname"><span class="pre">cauchy_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/linear_elasticity.html#LinearElasticity2D.cauchy_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D.cauchy_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.linear_elasticity.LinearElasticity2D._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.linear_elasticity.LinearElasticity2D._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.kernels.poisson">
+<span id="pancax-kernels-poisson-module"></span><h2>pancax.kernels.poisson module<a class="headerlink" href="#module-pancax.kernels.poisson" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.poisson.</span></span><span class="sig-name descname"><span class="pre">Poisson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/poisson.html#Poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.poisson.Poisson" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel" title="pancax.kernels.base_kernel.StrongFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel</span></code></a>, <a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel" title="pancax.kernels.base_kernel.WeakFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pancax.kernels.poisson.Poisson.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['u']</span></em><a class="headerlink" href="#pancax.kernels.poisson.Poisson.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.poisson.Poisson.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/poisson.html#Poisson.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.poisson.Poisson.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/poisson.html#Poisson.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.poisson.Poisson.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.strong_form_residual">
+<span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/poisson.html#Poisson.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.poisson.Poisson.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson.strong_form_neumann_bc">
+<span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/poisson.html#Poisson.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.poisson.Poisson.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.poisson.Poisson._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.poisson.Poisson._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.kernels.solid_mechanics">
+<span id="pancax-kernels-solid-mechanics-module"></span><h2>pancax.kernels.solid_mechanics module<a class="headerlink" href="#module-pancax.kernels.solid_mechanics" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.BaseMechanicsFormulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">BaseMechanicsFormulation</span></span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#BaseMechanicsFormulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.BaseMechanicsFormulation.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.BaseMechanicsFormulation.modify_field_gradient">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#BaseMechanicsFormulation.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.BaseMechanicsFormulation._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.IncompressiblePlaneStress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">IncompressiblePlaneStress</span></span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#IncompressiblePlaneStress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.kernels.solid_mechanics.BaseMechanicsFormulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.IncompressiblePlaneStress.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.IncompressiblePlaneStress.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#IncompressiblePlaneStress.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.IncompressiblePlaneStress.deformation_gradient">
+<span class="sig-name descname"><span class="pre">deformation_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#IncompressiblePlaneStress.deformation_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.deformation_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.IncompressiblePlaneStress.modify_field_gradient">
+<span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#IncompressiblePlaneStress.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.IncompressiblePlaneStress._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.IncompressiblePlaneStress._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.PlaneStrain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">PlaneStrain</span></span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#PlaneStrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.PlaneStrain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.kernels.solid_mechanics.BaseMechanicsFormulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.PlaneStrain.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.PlaneStrain.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.PlaneStrain.extract_stress">
+<span class="sig-name descname"><span class="pre">extract_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#PlaneStrain.extract_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.PlaneStrain.extract_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.PlaneStrain.modify_field_gradient">
+<span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#PlaneStrain.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.PlaneStrain.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.PlaneStrain._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.PlaneStrain._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.ThreeDimensional">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">ThreeDimensional</span></span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#ThreeDimensional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.ThreeDimensional" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.kernels.solid_mechanics.BaseMechanicsFormulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.ThreeDimensional.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.ThreeDimensional.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.ThreeDimensional.modify_field_gradient">
+<span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#ThreeDimensional.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.ThreeDimensional.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.ThreeDimensional._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.ThreeDimensional._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">SolidMechanics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constitutive_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.kernels.base_kernel.StrongFormPhysicsKernel" title="pancax.kernels.base_kernel.StrongFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StrongFormPhysicsKernel</span></code></a>, <a class="reference internal" href="#pancax.kernels.base_kernel.WeakFormPhysicsKernel" title="pancax.kernels.base_kernel.WeakFormPhysicsKernel"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeakFormPhysicsKernel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.field_values_names">
+<span class="sig-name descname"><span class="pre">field_values_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.field_values_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.bc_func">
+<span class="sig-name descname"><span class="pre">bc_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.bc_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.use_delta_pinn">
+<span class="sig-name descname"><span class="pre">use_delta_pinn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.use_delta_pinn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constitutive_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_delta_pinn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.n_dofs">
+<span class="sig-name descname"><span class="pre">n_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.constitutive_model">
+<span class="sig-name descname"><span class="pre">constitutive_model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.constitutive_models.html#pancax.constitutive_models.base_constitutive_model.ConstitutiveModel" title="pancax.constitutive_models.base_constitutive_model.ConstitutiveModel"><span class="pre">ConstitutiveModel</span></a></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.constitutive_model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.formulation">
+<span class="sig-name descname"><span class="pre">formulation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.kernels.solid_mechanics.BaseMechanicsFormulation"><span class="pre">BaseMechanicsFormulation</span></a></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.formulation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.element_field_gradient">
+<span class="sig-name descname"><span class="pre">element_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.element_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.element_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.element_quantity_from_func">
+<span class="sig-name descname"><span class="pre">element_quantity_from_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_props</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.element_quantity_from_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.element_quantity_from_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.nodal_incompressibility_constraint">
+<span class="sig-name descname"><span class="pre">nodal_incompressibility_constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.nodal_incompressibility_constraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.nodal_incompressibility_constraint" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.quadrature_incompressibility_constraint">
+<span class="sig-name descname"><span class="pre">quadrature_incompressibility_constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.quadrature_incompressibility_constraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.quadrature_incompressibility_constraint" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.pk1_stress_weak_form">
+<span class="sig-name descname"><span class="pre">pk1_stress_weak_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JxW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.pk1_stress_weak_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.pk1_stress_weak_form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.strong_form_residual">
+<span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.strong_form_neumann_bc">
+<span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.kernels.solid_mechanics.SolidMechanics.pk1_stress">
+<span class="sig-name descname"><span class="pre">pk1_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/kernels/solid_mechanics.html#SolidMechanics.pk1_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.kernels.solid_mechanics.SolidMechanics.pk1_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.kernels">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.kernels" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.fem.elements.html" class="btn btn-neutral float-left" title="pancax.fem.elements package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.loss_functions.html" class="btn btn-neutral float-right" title="pancax.loss_functions package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

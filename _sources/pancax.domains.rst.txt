@@ -1,0 +1,68 @@
+pancax.domains package
+======================
+
+Submodules
+----------
+
+pancax.domains.base\_domain module
+----------------------------------
+
+.. automodule:: pancax.domains.base_domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.domains.collocation\_domain module
+-----------------------------------------
+
+.. automodule:: pancax.domains.collocation_domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.domains.delta\_pinn\_domain module
+-----------------------------------------
+
+.. automodule:: pancax.domains.delta_pinn_domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.domains.inverse\_domain module
+-------------------------------------
+
+.. automodule:: pancax.domains.inverse_domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.domains.utils module
+---------------------------
+
+.. automodule:: pancax.domains.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.domains.variational\_domain module
+-----------------------------------------
+
+.. automodule:: pancax.domains.variational_domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.domains
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

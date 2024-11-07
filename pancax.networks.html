@@ -1,0 +1,627 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.networks package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.optimizers package" href="pancax.optimizers.html" />
+    <link rel="prev" title="pancax.math package" href="pancax.math.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax.networks package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks.elm">pancax.networks.elm module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.elm.activation"><code class="docutils literal notranslate"><span class="pre">activation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.elm.ELM"><code class="docutils literal notranslate"><span class="pre">ELM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM.__init__"><code class="docutils literal notranslate"><span class="pre">ELM.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM.layer"><code class="docutils literal notranslate"><span class="pre">ELM.layer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM.beta"><code class="docutils literal notranslate"><span class="pre">ELM.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM.n_outputs"><code class="docutils literal notranslate"><span class="pre">ELM.n_outputs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM._abc_impl"><code class="docutils literal notranslate"><span class="pre">ELM._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.elm.ELM2"><code class="docutils literal notranslate"><span class="pre">ELM2</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM2.layer"><code class="docutils literal notranslate"><span class="pre">ELM2.layer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM2.__init__"><code class="docutils literal notranslate"><span class="pre">ELM2.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM2._abc_impl"><code class="docutils literal notranslate"><span class="pre">ELM2._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM2.beta"><code class="docutils literal notranslate"><span class="pre">ELM2.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.elm.ELM2.n_outputs"><code class="docutils literal notranslate"><span class="pre">ELM2.n_outputs</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks.field_property_pair">pancax.networks.field_property_pair module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.field_property_pair.BasePancaxModel"><code class="docutils literal notranslate"><span class="pre">BasePancaxModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.BasePancaxModel.serialise"><code class="docutils literal notranslate"><span class="pre">BasePancaxModel.serialise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.BasePancaxModel.__init__"><code class="docutils literal notranslate"><span class="pre">BasePancaxModel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.BasePancaxModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">BasePancaxModel._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair.fields"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair.properties"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair.properties</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair.freeze_fields_filter"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair.freeze_fields_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair.freeze_props_filter"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair.freeze_props_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair.__init__"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.field_property_pair.FieldPropertyPair._abc_impl"><code class="docutils literal notranslate"><span class="pre">FieldPropertyPair._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks.initialization">pancax.networks.initialization module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.initialization.zero_init"><code class="docutils literal notranslate"><span class="pre">zero_init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.initialization.trunc_init"><code class="docutils literal notranslate"><span class="pre">trunc_init()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.initialization.init_linear_weight"><code class="docutils literal notranslate"><span class="pre">init_linear_weight()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.initialization.init_linear"><code class="docutils literal notranslate"><span class="pre">init_linear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.initialization.box_init"><code class="docutils literal notranslate"><span class="pre">box_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks.mlp">pancax.networks.mlp module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.mlp.Linear"><code class="docutils literal notranslate"><span class="pre">Linear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.mlp.MLP"><code class="docutils literal notranslate"><span class="pre">MLP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.mlp.MLPBasis"><code class="docutils literal notranslate"><span class="pre">MLPBasis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks.properties">pancax.networks.properties module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.properties.Properties"><code class="docutils literal notranslate"><span class="pre">Properties</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.Properties.__init__"><code class="docutils literal notranslate"><span class="pre">Properties.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.Properties.prop_mins"><code class="docutils literal notranslate"><span class="pre">Properties.prop_mins</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.Properties.prop_maxs"><code class="docutils literal notranslate"><span class="pre">Properties.prop_maxs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.Properties.prop_params"><code class="docutils literal notranslate"><span class="pre">Properties.prop_params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.Properties._abc_impl"><code class="docutils literal notranslate"><span class="pre">Properties._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.Properties.activation_func"><code class="docutils literal notranslate"><span class="pre">Properties.activation_func</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.properties.FixedProperties"><code class="docutils literal notranslate"><span class="pre">FixedProperties</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.FixedProperties._abc_impl"><code class="docutils literal notranslate"><span class="pre">FixedProperties._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.properties.FixedProperties.__init__"><code class="docutils literal notranslate"><span class="pre">FixedProperties.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks.rbf">pancax.networks.rbf module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.rbf.RBFBasis"><code class="docutils literal notranslate"><span class="pre">RBFBasis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.rbf.RBFBasis.__init__"><code class="docutils literal notranslate"><span class="pre">RBFBasis.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.rbf.RBFBasis.center"><code class="docutils literal notranslate"><span class="pre">RBFBasis.center</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.rbf.RBFBasis.sigma"><code class="docutils literal notranslate"><span class="pre">RBFBasis.sigma</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.networks.rbf.RBFBasis._abc_impl"><code class="docutils literal notranslate"><span class="pre">RBFBasis._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.rbf.rbf_normalization"><code class="docutils literal notranslate"><span class="pre">rbf_normalization()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.networks">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.networks.Network"><code class="docutils literal notranslate"><span class="pre">Network()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.networks package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.networks.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-networks-package">
+<h1>pancax.networks package<a class="headerlink" href="#pancax-networks-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.networks.elm">
+<span id="pancax-networks-elm-module"></span><h2>pancax.networks.elm module<a class="headerlink" href="#module-pancax.networks.elm" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.elm.activation">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.elm.</span></span><span class="sig-name descname"><span class="pre">activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/elm.html#activation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.elm.activation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.elm.</span></span><span class="sig-name descname"><span class="pre">ELM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/elm.html#ELM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.elm.ELM" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/elm.html#ELM.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.elm.ELM.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM.layer">
+<span class="sig-name descname"><span class="pre">layer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.networks.elm.ELM.layer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.networks.elm.ELM.beta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM.n_outputs">
+<span class="sig-name descname"><span class="pre">n_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.networks.elm.ELM.n_outputs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.elm.ELM._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.elm.</span></span><span class="sig-name descname"><span class="pre">ELM2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta:</span> <span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">any&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs:</span> <span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/elm.html#ELM2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.elm.ELM2" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM2.layer">
+<span class="sig-name descname"><span class="pre">layer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.networks.elm.ELM2.layer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM2.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.networks.elm.ELM2.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM2._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.elm.ELM2._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM2.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.networks.elm.ELM2.beta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.elm.ELM2.n_outputs">
+<span class="sig-name descname"><span class="pre">n_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.networks.elm.ELM2.n_outputs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.networks.field_property_pair">
+<span id="pancax-networks-field-property-pair-module"></span><h2>pancax.networks.field_property_pair module<a class="headerlink" href="#module-pancax.networks.field_property_pair" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.BasePancaxModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.field_property_pair.</span></span><span class="sig-name descname"><span class="pre">BasePancaxModel</span></span><a class="reference internal" href="_modules/pancax/networks/field_property_pair.html#BasePancaxModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.field_property_pair.BasePancaxModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Base class for pancax model parameters.</p>
+<p>This includes a few helper methods</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.BasePancaxModel.serialise">
+<span class="sig-name descname"><span class="pre">serialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/field_property_pair.html#BasePancaxModel.serialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.field_property_pair.BasePancaxModel.serialise" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.BasePancaxModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.networks.field_property_pair.BasePancaxModel.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.BasePancaxModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.field_property_pair.BasePancaxModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.field_property_pair.</span></span><span class="sig-name descname"><span class="pre">FieldPropertyPair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/field_property_pair.html#FieldPropertyPair"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.networks.field_property_pair.BasePancaxModel" title="pancax.networks.field_property_pair.BasePancaxModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePancaxModel</span></code></a></p>
+<p>Data structure for storing a set of field network
+parameters and a set of material properties</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fields</strong> – field network parameters object</p></li>
+<li><p><strong>properties</strong> – property parameters object</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Module</span></em><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair.properties">
+<span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Module</span></em><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair.properties" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair.freeze_fields_filter">
+<span class="sig-name descname"><span class="pre">freeze_fields_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/field_property_pair.html#FieldPropertyPair.freeze_fields_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair.freeze_fields_filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair.freeze_props_filter">
+<span class="sig-name descname"><span class="pre">freeze_props_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/field_property_pair.html#FieldPropertyPair.freeze_props_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair.freeze_props_filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.field_property_pair.FieldPropertyPair._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.field_property_pair.FieldPropertyPair._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.networks.initialization">
+<span id="pancax-networks-initialization-module"></span><h2>pancax.networks.initialization module<a class="headerlink" href="#module-pancax.networks.initialization" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.initialization.zero_init">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.initialization.</span></span><span class="sig-name descname"><span class="pre">zero_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'no</span> <span class="pre">ni'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pancax/networks/initialization.html#zero_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.initialization.zero_init" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weight</strong> – current weight array for sizing</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new set of weights</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.initialization.trunc_init">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.initialization.</span></span><span class="sig-name descname"><span class="pre">trunc_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'no</span> <span class="pre">ni'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pancax/networks/initialization.html#trunc_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.initialization.trunc_init" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>weight</strong> – current weight array for sizing</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new set of weights</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.initialization.init_linear_weight">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.initialization.</span></span><span class="sig-name descname"><span class="pre">init_linear_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/pancax/networks/initialization.html#init_linear_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.initialization.init_linear_weight" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – equinox  model</p></li>
+<li><p><strong>init_fn</strong> – function to initialize weigth with</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new equinox model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.initialization.init_linear">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.initialization.</span></span><span class="sig-name descname"><span class="pre">init_linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/initialization.html#init_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.initialization.init_linear" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – equinox  model</p></li>
+<li><p><strong>init_fn</strong> – function to initialize weigth with</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a new equinox model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.initialization.box_init">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.initialization.</span></span><span class="sig-name descname"><span class="pre">box_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/initialization.html#box_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.initialization.box_init" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pancax.networks.mlp">
+<span id="pancax-networks-mlp-module"></span><h2>pancax.networks.mlp module<a class="headerlink" href="#module-pancax.networks.mlp" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.mlp.Linear">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.mlp.</span></span><span class="sig-name descname"><span class="pre">Linear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/mlp.html#Linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.mlp.Linear" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_inputs</strong> – Number of inputs to linear layer</p></li>
+<li><p><strong>n_outputs</strong> – Number of outputs of the linear layer</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Equinox Linear layer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.mlp.MLP">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.mlp.</span></span><span class="sig-name descname"><span class="pre">MLP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outputs:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation:</span> <span class="pre">~typing.Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">~jax._src.random.PRNGKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_final_bias:</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_func:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">trunc_init&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/mlp.html#MLP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.mlp.MLP" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_inputs</strong> – Number of inputs to the MLP</p></li>
+<li><p><strong>n_outputs</strong> – Number of outputs of the MLP</p></li>
+<li><p><strong>n_neurons</strong> – Number of neurons in each hidden layer of the MLP</p></li>
+<li><p><strong>n_layers</strong> – Number of hidden layers in the MLP</p></li>
+<li><p><strong>activation</strong> – Activation function, e.g. tanh or relu</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+<li><p><strong>use_final_bias</strong> – Boolean for whether or not to use a bias
+vector in the final layer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Equinox MLP layer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.mlp.MLPBasis">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.mlp.</span></span><span class="sig-name descname"><span class="pre">MLPBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation:</span> <span class="pre">~typing.Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">~jax._src.random.PRNGKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_func:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">trunc_init&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/mlp.html#MLPBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.mlp.MLPBasis" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pancax.networks.properties">
+<span id="pancax-networks-properties-module"></span><h2>pancax.networks.properties module<a class="headerlink" href="#module-pancax.networks.properties" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.properties.</span></span><span class="sig-name descname"><span class="pre">Properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_mins:</span> <span class="pre">~jax.Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_maxs:</span> <span class="pre">~jax.Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">~jax._src.random.PRNGKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_func:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">&lt;PjitFunction</span> <span class="pre">of</span> <span class="pre">&lt;function</span> <span class="pre">sigmoid&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/properties.html#Properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.properties.Properties" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prop_mins</strong> – Minimum allowable properties</p></li>
+<li><p><strong>prop_maxs</strong> – Maximum allowable properties</p></li>
+<li><p><strong>prop_params</strong> – Actual tunable parameters</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_mins:</span> <span class="pre">~jax.Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_maxs:</span> <span class="pre">~jax.Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">~jax._src.random.PRNGKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_func:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">&lt;PjitFunction</span> <span class="pre">of</span> <span class="pre">&lt;function</span> <span class="pre">sigmoid&gt;&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/networks/properties.html#Properties.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.properties.Properties.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prop_mins</strong> – Minimum allowable properties</p></li>
+<li><p><strong>prop_maxs</strong> – Maximum allowable properties</p></li>
+<li><p><strong>key</strong> – rng key</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties.prop_mins">
+<span class="sig-name descname"><span class="pre">prop_mins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></em><a class="headerlink" href="#pancax.networks.properties.Properties.prop_mins" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties.prop_maxs">
+<span class="sig-name descname"><span class="pre">prop_maxs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></em><a class="headerlink" href="#pancax.networks.properties.Properties.prop_maxs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties.prop_params">
+<span class="sig-name descname"><span class="pre">prop_params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></em><a class="headerlink" href="#pancax.networks.properties.Properties.prop_params" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.properties.Properties._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.properties.Properties.activation_func">
+<span class="sig-name descname"><span class="pre">activation_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.networks.properties.Properties.activation_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.properties.FixedProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.properties.</span></span><span class="sig-name descname"><span class="pre">FixedProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.Array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/properties.html#FixedProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.properties.FixedProperties" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.networks.properties.Properties" title="pancax.networks.properties.Properties"><code class="xref py py-class docutils literal notranslate"><span class="pre">Properties</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.properties.FixedProperties._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.properties.FixedProperties._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.properties.FixedProperties.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/networks/properties.html#FixedProperties.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.properties.FixedProperties.__init__" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>props</strong> – Property values to be fixed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.networks.rbf">
+<span id="pancax-networks-rbf-module"></span><h2>pancax.networks.rbf module<a class="headerlink" href="#module-pancax.networks.rbf" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.networks.rbf.RBFBasis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.networks.rbf.</span></span><span class="sig-name descname"><span class="pre">RBFBasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">&lt;function</span> <span class="pre">PRNGKey</span> <span class="pre">at</span> <span class="pre">0x7f2fc332f7e0&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/rbf.html#RBFBasis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.rbf.RBFBasis" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.networks.rbf.RBFBasis.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neurons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/networks/rbf.html#RBFBasis.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.rbf.RBFBasis.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.rbf.RBFBasis.center">
+<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></em><a class="headerlink" href="#pancax.networks.rbf.RBFBasis.center" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.rbf.RBFBasis.sigma">
+<span class="sig-name descname"><span class="pre">sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></em><a class="headerlink" href="#pancax.networks.rbf.RBFBasis.sigma" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.networks.rbf.RBFBasis._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.networks.rbf.RBFBasis._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.rbf.rbf_normalization">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.rbf.</span></span><span class="sig-name descname"><span class="pre">rbf_normalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks/rbf.html#rbf_normalization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.rbf.rbf_normalization" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pancax.networks">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.networks" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.networks.Network">
+<span class="sig-prename descclassname"><span class="pre">pancax.networks.</span></span><span class="sig-name descname"><span class="pre">Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/networks.html#Network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.networks.Network" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.math.html" class="btn btn-neutral float-left" title="pancax.math package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.optimizers.html" class="btn btn-neutral float-right" title="pancax.optimizers package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

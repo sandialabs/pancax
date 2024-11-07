@@ -1,0 +1,59 @@
+pancax.kernels package
+======================
+
+Submodules
+----------
+
+pancax.kernels.base\_kernel module
+----------------------------------
+
+.. automodule:: pancax.kernels.base_kernel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.kernels.laplace\_beltrami module
+---------------------------------------
+
+.. automodule:: pancax.kernels.laplace_beltrami
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.kernels.linear\_elasticity module
+----------------------------------------
+
+.. automodule:: pancax.kernels.linear_elasticity
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.kernels.poisson module
+-----------------------------
+
+.. automodule:: pancax.kernels.poisson
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.kernels.solid\_mechanics module
+--------------------------------------
+
+.. automodule:: pancax.kernels.solid_mechanics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.kernels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,0 +1,86 @@
+pancax.fem.elements package
+===========================
+
+Submodules
+----------
+
+pancax.fem.elements.base\_element module
+----------------------------------------
+
+.. automodule:: pancax.fem.elements.base_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.hex8\_element module
+----------------------------------------
+
+.. automodule:: pancax.fem.elements.hex8_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.line\_element module
+----------------------------------------
+
+.. automodule:: pancax.fem.elements.line_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.quad4\_element module
+-----------------------------------------
+
+.. automodule:: pancax.fem.elements.quad4_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.quad9\_element module
+-----------------------------------------
+
+.. automodule:: pancax.fem.elements.quad9_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.simplex\_tri\_element module
+------------------------------------------------
+
+.. automodule:: pancax.fem.elements.simplex_tri_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.tet10\_element module
+-----------------------------------------
+
+.. automodule:: pancax.fem.elements.tet10_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.elements.tet4\_element module
+----------------------------------------
+
+.. automodule:: pancax.fem.elements.tet4_element
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.fem.elements
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

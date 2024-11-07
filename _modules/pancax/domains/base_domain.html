@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.domains.base_domain &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.domains.base_domain</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.domains.base_domain</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">vmap</span>
+<span class="kn">from</span> <span class="nn">jaxtyping</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Float</span>
+<span class="kn">from</span> <span class="nn">pancax.bcs</span> <span class="kn">import</span> <span class="n">EssentialBC</span><span class="p">,</span> <span class="n">NaturalBC</span>
+<span class="kn">from</span> <span class="nn">pancax.bcs</span> <span class="kn">import</span> <span class="n">EssentialBCSet</span>
+<span class="kn">from</span> <span class="nn">pancax.fem</span> <span class="kn">import</span> <span class="n">DofManager</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">SimplexTriElement</span>
+<span class="kn">from</span> <span class="nn">pancax.fem</span> <span class="kn">import</span> <span class="n">create_higher_order_mesh_from_simplex_mesh</span>
+<span class="kn">from</span> <span class="nn">pancax.fem</span> <span class="kn">import</span> <span class="n">read_exodus_mesh</span>
+<span class="kn">from</span> <span class="nn">pancax.kernels</span> <span class="kn">import</span> <span class="n">PhysicsKernel</span>
+<span class="kn">from</span> <span class="nn">pancax.timer</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">pancax.utils</span> <span class="kn">import</span> <span class="n">find_mesh_file</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">equinox</span> <span class="k">as</span> <span class="nn">eqx</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+
+
+
+<div class="viewcode-block" id="BaseDomain">
+<a class="viewcode-back" href="../../../pancax.domains.html#pancax.domains.base_domain.BaseDomain">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseDomain</span><span class="p">(</span><span class="n">eqx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Base domain for all problem types.</span>
+<span class="sd">  This holds essential things for the problem</span>
+<span class="sd">  such as a mesh to load a geometry from,</span>
+<span class="sd">  times, physics, bcs, etc.</span>
+
+<span class="sd">  :param mesh: A mesh from an exodus file most likely</span>
+<span class="sd">  :param coords: An array of coordinates</span>
+<span class="sd">  :param times: An array of times</span>
+<span class="sd">  :param physics: An initialized physics object</span>
+<span class="sd">  :param essential_bcs: A list of EssentialBCs</span>
+<span class="sd">  :param natural_bcs: a list of NaturalBCs</span>
+<span class="sd">  :param dof_manager: A DofManager for keeping track of essential bcs</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">mesh_file</span><span class="p">:</span> <span class="nb">str</span>
+  <span class="n">mesh</span><span class="p">:</span> <span class="n">Mesh</span>
+  <span class="n">coords</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn nd&quot;</span><span class="p">]</span>
+  <span class="n">times</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nt&quot;</span><span class="p">],</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn 1&quot;</span><span class="p">]]</span>
+  <span class="n">physics</span><span class="p">:</span> <span class="n">PhysicsKernel</span>
+  <span class="n">essential_bcs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EssentialBC</span><span class="p">]</span>
+  <span class="n">natural_bcs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NaturalBC</span><span class="p">]</span>
+  <span class="n">dof_manager</span><span class="p">:</span> <span class="n">DofManager</span>
+
+<div class="viewcode-block" id="BaseDomain.__init__">
+<a class="viewcode-back" href="../../../pancax.domains.html#pancax.domains.base_domain.BaseDomain.__init__">[docs]</a>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">physics</span><span class="p">:</span> <span class="n">PhysicsKernel</span><span class="p">,</span>
+    <span class="n">essential_bcs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EssentialBC</span><span class="p">],</span>
+    <span class="n">natural_bcs</span><span class="p">:</span> <span class="nb">any</span><span class="p">,</span> <span class="c1"># TODO figure out to handle this</span>
+    <span class="n">mesh_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">times</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nt&quot;</span><span class="p">],</span>
+    <span class="n">p_order</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="p">):</span>
+    <span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;BaseDomain.__init__&#39;</span><span class="p">):</span>
+      <span class="c1"># setup</span>
+      <span class="n">n_dofs</span> <span class="o">=</span> <span class="n">physics</span><span class="o">.</span><span class="n">n_dofs</span>
+      
+      <span class="c1"># mesh</span>
+      <span class="n">mesh</span> <span class="o">=</span> <span class="n">read_exodus_mesh</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">)</span>
+
+      <span class="c1"># if tri mesh, we can make it higher order from lower order</span>
+      <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">parentElement</span><span class="p">)</span> <span class="o">==</span> <span class="n">SimplexTriElement</span><span class="p">:</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">create_higher_order_mesh_from_simplex_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">p_order</span><span class="p">,</span> <span class="n">copyNodeSets</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: Ignoring polynomial order flag for non tri mesh&#39;</span><span class="p">)</span>
+
+      <span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;move coordinates to device&#39;</span><span class="p">):</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+
+      <span class="c1"># dof book keeping</span>
+      <span class="n">dof_manager</span> <span class="o">=</span> <span class="n">DofManager</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">n_dofs</span><span class="p">,</span> <span class="n">essential_bcs</span><span class="p">)</span>
+      <span class="c1"># TODO move below to dof manager</span>
+      <span class="n">dof_manager</span><span class="o">.</span><span class="n">isUnknown</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">isUnknown</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+      <span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">)</span>
+
+      <span class="c1"># setting all at once</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span> <span class="o">=</span> <span class="n">mesh_file</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">coords</span> <span class="o">=</span> <span class="n">coords</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">times</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">physics</span> <span class="o">=</span> <span class="n">physics</span>
+      <span class="c1"># self.essential_bcs = essential_bcs</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">essential_bcs</span> <span class="o">=</span> <span class="n">EssentialBCSet</span><span class="p">(</span><span class="n">essential_bcs</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">natural_bcs</span> <span class="o">=</span> <span class="n">natural_bcs</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">dof_manager</span> <span class="o">=</span> <span class="n">dof_manager</span></div>
+
+
+<div class="viewcode-block" id="BaseDomain.field_values">
+<a class="viewcode-back" href="../../../pancax.domains.html#pancax.domains.base_domain.BaseDomain.field_values">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_network</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">field_values</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+      <span class="n">field_network</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">t</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">us</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
