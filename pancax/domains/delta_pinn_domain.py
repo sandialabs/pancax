@@ -122,8 +122,9 @@ class DeltaPINNDomain(VariationalDomain):
             print(f'  Post-processing eigenvector {n}')
             field = domain.dof_manager.create_field(modes[:, n])
             field = onp.asarray(field)
-            pp.exo.put_time(n + 1, 1. / lambdas[n])
-            pp.exo.put_node_variable_values('eigenvector', n + 1, field[:, 0])
+            # TODO will fail on no exodus post-processor
+            pp.pp.exo.put_time(n + 1, 1. / lambdas[n])
+            pp.pp.exo.put_node_variable_values('eigenvector', n + 1, field[:, 0])
           pp.close()
 
       # normalizing modes by default
