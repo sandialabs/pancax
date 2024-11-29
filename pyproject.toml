@@ -8,7 +8,8 @@ dependencies = [
   'matplotlib',
   'netCDF4',
   'pandas',
-  'scipy'
+  'scipy',
+  'vtk'
 ]
 
 [project.optional-dependencies]
@@ -34,8 +35,8 @@ docs = [
   'sphinxcontrib-napoleon'
 ]
 test = [
-    'pytest',
-    'pytest-cov',
+  'pytest',
+  'pytest-cov',
 ]
 
 [tool.setuptools]
