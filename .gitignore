@@ -7,6 +7,9 @@
 .*nfs*
 *.png
 *.pyc
+*.vtk
+*.vtm
+*.vtu
 .coverage
 docs/source/modules.rst
 docs/source/pancax.*

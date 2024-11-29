@@ -6,10 +6,15 @@ try:
 except:
   print('WARNING: Could not find exodus3 module. You\'ll need to use vtk output')
 
+try:
+  import vtk
+except:
+  print('WARNING: Could not find vtk module. You\'ll need to use another form of output')
+
 import jax
 import os
 import numpy as onp
-import vtk
+# import vtk
 
 
 class ExodusPostProcessor:
