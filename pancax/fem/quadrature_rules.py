@@ -55,6 +55,10 @@ class QuadratureRule(eqx.Module):
     def __len__(self):
         return self.xigauss.shape[0]
 
+    def eval_at_iso_points(self, field):
+        xigauss = self.xigauss
+        fields = jnp.array([field[0,:] + (field[1,:]-field[0,:]) * xi for xi in xigauss])
+        return fields
 
 def create_quadrature_rule_1D(degree: int) -> QuadratureRule:
     """Creates a Gauss-Legendre quadrature on the unit interval.
