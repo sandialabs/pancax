@@ -45,7 +45,7 @@ class PlaneStrain(BaseMechanicsFormulation):
 
 
 class ThreeDimensional(BaseMechanicsFormulation):
-	n_dimensions = 3
+	n_dimensions: int = 3
 
 	def modify_field_gradient(self, grad_u):
 		return grad_u
