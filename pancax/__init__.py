@@ -2,17 +2,17 @@ from .bcs import EssentialBC, NaturalBC
 from .bvps import *
 from .constitutive_models import *
 from .data import *
-from .domains import *
+from .domains import CollocationDomain, DeltaPINNDomain, VariationalDomain
 from .fem import *
-from .kernels import *
 from .kinematics import *
 from .history_writer import EnsembleHistoryWriter, HistoryWriter
 from .logging import EnsembleLogger, Logger, log_loss
 from .loss_functions import *
 from .networks import *
 from .optimizers import *
-from .physics import *
+from .physics_kernels import *
 from .post_processor import PostProcessor
+from .problem import Problem
 from .trainer import Trainer
 from .utils import find_data_file, find_mesh_file
 from jax import jit

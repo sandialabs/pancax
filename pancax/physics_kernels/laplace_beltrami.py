@@ -3,7 +3,7 @@ import jax.numpy as jnp
 
 
 class LaplaceBeltrami(BaseEnergyFormPhysics):
-  field_value_names: tuple[int, ...]
+  field_value_names: tuple[int, ...] = ('u')
 
   def __init__(self):
     super().__init__(('u'))

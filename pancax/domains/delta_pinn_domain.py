@@ -12,6 +12,7 @@ import numpy as onp
 
 class DeltaPINNDomain(VariationalDomain):
   n_eigen_values: int
+  physics: LaplaceBeltrami
   eigen_modes: Float[Array, "nn nev"]
 
   def __init__(
@@ -24,18 +25,21 @@ class DeltaPINNDomain(VariationalDomain):
   ):
     super().__init__(mesh_file, times, p_order=p_order, q_order=q_order)
     self.n_eigen_values = n_eigen_values
+    physics = LaplaceBeltrami()
+    physics = physics.update_normalization(self)
+    self.physics = physics.update_var_name_to_method()
     self.eigen_modes = self.solve_eigen_problem()
 
   # def __pos
 
   def solve_eigen_problem(self):
-    physics = LaplaceBeltrami()
+    # physics = LaplaceBeltrami()
     dof_manager = DofManager(self.mesh, 1, [])
     Uu = jnp.zeros(dof_manager.get_unknown_size())
     U = dof_manager.create_field(Uu)
     # TODO need to define these methods
-    K = physics.stiffness_matrix((), self, 0., U, dof_manager)
-    M = physics.mass_matrix((), self, 0., U, dof_manager)
+    K = self.physics.stiffness_matrix((), self, 0., U, dof_manager)
+    M = self.physics.mass_matrix((), self, 0., U, dof_manager)
 
     with Timer('eigen solve'):
       nModes = self.n_eigen_values
@@ -66,7 +70,7 @@ class DeltaPINNDomain(VariationalDomain):
     # normalizing modes by default
     modes = jnp.array(modes[:, 0:len(lambdas) - 1])
     print(modes.shape)
-    # modes = (modes - jnp.min(modes, axis=0)) / \
-    #         (jnp.max(modes, axis=0) - jnp.min(modes, axis=0))
+    modes = (modes - jnp.min(modes, axis=0)) / \
+            (jnp.max(modes, axis=0) - jnp.min(modes, axis=0))
 
     return modes
