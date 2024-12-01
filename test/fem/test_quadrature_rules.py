@@ -5,7 +5,6 @@ import jax.numpy as jnp
 import pytest
 
 
-
 # integrate x^n y^m on unit triangle
 def integrate_2D_monomial_on_triangle(n, m):
     p = n + m
@@ -137,4 +136,3 @@ def test_error_raise_on_bad_quadrature_degree():
 
     with pytest.raises(ValueError):
         qr = QuadratureRule(Tet4Element(), 3)
-

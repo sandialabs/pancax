@@ -50,7 +50,8 @@ class Adam(Optimizer):
         updates, opt_st = self.opt.update(grads, opt_st)
         params = eqx.apply_updates(params, updates)
         # add grad props to output
-        loss[1].update({'dprops': grads.properties.prop_params})
+        # TODO what to do about below?
+        # loss[1].update({'dprops': grads.properties.prop_params})
         return params, opt_st, loss
     else:
       def step(params, domain, opt_st):

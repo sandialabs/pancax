@@ -25,8 +25,3 @@ def test_read_exodus_mesh_tri():
 def test_read_exodus_mesh_with_ssets_tri():
     f = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mesh_1x.g')
     mesh = read_exodus_mesh(f)
-
-
-
-
-

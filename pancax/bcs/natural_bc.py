@@ -1,4 +1,5 @@
 from jaxtyping import Array, Float
+from pancax import fem
 from pancax.fem import surface
 from typing import Callable, Optional
 import equinox as eqx
@@ -20,6 +21,7 @@ class NaturalBC(eqx.Module):
 
     def vmap_inner(edge):
       edge_coords = surface.get_coords(mesh.coords, mesh.conns, edge)
+      # edge_coords = fem.mesh.get.get_coords(mesh, side)
       jac = jnp.linalg.norm(edge_coords[0,:] - edge_coords[1,:])
       xgauss = edge_coords[0] + jnp.outer(xigauss, edge_coords[1] - edge_coords[0])
       return xgauss

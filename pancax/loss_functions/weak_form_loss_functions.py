@@ -35,10 +35,14 @@ class EnergyLoss(PhysicsLossFunction):
     return self.weight * loss, dict(energy=energy)
 
   def load_step(self, params, domain, t):
-    field_network, props = params
-    us = domain.field_values(field_network, t)
-    props = props()
-    pi = potential_energy(domain, us, props)
+    # field_network, props = params
+    # us = domain.physics.field_values(field_network, t)
+    # us = domain.physics.vmap_field_values(field_network, domain.coords, t)
+    # props = props()
+    # pi = potential_energy(domain, us, props)
+    field, physics = params
+    us = physics.vmap_field_values(field, domain.coords, t)
+    pi = physics.potential_energy(params, domain.domain, t, us)
     return pi
 
 

@@ -35,10 +35,13 @@ class DirichletBCLoss(BCLossFunction):
         field_network, coords, t
       )[:, bc.component]
       us_expected = vmap(bc.function, in_axes=(0, None))(coords, t)
-      return jnp.square(us_predicted - use_expected).mean()
+      return jnp.square(us_predicted - us_expected).mean()
 
-    errors = vmap(vmap_func)(domain.essential_bcs)
-    error = jnp.sum(errors)
+    # errors = vmap(vmap_func)(domain.essential_bcs)
+    # error = jnp.sum(errors)
+    error = 0.0
+    for bc in domain.essential_bcs:
+      error = error + vmap_func(bc)
     return error
 
 
