@@ -16,7 +16,7 @@ pp = PostProcessor(mesh_file, 'exodus')
 # domain setup
 ##################
 times = jnp.linspace(0.0, 0.0, 1)
-domain = VariationalDomain(mesh_file, times)
+domain = CollocationDomain(mesh_file, times)
 
 ##################
 # physics setup
@@ -53,14 +53,11 @@ problem = Problem(domain, physics, ics, essential_bcs, natural_bcs)
 ##################
 n_dims = domain.coords.shape[1]
 field = MLP(n_dims + 1, physics.n_dofs, 50, 3, jax.nn.tanh, key)
-# props = FixedProperties([])
-# params = FieldPropertyPair(field, props)
 params = FieldPropertyPair(field, problem.physics)
 
 loss_function = StrongFormResidualLoss()
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
 opt_st = opt.init(params)
-# # print(opt_st)
 
 for epoch in range(5000):
   params, opt_st, loss = opt.step(params, problem, opt_st)
