@@ -34,7 +34,8 @@ class FieldPropertyPair(BasePancaxModel):
   def freeze_fields_filter(self):
     filter_spec = jtu.tree_map(lambda _: False, self)
     filter_spec = eqx.tree_at(
-        lambda tree: tree.properties.prop_params,
+        # lambda tree: tree.properties.prop_params,
+        lambda tree: tree.properties,
         filter_spec,
         replace=True
     )

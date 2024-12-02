@@ -54,5 +54,9 @@ class ForwardProblem(eqx.Module):
     return self.domain.mesh
 
   @property
+  def mesh_file(self):
+    return self.domain.mesh_file
+
+  @property
   def times(self):
     return self.domain.times
