@@ -85,11 +85,6 @@ loss_function_2 = CombineLossFunctions(
   # with_props=True 
 )
 
-# filter_spec_1 = lambda p: p.field_network
-# filter_spec_2 = lambda p: p.properties 
-# filter_spec_1 = params.freeze_props_filter()
-# filter_spec_2 = params.freeze_fields_filter()
-
 opt_1 = Adam(loss_function_1, learning_rate=1.0e-3, has_aux=True)#, filter_spec=filter_spec_1)
 opt_2 = Adam(loss_function_2, learning_rate=1.0e-3, has_aux=True)#, transition_steps=2500, filter_spec=filter_spec_2)
 
@@ -140,28 +135,3 @@ pp.init(problem, 'output.e',
 )
 pp.write_outputs(params, problem)
 pp.close()
-# trainer_1 = Trainer(
-#   problem, opt_1, 
-#   # output_node_variables=['displacement'], 
-#   output_node_variables=['field_values'],
-#   log_every=2500, 
-#   output_every=100000
-# )
-# trainer_2 = Trainer(
-#   problem, opt_2, 
-#   # output_node_variables=['displacement'], 
-#   output_node_variables=['field_values'],
-#   log_file='props_log.log',
-#   log_every=10,
-#   output_every=1000000000
-# )
-# opt_st_2 = trainer_2.init(params)
-
-# pre-train on initial prop guesses
-# print('Pre-training')
-# params = trainer_1.train(params, 25000)
-# for n in range(1000):
-#   print(f'Iteration = {n}')
-#   params = trainer_1.train(params, 5000)
-#   for m in range(50):
-#     params, opt_st_2 = trainer_2.step(params, opt_st_2)
