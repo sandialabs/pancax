@@ -12,7 +12,7 @@ from .networks import *
 from .optimizers import *
 from .physics_kernels import *
 from .post_processor import PostProcessor
-from .problem import Problem
+from .problems import ForwardProblem, InverseProblem
 from .trainer import Trainer
 from .utils import find_data_file, find_mesh_file
 from jax import jit

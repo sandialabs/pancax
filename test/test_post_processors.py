@@ -1,7 +1,7 @@
 from jax import random
 from pancax import EssentialBC, VariationalDomain, NeoHookean, ThreeDimensional, SolidMechanics
 from pancax import FieldPropertyPair, MLP
-from pancax import PostProcessor, Problem
+from pancax import PostProcessor, ForwardProblem
 from pathlib import Path
 import jax
 import jax.numpy as jnp
@@ -29,7 +29,7 @@ def problem():
     ]
     natural_bcs = [
     ]
-    problem = Problem(domain, physics, ics, essential_bcs, natural_bcs)
+    problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
     return problem
 
 

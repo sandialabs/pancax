@@ -1,13 +1,13 @@
-from .bcs import EssentialBC, NaturalBC
-from .domains import BaseDomain, VariationalDomain
-from .physics_kernels import BasePhysics
+from ..bcs import EssentialBC, NaturalBC
+from ..domains import BaseDomain, VariationalDomain
+from ..physics_kernels import BasePhysics
 from typing import Callable, List
 import equinox as eqx
 
 
 # note that physics here will note hold the correct parameters
 # after initialization
-class Problem(eqx.Module):
+class ForwardProblem(eqx.Module):
   domain: BaseDomain
   physics: BasePhysics
   ics: List[Callable]
@@ -34,9 +34,21 @@ class Problem(eqx.Module):
     self.natural_bcs = natural_bcs
 
   @property
+  def conns(self):
+    return self.domain.conns
+
+  @property
   def coords(self):
     return self.domain.coords
   
+  @property
+  def dof_manager(self):
+    return self.domain.dof_manager
+
+  @property
+  def fspace(self):
+    return self.domain.fspace
+
   @property
   def mesh(self):
     return self.domain.mesh
