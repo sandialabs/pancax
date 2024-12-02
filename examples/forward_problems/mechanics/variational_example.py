@@ -1,5 +1,6 @@
 from pancax import *
 
+
 ##################
 # for reproducibility
 ##################
@@ -15,30 +16,33 @@ pp = PostProcessor(mesh_file, 'exodus')
 ##################
 # domain setup
 ##################
-times = jnp.linspace(0.0, 0.0, 1)
+times = jnp.linspace(0.0, 1.0, 11)
 domain = VariationalDomain(mesh_file, times)
 
 ##################
 # physics setup
 ##################
-physics = Poisson(lambda x: 2 * jnp.pi**2 * jnp.sin(2. * jnp.pi * x[0]) * jnp.sin(2. * jnp.pi * x[1]))
+model = Gent(
+  bulk_modulus=0.833,
+  shear_modulus=0.3846,
+  Jm_parameter=3.
+)
+physics = SolidMechanics(model, PlaneStrain())
 
 ##################
-# bcs
+# ics/bcs
 ##################
-def bc_func(x, t, z):
-  x, y = x[0], x[1]
-  return x * (1. - x) * y * (1. - y) * z
-
-physics = physics.update_dirichlet_bc_func(bc_func)
-
 ics = [
 ]
+essential_bc_func = UniaxialTensionLinearRamp(
+  final_displacement=1.0, length=1.0, direction='y', n_dimensions=2
+)
+physics = physics.update_dirichlet_bc_func(essential_bc_func)
 essential_bcs = [
   EssentialBC('nset_1', 0),
-  EssentialBC('nset_2', 0),
+  EssentialBC('nset_1', 1),
   EssentialBC('nset_3', 0),
-  EssentialBC('nset_4', 0),
+  EssentialBC('nset_3', 1),
 ]
 natural_bcs = [
 ]
@@ -59,18 +63,23 @@ loss_function = EnergyLoss()
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
 opt_st = opt.init(params)
 
-for epoch in range(5000):
+for epoch in range(10000):
   params, opt_st, loss = opt.step(params, problem, opt_st)
 
   if epoch % 100 == 0:
     print(epoch)
     print(loss)
+    # print(params.properties.constitutive_model.shear_modulus())
 
 ##################
 # post-processing
 ##################
-pp.init(problem, 'output.e',
-  node_variables=['field_values']        
+pp.init(problem, 'output.e', 
+  node_variables=[
+    # 'displacement'
+    'field_values'
+  ], 
+  element_variables=[]
 )
 pp.write_outputs(params, problem)
 pp.close()

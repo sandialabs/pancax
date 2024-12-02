@@ -46,7 +46,7 @@ natural_bcs = [
 ##################
 # problem setup
 ##################
-problem = Problem(domain, physics, ics, essential_bcs, natural_bcs)
+problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
 
 ##################
 # ML setup

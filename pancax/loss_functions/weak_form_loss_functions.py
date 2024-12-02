@@ -108,10 +108,13 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
     return loss, dict(energy=pi, residual=R, global_data_loss=reaction_loss)
 
   def load_step(self, params, domain, t):
-    field_network, props = params
-    us = domain.field_values(field_network, t)
-    props = props()
-    return potential_energy_residual_and_reaction_force(domain, us, props)
+    # field_network, props = params
+    field, physics = params
+    # us = domain.field_values(field_network, t)
+    us = physics.vmap_field_values(field, domain.coords, t)
+    return physics.potential_energy_residual_and_reaction_force(params, domain, t, us, domain.global_data)
+    # props = props()
+    # return potential_energy_residual_and_reaction_force(domain, us, props)
 
 
 class QuadratureIncompressibilityConstraint(PhysicsLossFunction):

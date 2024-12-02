@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from jax import hessian, jacfwd, vmap
+from jax import hessian, jacfwd, value_and_grad, vmap
 from jax.lax import stop_gradient
 from jaxtyping import Array, Float
 from pancax.fem import assemble_sparse_stiffness_matrix
@@ -160,6 +160,20 @@ class BaseEnergyFormPhysics(BasePhysics):
   # def potential_energy(self, params, domain, t, *args):
   def potential_energy(self, params, domain, t, us, *args):
     return self.potential_energy_on_block(params, domain.coords, t, us, domain.fspace, domain.conns, *args)
+
+  def potential_energy_and_internal_force(self, params, domain, t, us, *args):
+    return value_and_grad(self.potential_energy, argnums=3)(params, domain, t, us, *args)
+
+  def potential_energy_and_residual(self, params, domain, t, us, *args):
+    pi, f = self.potential_energy_and_internal_force(params, domain, t, us, *args)
+    return pi, jnp.linalg.norm(f.flatten()[domain.dof_manager.unknownIndices])
+  
+  def potential_energy_residual_and_reaction_force(self, params, domain, t, us, *args):
+    global_data = args[0]
+    pi, f = self.potential_energy_and_internal_force(params, domain, t, us, *args)
+    R = jnp.linalg.norm(f.flatten()[domain.dof_manager.unknownIndices])
+    reaction = jnp.sum(f[global_data.reaction_nodes, global_data.reaction_dof])
+    return pi, R, reaction
 
   def mass_matrix(self, params, domain, t, us, *args):
     # us = self.vmap_field_values(params, domain.coords, t, *args)
