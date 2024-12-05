@@ -105,7 +105,7 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
     loss = self.energy_weight * pi + \
            self.residual_weight * R + \
            self.reaction_weight * reaction_loss
-    return loss, dict(energy=pi, residual=R, global_data_loss=reaction_loss)
+    return loss, dict(energy=pi, residual=R, global_data_loss=reaction_loss, reactions=reactions)
 
   def load_step(self, params, domain, t):
     # field_network, props = params
