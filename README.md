@@ -2,6 +2,7 @@
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://sandialabs.github.io/pancax/) 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://sandialabs.github.io/pancax/dev/) 
 [![Coverage](https://codecov.io/gh/sandialabs/pancax/branch/main/graph/badge.svg)](https://codecov.io/gh/sandialabs/pancax)
+[![PyPI version](https://badge.fury.io/py/pancax.svg)](https://pypi.org/project/pancax/)
 
 # Pancax ("PANCAKES")
 Physics augment neural computations in jax
