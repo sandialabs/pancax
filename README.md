@@ -31,10 +31,6 @@ folder, run the following command
 
 ``pip install -e .[cuda,docs,test]``
 
-![Pancax](https://github.com/sandialabs/pancax/blob/main/assets/pancax.png?raw=true)
-
-If you leverage these tools for your own research, please cite the following article
-
 ## Usage
 Currently the main entry point to pancax is through a python script (although a yaml input file is also in the works).
 To run a script you can run the following command
@@ -46,6 +42,10 @@ respecting several environment variables which can be supplied after the ``panca
 these can be displayed with the help message
 
 ``python -m pancax -h``
+
+![Pancax](https://github.com/sandialabs/pancax/blob/main/assets/pancax.png?raw=true)
+
+If you leverage these tools for your own research, please cite the following article
 
 ## Citation
 ```bibtex
