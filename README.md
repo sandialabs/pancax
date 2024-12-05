@@ -15,7 +15,7 @@ Physics augmented neural computations in jax
 ### CPU installation instructions
 To install pancax using pip (recommended) for CPU usage you can type the following command
 
-``pip install pancax``
+``pip install pancax[cpu]``
 
 ### GPU installation instructions
 Currently only CUDA has been tested, so only a CUDA option is supplied.
