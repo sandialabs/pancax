@@ -2,9 +2,10 @@ name: Deploy
 on:
   push:
     branches: main
-
+  release:
+    types: published
 jobs:
-  build:
+  wheels:
     strategy:
         fail-fast: false
         matrix:
@@ -31,3 +32,21 @@ jobs:
       with:
         name: ${{ matrix.os }}-${{ matrix.python-version }}-wheel
         path: dist/
+  twine:
+    needs: wheels
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+    - uses: actions/setup-python@v5
+      with:
+        check-latest: true
+        python-version: 3.13
+    - name: wheelhouse
+      run: mkdir -p wheelhouse/ && mv ./*-wheel*/*.whl wheelhouse/
+    - name: twine
+      run: pip install twine
+    - name: check
+      run: twine check wheelhouse/*.whl
+    - name: upload
+      if: github.event_name == 'release'
+      run: twine upload -u __token__ -p ${{ secrets.PYPI_API_TOKEN }} wheelhouse/*.whl
