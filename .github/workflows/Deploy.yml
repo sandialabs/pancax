@@ -30,4 +30,4 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.os }}-${{ matrix.python-version }}-wheel
-        path: build/
+        path: target/build/
