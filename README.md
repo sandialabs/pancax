@@ -5,12 +5,36 @@
 [![PyPI version](https://badge.fury.io/py/pancax.svg)](https://pypi.org/project/pancax/)
 
 # Pancax ("PANCAKES")
-Physics augment neural computations in jax
+Physics augmented neural computations in jax
+
+## Table of Contents
+1. [Installation](#installation)
+2. [Citation](#citation)
+
+## Installation
+### CPU installation instructions
+To install pancax using pip (recommended) for CPU usage you can type the following command
+
+``pip install pancax``
+
+### GPU installation instructions
+Currently only CUDA has been tested, so only a CUDA option is supplied.
+#### CUDA installation instructions
+To install pancax using pip (recommended) for CPU usage you can type the following command
+
+``pip install pancax[cuda]``
+
+### Developer installation instructions
+If you would like to do development in pancax, please first clone the repo and in the pancax 
+folder, run the following command
+
+``pip install -e .[cuda,docs,test]``
 
 ![Pancax](https://github.com/sandialabs/pancax/blob/main/assets/pancax.png?raw=true)
 
 If you leverage these tools for your own research, please cite the following article
 
+## Citation
 ```bibtex
 @article{hamel2023calibrating,
   title={Calibrating constitutive models with full-field data via physics informed neural networks},
