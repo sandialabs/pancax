@@ -27,10 +27,7 @@ jobs:
         pip install build setuptools twine wheel
     - name: Build package
       run: python -m build
-    - name: Upload to PyPI
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: |
-        pip install twine
-        twine upload dist/*
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.os }}-${{ matrix.python-version }}-wheel
+        path: target/wheels
