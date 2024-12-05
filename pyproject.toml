@@ -41,7 +41,12 @@ test = [
 
 [tool.setuptools]
 packages = [
-  'pancax'
+  'pancax',
+  'pancax.bcs',
+  'pancax.bvps',
+  'pancax.constitutive_models',
+  'pancax.data',
+  'pancax.domains'
 ]
 
 [tool.coverage.report]
