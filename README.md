@@ -9,7 +9,8 @@ Physics augmented neural computations in jax
 
 ## Table of Contents
 1. [Installation](#installation)
-2. [Citation](#citation)
+2. [Usage](#usage)
+3. [Citation](#citation)
 
 ## Installation
 ### CPU installation instructions
@@ -33,6 +34,18 @@ folder, run the following command
 ![Pancax](https://github.com/sandialabs/pancax/blob/main/assets/pancax.png?raw=true)
 
 If you leverage these tools for your own research, please cite the following article
+
+## Usage
+Currently the main entry point to pancax is through a python script (although a yaml input file is also in the works).
+To run a script you can run the following command
+
+``python -m pancax -i my_script.py``
+
+where ``my_script.py`` is the name of the scipt you've written. This will run the python script while also 
+respecting several environment variables which can be supplied after the ``pancax`` keyword above. A list of
+these can be displayed with the help message
+
+``python -m pancax -h``
 
 ## Citation
 ```bibtex
