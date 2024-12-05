@@ -1,8 +1,12 @@
 from ..bcs import EssentialBC, NaturalBC
-from ..domains import BaseDomain, VariationalDomain
-from ..physics_kernels import BasePhysics
+from ..domains import BaseDomain, CollocationDomain, VariationalDomain
+from ..physics_kernels import BasePhysics, BaseStrongFormPhysics, BaseVariationalFormPhysics
 from typing import Callable, List
 import equinox as eqx
+
+
+class DomainPhysicsCompatabilityError(Exception):
+  pass
 
 
 # note that physics here will note hold the correct parameters
@@ -23,6 +27,26 @@ class ForwardProblem(eqx.Module):
     natural_bcs: List[NaturalBC]
   ) -> None:
     
+    # check compatability between domain and physics
+    if type(domain) == CollocationDomain:
+      if not issubclass(type(physics), BaseStrongFormPhysics):
+        raise DomainPhysicsCompatabilityError(
+          f'Incompatable domain and physics.\n'
+          f'Got domain of type = {type(domain)}\n'
+          f'Got physics of type = {type(physics)}'
+        )
+    elif type(domain) == VariationalDomain:
+      # TODO also need a weak form catch here
+      # TODO or just maybe make a base variational physics class
+      if not issubclass(type(physics), BaseVariationalFormPhysics):
+        raise DomainPhysicsCompatabilityError(
+          f'Incompatable domain and physics.\n'
+          f'Got domain of type = {type(domain)}\n'
+          f'Got physics of type = {type(physics)}'
+        )
+    else:
+      assert False, 'wtf is this domain'
+
     if type(domain) == VariationalDomain:
       domain = domain.update_dof_manager(essential_bcs, physics.n_dofs)
 
@@ -33,6 +57,9 @@ class ForwardProblem(eqx.Module):
     self.essential_bcs = essential_bcs
     self.natural_bcs = natural_bcs
 
+  # TODO a lot of these below are for some backwards
+  # compatability during a transition period to
+  # this new interface
   @property
   def conns(self):
     return self.domain.conns
