@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.3'
+version = '0.0.4'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -46,7 +46,15 @@ packages = [
   'pancax.bvps',
   'pancax.constitutive_models',
   'pancax.data',
-  'pancax.domains'
+  'pancax.domains',
+  'pancax.fem',
+  'pancax.kernels',
+  'pancax.loss_functions',
+  'pancax.math',
+  'pancax.networks',
+  'pancax.optimizers',
+  'pancax.physics_kernels',
+  'pancax.problems'
 ]
 
 [tool.coverage.report]

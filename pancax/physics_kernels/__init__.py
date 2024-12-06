@@ -1,5 +1,7 @@
 from .base import BasePhysics
+from .base import BaseEnergyFormPhysics
 from .base import BaseStrongFormPhysics
+from .base import BaseVariationalFormPhysics
 from .burgers_equation import BurgersEquation
 from .heat_equation import HeatEquation
 from .laplace_beltrami import LaplaceBeltrami

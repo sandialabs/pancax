@@ -118,7 +118,11 @@ class BasePhysics(eqx.Module):
     return len(self.field_value_names)
 
 
-class BaseEnergyFormPhysics(BasePhysics):
+class BaseVariationalFormPhysics(BasePhysics):
+  pass
+
+
+class BaseEnergyFormPhysics(BaseVariationalFormPhysics):
   field_value_names: tuple[str, ...]
 
   def element_energy(self, params, x, t, u, fspace, *args):
