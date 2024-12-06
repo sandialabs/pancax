@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.fem.elements.base_element &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.fem.elements.base_element</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.fem.elements.base_element</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">jaxtyping</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">special</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">equinox</span> <span class="k">as</span> <span class="nn">eqx</span>
+
+
+<div class="viewcode-block" id="get_lobatto_nodes_1d">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.get_lobatto_nodes_1d">[docs]</a>
+<span class="k">def</span> <span class="nf">get_lobatto_nodes_1d</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">Legendre</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>
+    <span class="n">xInterior</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">roots</span><span class="p">()</span>
+    <span class="n">xn</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span> <span class="n">xInterior</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">xn</span></div>
+
+
+
+<div class="viewcode-block" id="pascal_triangle_monomials">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.pascal_triangle_monomials">[docs]</a>
+<span class="k">def</span> <span class="nf">pascal_triangle_monomials</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">monomialIndices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">p</span> <span class="o">+=</span> <span class="n">monomialIndices</span>
+        <span class="n">monomialIndices</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">q</span> <span class="o">+=</span> <span class="n">monomialIndices</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="vander1d">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.vander1d">[docs]</a>
+<span class="k">def</span> <span class="nf">vander1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">degree</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">dA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">Legendre</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">)</span> 
+        <span class="n">p</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c1"># keep polynomial orthonormal</span>
+        <span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>
+        <span class="n">dA</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">dA</span></div>
+
+
+
+<div class="viewcode-block" id="vander2d">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.vander2d">[docs]</a>
+<span class="k">def</span> <span class="nf">vander2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">degree</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">nNodes</span> <span class="o">=</span> <span class="p">(</span><span class="n">degree</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">degree</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+    <span class="n">pq</span> <span class="o">=</span> <span class="n">pascal_triangle_monomials</span><span class="p">(</span><span class="n">degree</span><span class="p">)</span>
+
+    <span class="c1"># It&#39;s easier to process if the input arrays</span>
+    <span class="c1"># always have the same shape</span>
+    <span class="c1"># If a 1D array is given (a single point),</span>
+    <span class="c1"># convert to the equivalent 2D array</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="c1"># switch to bi-unit triangle (-1,-1)--(1,-1)--(-1,1)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">1.0</span>
+    
+    <span class="k">def</span> <span class="nf">map_from_tri_to_square</span><span class="p">(</span><span class="n">xi</span><span class="p">):</span>
+        <span class="n">small</span> <span class="o">=</span> <span class="mf">1e-12</span>
+        <span class="c1"># The mapping has a singularity at the vertex (-1, 1).</span>
+        <span class="c1"># Handle that point specially.</span>
+        <span class="n">indexSingular</span> <span class="o">=</span> <span class="n">xi</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">small</span>
+        <span class="n">xiShifted</span> <span class="o">=</span> <span class="n">xi</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">xiShifted</span><span class="p">[</span><span class="n">indexSingular</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">small</span>
+        <span class="n">eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+        <span class="n">eta</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">xiShifted</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">xiShifted</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mf">1.0</span>
+        <span class="n">eta</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">xiShifted</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">eta</span><span class="p">[</span><span class="n">indexSingular</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="n">eta</span><span class="p">[</span><span class="n">indexSingular</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        
+        <span class="c1"># Jacobian of map. </span>
+        <span class="c1"># Actually, deta is just the first row of the Jacobian.</span>
+        <span class="c1"># The second row is trivially [0, 1], so we don&#39;t compute it.</span>
+        <span class="c1"># We just use that fact directly in the derivative Vandermonde</span>
+        <span class="c1"># expressions.</span>
+        <span class="n">deta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+        <span class="n">deta</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">xiShifted</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">deta</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">xiShifted</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">xiShifted</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="n">eta</span><span class="p">,</span> <span class="n">deta</span>
+    
+    <span class="n">E</span><span class="p">,</span> <span class="n">dE</span> <span class="o">=</span> <span class="n">map_from_tri_to_square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+    
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nNodes</span><span class="p">))</span>
+    <span class="n">Ax</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">Ay</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">N1D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">Polynomial</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nNodes</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">Legendre</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c1"># SciPy&#39;s polynomials use the deprecated poly1d type</span>
+        <span class="c1"># of NumPy. To convert to the modern Polynomial type,</span>
+        <span class="c1"># we need to reverse the order of the coefficients.</span>
+        <span class="n">qPoly1d</span> <span class="o">=</span> <span class="n">special</span><span class="o">.</span><span class="n">jacobi</span><span class="p">(</span><span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="o">*</span><span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">Polynomial</span><span class="p">(</span><span class="n">qPoly1d</span><span class="o">.</span><span class="n">coef</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]):</span>
+            <span class="n">q</span> <span class="o">*=</span> <span class="n">N1D</span>
+        
+        <span class="c1"># orthonormality weight</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        
+        <span class="n">A</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span><span class="o">*</span><span class="n">p</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">q</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        
+        <span class="c1"># derivatives</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>
+        <span class="n">dq</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>
+        <span class="n">Ax</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">weight</span><span class="o">*</span><span class="n">dp</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">q</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">dE</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">Ay</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">weight</span><span class="o">*</span><span class="p">(</span><span class="n">dp</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">q</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">dE</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+                             <span class="o">+</span> <span class="n">p</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="n">dq</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
+        
+    <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">Ax</span><span class="p">,</span> <span class="n">Ay</span></div>
+
+
+
+<span class="c1"># TODO add hessians maybe?</span>
+<div class="viewcode-block" id="ShapeFunctions">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.ShapeFunctions">[docs]</a>
+<span class="k">class</span> <span class="nc">ShapeFunctions</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shape functions and shape function gradients (in the parametric space).</span>
+
+<span class="sd">    :param values: Values of the shape functions at a discrete set of points.</span>
+<span class="sd">        Shape is ``(nPts, nNodes)``, where ``nPts`` is the number of</span>
+<span class="sd">        points at which the shame functinos are evaluated, and ``nNodes``</span>
+<span class="sd">        is the number of nodes in the element (which is equal to the</span>
+<span class="sd">        number of shape functions).</span>
+<span class="sd">    :param gradients: Values of the parametric gradients of the shape functions.</span>
+<span class="sd">        Shape is ``(nPts, nDim, nNodes)``, where ``nDim`` is the number</span>
+<span class="sd">        of spatial dimensions. Line elements are an exception, which</span>
+<span class="sd">        have shape ``(nPts, nNdodes)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;np nn&quot;</span><span class="p">]</span>
+    <span class="n">gradients</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;np nd nn&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="BaseElement">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.BaseElement">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseElement</span><span class="p">(</span><span class="n">eqx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for different element technologies</span>
+
+<span class="sd">    :param elementType: Element type name</span>
+<span class="sd">    :param degree: Polynomial degree</span>
+<span class="sd">    :param coordinates: Nodal coordinates in the reference configuration</span>
+<span class="sd">    :param vertexNodes: Vertex node number, 0-based</span>
+<span class="sd">    :param faceNodes: Nodes associated with each face, 0-based</span>
+<span class="sd">    :param interiorNodes: Nodes in the interior, 0-based or empty</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">elementType</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">coordinates</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn nd&quot;</span><span class="p">]</span>
+    <span class="n">vertexNodes</span><span class="p">:</span> <span class="n">Int</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nn&quot;</span><span class="p">]</span>
+    <span class="n">faceNodes</span><span class="p">:</span> <span class="n">Int</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nf nnpf&quot;</span><span class="p">]</span>
+    <span class="n">interiorNodes</span><span class="p">:</span> <span class="n">Int</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nni&quot;</span><span class="p">]</span>
+
+    <span class="c1"># def __init__(self, elementType, degree, coordinates, vertexNodes, faceNodes, interiorNodes):</span>
+    <span class="c1">#     self.elementType = elementType</span>
+    <span class="c1">#     self.degree = degree</span>
+    <span class="c1">#     self.coordinates = coordinates</span>
+    <span class="c1">#     self.vertexNodes = vertexNodes</span>
+    <span class="c1">#     self.faceNodes = faceNodes</span>
+    <span class="c1">#     self.interiorNodes = interiorNodes</span>
+
+<div class="viewcode-block" id="BaseElement.compute_shapes">
+<a class="viewcode-back" href="../../../../pancax.fem.elements.html#pancax.fem.elements.base_element.BaseElement.compute_shapes">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">compute_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodalPoints</span><span class="p">,</span> <span class="n">evaluationPoints</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to be defined to calculate shape function values</span>
+<span class="sd">        and gradients given a list of nodal points (usually the vertexNodes)</span>
+<span class="sd">        and a list of evaluation points (usually the quadrature points).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+
+    <span class="c1"># TODO figure out how to rope in quadrature rules into this class</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

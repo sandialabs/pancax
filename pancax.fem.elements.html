@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.fem.elements package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.kernels package" href="pancax.kernels.html" />
+    <link rel="prev" title="pancax.fem package" href="pancax.fem.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.fem.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pancax.fem.elements package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.base_element">pancax.fem.elements.base_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.hex8_element">pancax.fem.elements.hex8_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.line_element">pancax.fem.elements.line_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.quad4_element">pancax.fem.elements.quad4_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.quad9_element">pancax.fem.elements.quad9_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.simplex_tri_element">pancax.fem.elements.simplex_tri_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.tet10_element">pancax.fem.elements.tet10_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements.tet4_element">pancax.fem.elements.tet4_element module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-pancax.fem.elements">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.dof_manager">pancax.fem.dof_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.function_space">pancax.fem.function_space module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.mesh">pancax.fem.mesh module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.quadrature_rules">pancax.fem.quadrature_rules module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.read_exodus_mesh">pancax.fem.read_exodus_mesh module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.sparse_matrix_assembler">pancax.fem.sparse_matrix_assembler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.surface">pancax.fem.surface module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.traction_bc">pancax.fem.traction_bc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.fem.html#module-pancax.fem">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+          <li class="breadcrumb-item"><a href="pancax.fem.html">pancax.fem package</a></li>
+      <li class="breadcrumb-item active">pancax.fem.elements package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.fem.elements.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-fem-elements-package">
+<h1>pancax.fem.elements package<a class="headerlink" href="#pancax-fem-elements-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.fem.elements.base_element">
+<span id="pancax-fem-elements-base-element-module"></span><h2>pancax.fem.elements.base_element module<a class="headerlink" href="#module-pancax.fem.elements.base_element" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.get_lobatto_nodes_1d">
+<span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.base_element.</span></span><span class="sig-name descname"><span class="pre">get_lobatto_nodes_1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#get_lobatto_nodes_1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.get_lobatto_nodes_1d" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.pascal_triangle_monomials">
+<span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.base_element.</span></span><span class="sig-name descname"><span class="pre">pascal_triangle_monomials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#pascal_triangle_monomials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.pascal_triangle_monomials" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.vander1d">
+<span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.base_element.</span></span><span class="sig-name descname"><span class="pre">vander1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#vander1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.vander1d" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.vander2d">
+<span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.base_element.</span></span><span class="sig-name descname"><span class="pre">vander2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#vander2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.vander2d" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.base_element.</span></span><span class="sig-name descname"><span class="pre">ShapeFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'np</span> <span class="pre">nn'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'np</span> <span class="pre">nd</span> <span class="pre">nn'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#ShapeFunctions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Shape functions and shape function gradients (in the parametric space).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – Values of the shape functions at a discrete set of points.
+Shape is <code class="docutils literal notranslate"><span class="pre">(nPts,</span> <span class="pre">nNodes)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nPts</span></code> is the number of
+points at which the shame functinos are evaluated, and <code class="docutils literal notranslate"><span class="pre">nNodes</span></code>
+is the number of nodes in the element (which is equal to the
+number of shape functions).</p></li>
+<li><p><strong>gradients</strong> – Values of the parametric gradients of the shape functions.
+Shape is <code class="docutils literal notranslate"><span class="pre">(nPts,</span> <span class="pre">nDim,</span> <span class="pre">nNodes)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nDim</span></code> is the number
+of spatial dimensions. Line elements are an exception, which
+have shape <code class="docutils literal notranslate"><span class="pre">(nPts,</span> <span class="pre">nNdodes)</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions.values">
+<span class="sig-name descname"><span class="pre">values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'np</span> <span class="pre">nn'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions.values" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions.gradients">
+<span class="sig-name descname"><span class="pre">gradients</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'np</span> <span class="pre">nd</span> <span class="pre">nn'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions.gradients" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions._asdict">
+<span class="sig-name descname"><span class="pre">_asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions._asdict" title="Link to this definition"></a></dt>
+<dd><p>Return a new dict which maps field names to their values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions._field_defaults">
+<span class="sig-name descname"><span class="pre">_field_defaults</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions._field_defaults" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions._fields">
+<span class="sig-name descname"><span class="pre">_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('values',</span> <span class="pre">'gradients')</span></em><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions._fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions._make">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_make</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions._make" title="Link to this definition"></a></dt>
+<dd><p>Make a new ShapeFunctions object from a sequence or iterable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.ShapeFunctions._replace">
+<span class="sig-name descname"><span class="pre">_replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pancax.fem.elements.base_element.ShapeFunctions._replace" title="Link to this definition"></a></dt>
+<dd><p>Return a new ShapeFunctions object replacing specified fields with new values</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.base_element.</span></span><span class="sig-name descname"><span class="pre">BaseElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elementType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertexNodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faceNodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interiorNodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#BaseElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Base class for different element technologies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elementType</strong> – Element type name</p></li>
+<li><p><strong>degree</strong> – Polynomial degree</p></li>
+<li><p><strong>coordinates</strong> – Nodal coordinates in the reference configuration</p></li>
+<li><p><strong>vertexNodes</strong> – Vertex node number, 0-based</p></li>
+<li><p><strong>faceNodes</strong> – Nodes associated with each face, 0-based</p></li>
+<li><p><strong>interiorNodes</strong> – Nodes in the interior, 0-based or empty</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.compute_shapes">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/base_element.html#BaseElement.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elementType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertexNodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faceNodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interiorNodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.base_element.BaseElement._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.base_element.BaseElement._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.hex8_element">
+<span id="pancax-fem-elements-hex8-element-module"></span><h2>pancax.fem.elements.hex8_element module<a class="headerlink" href="#module-pancax.fem.elements.hex8_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.hex8_element.</span></span><span class="sig-name descname"><span class="pre">Hex8Element</span></span><a class="reference internal" href="_modules/pancax/fem/elements/hex8_element.html#Hex8Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hex8'</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[-1.,</span> <span class="pre">-1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span> <span class="pre">-1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span>&#160; <span class="pre">1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[-1.,</span>&#160; <span class="pre">1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[-1.,</span> <span class="pre">-1.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span> <span class="pre">-1.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[-1.,</span>&#160; <span class="pre">1.,</span>&#160; <span class="pre">1.]],</span> <span class="pre">dtype=float32)</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0,</span> <span class="pre">1,</span> <span class="pre">5,</span> <span class="pre">6],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">6,</span> <span class="pre">5],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">7,</span> <span class="pre">6],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0,</span> <span class="pre">4,</span> <span class="pre">7,</span> <span class="pre">3],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0,</span> <span class="pre">3,</span> <span class="pre">2,</span> <span class="pre">1],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7]],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/hex8_element.html#Hex8Element.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/hex8_element.html#Hex8Element.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.hex8_element.Hex8Element._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.hex8_element.Hex8Element._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.line_element">
+<span id="pancax-fem-elements-line-element-module"></span><h2>pancax.fem.elements.line_element module<a class="headerlink" href="#module-pancax.fem.elements.line_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.line_element.</span></span><span class="sig-name descname"><span class="pre">LineElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/line_element.html#LineElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'line'</span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/line_element.html#LineElement.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.line_element.LineElement.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/line_element.html#LineElement.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.line_element.LineElement.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.quad4_element">
+<span id="pancax-fem-elements-quad4-element-module"></span><h2>pancax.fem.elements.quad4_element module<a class="headerlink" href="#module-pancax.fem.elements.quad4_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.quad4_element.</span></span><span class="sig-name descname"><span class="pre">Quad4Element</span></span><a class="reference internal" href="_modules/pancax/fem/elements/quad4_element.html#Quad4Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'quad4'</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[-1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[-1.,</span>&#160; <span class="pre">1.]],</span> <span class="pre">dtype=float32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([0,</span> <span class="pre">1,</span> <span class="pre">2],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0,</span> <span class="pre">1],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1,</span> <span class="pre">2],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[2,</span> <span class="pre">3],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[3,</span> <span class="pre">0]],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/quad4_element.html#Quad4Element.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/quad4_element.html#Quad4Element.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad4_element.Quad4Element._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.quad4_element.Quad4Element._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.quad9_element">
+<span id="pancax-fem-elements-quad9-element-module"></span><h2>pancax.fem.elements.quad9_element module<a class="headerlink" href="#module-pancax.fem.elements.quad9_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.quad9_element.</span></span><span class="sig-name descname"><span class="pre">Quad9Element</span></span><a class="reference internal" href="_modules/pancax/fem/elements/quad9_element.html#Quad9Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'quad9'</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[-1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[-1.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">0.,</span> <span class="pre">-1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">1.,</span>&#160; <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">0.,</span>&#160; <span class="pre">1.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[-1.,</span>&#160; <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[</span> <span class="pre">0.,</span>&#160; <span class="pre">0.]],</span> <span class="pre">dtype=float32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0,</span> <span class="pre">4,</span> <span class="pre">1],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">2],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[2,</span> <span class="pre">6,</span> <span class="pre">3],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[3,</span> <span class="pre">7,</span> <span class="pre">0]],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([8],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/quad9_element.html#Quad9Element.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/quad9_element.html#Quad9Element.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.quad9_element.Quad9Element._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.quad9_element.Quad9Element._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.simplex_tri_element">
+<span id="pancax-fem-elements-simplex-tri-element-module"></span><h2>pancax.fem.elements.simplex_tri_element module<a class="headerlink" href="#module-pancax.fem.elements.simplex_tri_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.simplex_tri_element.</span></span><span class="sig-name descname"><span class="pre">SimplexTriElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/simplex_tri_element.html#SimplexTriElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'simplex</span> <span class="pre">tri'</span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/simplex_tri_element.html#SimplexTriElement.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.simplex_tri_element.SimplexTriElement.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/simplex_tri_element.html#SimplexTriElement.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.simplex_tri_element.SimplexTriElement.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.tet10_element">
+<span id="pancax-fem-elements-tet10-element-module"></span><h2>pancax.fem.elements.tet10_element module<a class="headerlink" href="#module-pancax.fem.elements.tet10_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.tet10_element.</span></span><span class="sig-name descname"><span class="pre">Tet10Element</span></span><a class="reference internal" href="_modules/pancax/fem/elements/tet10_element.html#Tet10Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tet10'</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.</span> <span class="pre">,</span> <span class="pre">1.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">,</span> <span class="pre">1.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.5,</span> <span class="pre">0.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.5,</span> <span class="pre">0.5,</span> <span class="pre">0.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.</span> <span class="pre">,</span> <span class="pre">0.5,</span> <span class="pre">0.</span> <span class="pre">],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.</span> <span class="pre">,</span> <span class="pre">0.</span> <span class="pre">,</span> <span class="pre">0.5],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.5,</span> <span class="pre">0.</span> <span class="pre">,</span> <span class="pre">0.5],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.</span> <span class="pre">,</span> <span class="pre">0.5,</span> <span class="pre">0.5]],</span> <span class="pre">dtype=float32)</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">6,</span> <span class="pre">7,</span> <span class="pre">8,</span> <span class="pre">9],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">8,</span> <span class="pre">3,</span> <span class="pre">7],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">2,</span> <span class="pre">9,</span> <span class="pre">3,</span> <span class="pre">7],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0,</span> <span class="pre">7,</span> <span class="pre">3,</span> <span class="pre">9,</span> <span class="pre">2,</span> <span class="pre">6],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0,</span> <span class="pre">6,</span> <span class="pre">2,</span> <span class="pre">5,</span> <span class="pre">1,</span> <span class="pre">4]],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/tet10_element.html#Tet10Element.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/tet10_element.html#Tet10Element.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet10_element.Tet10Element._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.tet10_element.Tet10Element._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements.tet4_element">
+<span id="pancax-fem-elements-tet4-element-module"></span><h2>pancax.fem.elements.tet4_element module<a class="headerlink" href="#module-pancax.fem.elements.tet4_element" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.fem.elements.tet4_element.</span></span><span class="sig-name descname"><span class="pre">Tet4Element</span></span><a class="reference internal" href="_modules/pancax/fem/elements/tet4_element.html#Tet4Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.fem.elements.base_element.BaseElement" title="pancax.fem.elements.base_element.BaseElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.elementType">
+<span class="sig-name descname"><span class="pre">elementType</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tet4'</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.elementType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.degree">
+<span class="sig-name descname"><span class="pre">degree</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.degree" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">1.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">1.]],</span> <span class="pre">dtype=float32)</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.coordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.vertexNodes">
+<span class="sig-name descname"><span class="pre">vertexNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.vertexNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.faceNodes">
+<span class="sig-name descname"><span class="pre">faceNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nf</span> <span class="pre">nnpf'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Array([[0,</span> <span class="pre">1,</span> <span class="pre">3],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0,</span> <span class="pre">3,</span> <span class="pre">2],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">1]],</span> <span class="pre">dtype=int32)</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.faceNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.interiorNodes">
+<span class="sig-name descname"><span class="pre">interiorNodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nni'</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.interiorNodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/tet4_element.html#Tet4Element.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element.compute_shapes">
+<span class="sig-name descname"><span class="pre">compute_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodalPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluationPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/fem/elements/tet4_element.html#Tet4Element.compute_shapes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element.compute_shapes" title="Link to this definition"></a></dt>
+<dd><p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.fem.elements.tet4_element.Tet4Element._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.fem.elements.tet4_element.Tet4Element._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.fem.elements">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.fem.elements" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.fem.html" class="btn btn-neutral float-left" title="pancax.fem package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.kernels.html" class="btn btn-neutral float-right" title="pancax.kernels package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

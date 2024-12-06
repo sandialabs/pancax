@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.physics_kernels.base &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.physics_kernels.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.physics_kernels.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">hessian</span><span class="p">,</span> <span class="n">jacfwd</span><span class="p">,</span> <span class="n">value_and_grad</span><span class="p">,</span> <span class="n">vmap</span>
+<span class="kn">from</span> <span class="nn">jax.lax</span> <span class="kn">import</span> <span class="n">stop_gradient</span>
+<span class="kn">from</span> <span class="nn">jaxtyping</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Float</span>
+<span class="kn">from</span> <span class="nn">pancax.fem</span> <span class="kn">import</span> <span class="n">assemble_sparse_stiffness_matrix</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">equinox</span> <span class="k">as</span> <span class="nn">eqx</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+
+<span class="c1"># TODO clean this up</span>
+<div class="viewcode-block" id="nodal_pp">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.nodal_pp">[docs]</a>
+<span class="k">def</span> <span class="nf">nodal_pp</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">has_props</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">jit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	:param func: Function to use for a nodal property output variable</span>
+<span class="sd">	:param has_props: Whether or not this function need properties</span>
+<span class="sd">	:param jit: Whether or not to jit this function</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="n">has_props</span><span class="p">:</span>
+		<span class="c1"># new_func = lambda p, d, t: vmap(</span>
+		<span class="c1"># 	func, in_axes=(None, 0, None, None)</span>
+		<span class="c1"># )(p.fields, d.coords, t, p.properties)</span>
+		<span class="n">new_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">vmap</span><span class="p">(</span>
+			<span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="p">)(</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">new_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">vmap</span><span class="p">(</span>
+			<span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="p">)(</span><span class="n">p</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+	
+	<span class="k">if</span> <span class="n">jit</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">eqx</span><span class="o">.</span><span class="n">filter_jit</span><span class="p">(</span><span class="n">new_func</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">new_func</span></div>
+
+
+
+<div class="viewcode-block" id="standard_pp">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.standard_pp">[docs]</a>
+<span class="k">def</span> <span class="nf">standard_pp</span><span class="p">(</span><span class="n">physics</span><span class="p">):</span>
+	<span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="s1">&#39;field_values&#39;</span><span class="p">:</span> <span class="p">{</span>
+			<span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="n">nodal_pp</span><span class="p">(</span><span class="n">physics</span><span class="o">.</span><span class="n">field_values</span><span class="p">),</span>
+			<span class="s1">&#39;names&#39;</span> <span class="p">:</span> <span class="n">physics</span><span class="o">.</span><span class="n">field_value_names</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">d</span></div>
+
+
+
+<div class="viewcode-block" id="BasePhysics">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics">[docs]</a>
+<span class="k">class</span> <span class="nc">BasePhysics</span><span class="p">(</span><span class="n">eqx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">field_value_names</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>  
+  <span class="n">var_name_to_method</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="c1">#= field(default_factory=lambda: {})</span>
+  <span class="c1"># needs to be set</span>
+  <span class="c1"># by default it just returns network output</span>
+  <span class="n">dirichlet_bc_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="c1">#= lambda x, t, z: z</span>
+  <span class="c1"># TODO how to make this dimension dependent?</span>
+  <span class="c1"># finally use generics in python?</span>
+  <span class="n">x_mins</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nd&quot;</span><span class="p">]</span> <span class="c1">#= jnp.zeros(3)</span>
+  <span class="n">x_maxs</span><span class="p">:</span> <span class="n">Float</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="s2">&quot;nd&quot;</span><span class="p">]</span> <span class="c1">#= jnp.zeros(3)</span>
+
+<div class="viewcode-block" id="BasePhysics.__init__">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.__init__">[docs]</a>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_value_names</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">field_value_names</span> <span class="o">=</span> <span class="n">field_value_names</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">var_name_to_method</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dirichlet_bc_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">z</span>
+    <span class="c1"># TODO improve this error handling</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x_maxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+  <span class="c1"># TODO need to modify for delta pinn</span>
+<div class="viewcode-block" id="BasePhysics.field_values">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.field_values">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">stop_gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">stop_gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_maxs</span><span class="p">)</span> <span class="o">-</span> <span class="n">stop_gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span><span class="p">))</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirichlet_bc_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">u</span></div>
+
+  
+<div class="viewcode-block" id="BasePhysics.field_gradients">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.field_gradients">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jacfwd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.field_hessians">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.field_hessians">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_hessians</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hessian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.field_laplacians">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.field_laplacians">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_laplacians</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_hessians</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">),</span> <span class="n">axis1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis2</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.field_time_derivatives">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.field_time_derivatives">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_time_derivatives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jacfwd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.field_second_time_derivatives">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.field_second_time_derivatives">[docs]</a>
+  <span class="k">def</span> <span class="nf">field_second_time_derivatives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jacfwd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_time_derivatives</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.update_dirichlet_bc_func">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.update_dirichlet_bc_func">[docs]</a>
+  <span class="k">def</span> <span class="nf">update_dirichlet_bc_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bc_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+    <span class="n">get_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">dirichlet_bc_func</span>
+    <span class="n">new_pytree</span> <span class="o">=</span> <span class="n">eqx</span><span class="o">.</span><span class="n">tree_at</span><span class="p">(</span><span class="n">get_fn</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">bc_func</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_pytree</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.update_normalization">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.update_normalization">[docs]</a>
+  <span class="k">def</span> <span class="nf">update_normalization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
+    <span class="n">x_mins</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">x_maxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">new_pytree</span> <span class="o">=</span> <span class="n">eqx</span><span class="o">.</span><span class="n">tree_at</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">x_mins</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">x_mins</span><span class="p">)</span>
+    <span class="n">new_pytree</span> <span class="o">=</span> <span class="n">eqx</span><span class="o">.</span><span class="n">tree_at</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">x_maxs</span><span class="p">,</span> <span class="n">new_pytree</span><span class="p">,</span> <span class="n">x_maxs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_pytree</span></div>
+
+  
+<div class="viewcode-block" id="BasePhysics.update_var_name_to_method">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.update_var_name_to_method">[docs]</a>
+  <span class="k">def</span> <span class="nf">update_var_name_to_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">var_name_to_method</span> <span class="o">=</span> <span class="n">standard_pp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">new_pytree</span> <span class="o">=</span> <span class="n">eqx</span><span class="o">.</span><span class="n">tree_at</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">var_name_to_method</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">var_name_to_method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_pytree</span></div>
+
+
+  <span class="c1"># some helpful vmaps</span>
+<div class="viewcode-block" id="BasePhysics.vmap_field_values">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.vmap_field_values">[docs]</a>
+  <span class="k">def</span> <span class="nf">vmap_field_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">field</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasePhysics.vmap_field_gradients">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics.vmap_field_gradients">[docs]</a>
+  <span class="k">def</span> <span class="nf">vmap_field_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_gradients</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">field</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">n_dofs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_value_names</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="BaseVariationalFormPhysics">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseVariationalFormPhysics">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseVariationalFormPhysics</span><span class="p">(</span><span class="n">BasePhysics</span><span class="p">):</span>
+  <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseEnergyFormPhysics</span><span class="p">(</span><span class="n">BaseVariationalFormPhysics</span><span class="p">):</span>
+  <span class="n">field_value_names</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.element_energy">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.element_energy">[docs]</a>
+  <span class="k">def</span> <span class="nf">element_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">vs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">shape_function_values</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">grad_vs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">shape_function_gradients</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">JxWs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">JxWs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">))(</span><span class="n">vs</span><span class="p">)</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">))(</span><span class="n">vs</span><span class="p">)</span>
+    <span class="n">grad_us</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)(</span><span class="n">grad_vs</span><span class="p">)</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="n">pis</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">grad_us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">JxWs</span><span class="p">,</span> <span class="n">pis</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.element_kinetic_energy">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.element_kinetic_energy">[docs]</a>
+  <span class="k">def</span> <span class="nf">element_kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">vs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">shape_function_values</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">grad_vs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">shape_function_gradients</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">JxWs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">JxWs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">))(</span><span class="n">vs</span><span class="p">)</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">u</span><span class="p">))(</span><span class="n">vs</span><span class="p">)</span>
+    <span class="n">grad_us</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)(</span><span class="n">grad_vs</span><span class="p">)</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="n">pis</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kinetic_energy</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">grad_us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">JxWs</span><span class="p">,</span> <span class="n">pis</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.energy">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.energy">[docs]</a>
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">grad_u</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+  <span class="c1"># TODO currently only valid for one block</span>
+<div class="viewcode-block" id="BaseEnergyFormPhysics.potential_energy_on_block">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_on_block">[docs]</a>
+  <span class="k">def</span> <span class="nf">potential_energy_on_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># field, _ = params</span>
+    <span class="c1"># us = self.field_values(field, x, t, *args)</span>
+    <span class="c1"># us = self.vmap_field_values(params, x, t, *args)</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmap_element_energy</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+  
+  <span class="c1"># TODO only works on a single block</span>
+  <span class="c1"># def potential_energy(self, params, domain, t, *args):</span>
+<div class="viewcode-block" id="BaseEnergyFormPhysics.potential_energy">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy">[docs]</a>
+  <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_energy_on_block</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.potential_energy_and_internal_force">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_and_internal_force">[docs]</a>
+  <span class="k">def</span> <span class="nf">potential_energy_and_internal_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value_and_grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">potential_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">3</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.potential_energy_and_residual">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_and_residual">[docs]</a>
+  <span class="k">def</span> <span class="nf">potential_energy_and_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">pi</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_energy_and_internal_force</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pi</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span></div>
+
+  
+<div class="viewcode-block" id="BaseEnergyFormPhysics.potential_energy_residual_and_reaction_force">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_residual_and_reaction_force">[docs]</a>
+  <span class="k">def</span> <span class="nf">potential_energy_residual_and_reaction_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">global_data</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pi</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_energy_and_internal_force</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span>
+    <span class="n">reaction</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">global_data</span><span class="o">.</span><span class="n">reaction_nodes</span><span class="p">,</span> <span class="n">global_data</span><span class="o">.</span><span class="n">reaction_dof</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pi</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">reaction</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.mass_matrix">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.mass_matrix">[docs]</a>
+  <span class="k">def</span> <span class="nf">mass_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># us = self.vmap_field_values(params, domain.coords, t, *args)</span>
+    <span class="n">dof_manager</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element_kinetic_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">assemble_sparse_stiffness_matrix</span><span class="p">(</span>
+       <span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">),</span> <span class="n">dof_manager</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.stiffness_matrix">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.stiffness_matrix">[docs]</a>
+  <span class="k">def</span> <span class="nf">stiffness_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># us = self.vmap_field_values(params, domain.coords, t, *args)</span>
+    <span class="n">dof_manager</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">assemble_sparse_stiffness_matrix</span><span class="p">(</span>
+       <span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">),</span> <span class="n">dof_manager</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEnergyFormPhysics.vmap_element_energy">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseEnergyFormPhysics.vmap_element_energy">[docs]</a>
+  <span class="k">def</span> <span class="nf">vmap_element_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span>
+    <span class="n">pis</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element_energy</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="n">in_axes</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="n">conns</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pis</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BaseStrongFormPhysics">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseStrongFormPhysics">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseStrongFormPhysics</span><span class="p">(</span><span class="n">BasePhysics</span><span class="p">):</span>
+  <span class="n">field_value_names</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<div class="viewcode-block" id="BaseStrongFormPhysics.strong_form_neumann_bc">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseStrongFormPhysics.strong_form_neumann_bc">[docs]</a>
+  <span class="k">def</span> <span class="nf">strong_form_neumann_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;Can</span><span class="se">\&#39;</span><span class="s1">t call this on the base method. Need to implement for physics.&#39;</span></div>
+
+
+<div class="viewcode-block" id="BaseStrongFormPhysics.strong_form_residual">
+<a class="viewcode-back" href="../../../pancax.physics_kernels.html#pancax.physics_kernels.base.BaseStrongFormPhysics.strong_form_residual">[docs]</a>
+  <span class="nd">@abstractmethod</span>
+  <span class="k">def</span> <span class="nf">strong_form_residual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+</div>
+
+
+  <span class="c1"># def vmap_strong_form_residual(    # us = self.field_values(params, x, t, *args)</span>
+    <span class="c1"># us = us[fspace.conns, :]</span>
+    <span class="c1"># xs = x[fspace.conns, :])</span>
+
+<span class="c1"># class BaseWeakFormPhysics(BasePhysics):</span>
+<span class="c1">#   n_dofs: int</span>
+<span class="c1">#   field_value_names: tuple[int, ...]</span>
+
+<span class="c1">#   def element_field(self, params, x, t, func, u, fspace):</span>
+<span class="c1">#     # x_el = x[conn, :]</span>
+<span class="c1">#     # u_el = u[conn, :]</span>
+<span class="c1">#     # return vmap(func, in_axes=(None, None, None, ))</span>
+<span class="c1">#     v = fspace.shape_function_values(x)</span>
+<span class="c1">#     grad_v = fspace.shape_function_gradients(x)</span>
+<span class="c1">#     JxWs = fspace.JxWs(x)</span>
+<span class="c1">#     return jnp</span>
+<span class="c1">#     pass</span>
+
+<span class="c1">#   def element_field_gradient(self, params, x, t, *args):</span>
+<span class="c1">#     pass</span>
+
+<span class="c1">#   def quadrature_field(self, params, x, t, *args):</span>
+<span class="c1">#     pass</span>
+  
+<span class="c1">#   # def quadrature_field_gradient(self):</span>
+<span class="c1">#   #   pass</span>
+
+<span class="c1">#   @abstractmethod</span>
+<span class="c1">#   def energy(self, params, x, t, u, grad_u, *args):</span>
+<span class="c1">#     pass</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

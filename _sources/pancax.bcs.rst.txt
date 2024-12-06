@@ -1,0 +1,41 @@
+pancax.bcs package
+==================
+
+Submodules
+----------
+
+pancax.bcs.distance\_functions module
+-------------------------------------
+
+.. automodule:: pancax.bcs.distance_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.bcs.essential\_bc module
+-------------------------------
+
+.. automodule:: pancax.bcs.essential_bc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.bcs.natural\_bc module
+-----------------------------
+
+.. automodule:: pancax.bcs.natural_bc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.bcs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

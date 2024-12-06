@@ -1,0 +1,50 @@
+pancax.optimizers package
+=========================
+
+Submodules
+----------
+
+pancax.optimizers.adam module
+-----------------------------
+
+.. automodule:: pancax.optimizers.adam
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.optimizers.base module
+-----------------------------
+
+.. automodule:: pancax.optimizers.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.optimizers.lbfgs module
+------------------------------
+
+.. automodule:: pancax.optimizers.lbfgs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.optimizers.utils module
+------------------------------
+
+.. automodule:: pancax.optimizers.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.optimizers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,0 +1,68 @@
+pancax.physics\_kernels package
+===============================
+
+Submodules
+----------
+
+pancax.physics\_kernels.base module
+-----------------------------------
+
+.. automodule:: pancax.physics_kernels.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.physics\_kernels.burgers\_equation module
+------------------------------------------------
+
+.. automodule:: pancax.physics_kernels.burgers_equation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.physics\_kernels.heat\_equation module
+---------------------------------------------
+
+.. automodule:: pancax.physics_kernels.heat_equation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.physics\_kernels.laplace\_beltrami module
+------------------------------------------------
+
+.. automodule:: pancax.physics_kernels.laplace_beltrami
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.physics\_kernels.poisson module
+--------------------------------------
+
+.. automodule:: pancax.physics_kernels.poisson
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.physics\_kernels.solid\_mechanics module
+-----------------------------------------------
+
+.. automodule:: pancax.physics_kernels.solid_mechanics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.physics_kernels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

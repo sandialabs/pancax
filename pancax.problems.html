@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.problems package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pancax.physics_kernels package" href="pancax.physics_kernels.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.problems package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.problems.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-problems-package">
+<h1>pancax.problems package<a class="headerlink" href="#pancax-problems-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.problems.forward_problem">
+<span id="pancax-problems-forward-problem-module"></span><h2>pancax.problems.forward_problem module<a class="headerlink" href="#module-pancax.problems.forward_problem" title="Link to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.DomainPhysicsCompatabilityError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.problems.forward_problem.</span></span><span class="sig-name descname"><span class="pre">DomainPhysicsCompatabilityError</span></span><a class="reference internal" href="_modules/pancax/problems/forward_problem.html#DomainPhysicsCompatabilityError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.problems.forward_problem.DomainPhysicsCompatabilityError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.problems.forward_problem.</span></span><span class="sig-name descname"><span class="pre">ForwardProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.domains.html#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><span class="pre">pancax.domains.base.BaseDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><span class="pre">pancax.physics_kernels.base.BasePhysics</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">essential_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.essential_bc.EssentialBC" title="pancax.bcs.essential_bc.EssentialBC"><span class="pre">pancax.bcs.essential_bc.EssentialBC</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.natural_bc.NaturalBC" title="pancax.bcs.natural_bc.NaturalBC"><span class="pre">pancax.bcs.natural_bc.NaturalBC</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/problems/forward_problem.html#ForwardProblem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.domains.html#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><span class="pre">BaseDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><span class="pre">BasePhysics</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">essential_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.essential_bc.EssentialBC" title="pancax.bcs.essential_bc.EssentialBC"><span class="pre">EssentialBC</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.natural_bc.NaturalBC" title="pancax.bcs.natural_bc.NaturalBC"><span class="pre">NaturalBC</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/problems/forward_problem.html#ForwardProblem.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.domain">
+<span class="sig-name descname"><span class="pre">domain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.domains.html#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><span class="pre">BaseDomain</span></a></em><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.domain" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.physics">
+<span class="sig-name descname"><span class="pre">physics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><span class="pre">BasePhysics</span></a></em><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.physics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.ics">
+<span class="sig-name descname"><span class="pre">ics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.ics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.essential_bcs">
+<span class="sig-name descname"><span class="pre">essential_bcs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.essential_bc.EssentialBC" title="pancax.bcs.essential_bc.EssentialBC"><span class="pre">EssentialBC</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.essential_bcs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.natural_bcs">
+<span class="sig-name descname"><span class="pre">natural_bcs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.natural_bc.NaturalBC" title="pancax.bcs.natural_bc.NaturalBC"><span class="pre">NaturalBC</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.natural_bcs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.conns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conns</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.conns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.coords">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.coords" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.dof_manager">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dof_manager</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.dof_manager" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.fspace">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fspace</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.fspace" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.mesh">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mesh</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.mesh" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.mesh_file">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mesh_file</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.mesh_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.problems.forward_problem.ForwardProblem.times">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">times</span></span><a class="headerlink" href="#pancax.problems.forward_problem.ForwardProblem.times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.problems.inverse_problem">
+<span id="pancax-problems-inverse-problem-module"></span><h2>pancax.problems.inverse_problem module<a class="headerlink" href="#module-pancax.problems.inverse_problem" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.problems.inverse_problem.InverseProblem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.problems.inverse_problem.</span></span><span class="sig-name descname"><span class="pre">InverseProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.domains.html#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><span class="pre">pancax.domains.base.BaseDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><span class="pre">pancax.physics_kernels.base.BasePhysics</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">essential_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.essential_bc.EssentialBC" title="pancax.bcs.essential_bc.EssentialBC"><span class="pre">pancax.bcs.essential_bc.EssentialBC</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.natural_bc.NaturalBC" title="pancax.bcs.natural_bc.NaturalBC"><span class="pre">pancax.bcs.natural_bc.NaturalBC</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.data.html#pancax.data.full_field_data.FullFieldData" title="pancax.data.full_field_data.FullFieldData"><span class="pre">pancax.data.full_field_data.FullFieldData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.data.html#pancax.data.global_data.GlobalData" title="pancax.data.global_data.GlobalData"><span class="pre">pancax.data.global_data.GlobalData</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/problems/inverse_problem.html#InverseProblem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.problems.inverse_problem.InverseProblem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.problems.forward_problem.ForwardProblem" title="pancax.problems.forward_problem.ForwardProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardProblem</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.problems.inverse_problem.InverseProblem.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.domains.html#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><span class="pre">BaseDomain</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.physics_kernels.html#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><span class="pre">BasePhysics</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">essential_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.essential_bc.EssentialBC" title="pancax.bcs.essential_bc.EssentialBC"><span class="pre">EssentialBC</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">natural_bcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pancax.bcs.html#pancax.bcs.natural_bc.NaturalBC" title="pancax.bcs.natural_bc.NaturalBC"><span class="pre">NaturalBC</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.data.html#pancax.data.full_field_data.FullFieldData" title="pancax.data.full_field_data.FullFieldData"><span class="pre">FullFieldData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pancax.data.html#pancax.data.global_data.GlobalData" title="pancax.data.global_data.GlobalData"><span class="pre">GlobalData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/problems/inverse_problem.html#InverseProblem.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.problems.inverse_problem.InverseProblem.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.inverse_problem.InverseProblem._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.problems.inverse_problem.InverseProblem._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.inverse_problem.InverseProblem.field_data">
+<span class="sig-name descname"><span class="pre">field_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.data.html#pancax.data.full_field_data.FullFieldData" title="pancax.data.full_field_data.FullFieldData"><span class="pre">FullFieldData</span></a></em><a class="headerlink" href="#pancax.problems.inverse_problem.InverseProblem.field_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.problems.inverse_problem.InverseProblem.global_data">
+<span class="sig-name descname"><span class="pre">global_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.data.html#pancax.data.global_data.GlobalData" title="pancax.data.global_data.GlobalData"><span class="pre">GlobalData</span></a></em><a class="headerlink" href="#pancax.problems.inverse_problem.InverseProblem.global_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.problems">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.problems" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.physics_kernels.html" class="btn btn-neutral float-left" title="pancax.physics_kernels package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

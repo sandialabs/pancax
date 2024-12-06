@@ -1,0 +1,32 @@
+pancax.problems package
+=======================
+
+Submodules
+----------
+
+pancax.problems.forward\_problem module
+---------------------------------------
+
+.. automodule:: pancax.problems.forward_problem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.problems.inverse\_problem module
+---------------------------------------
+
+.. automodule:: pancax.problems.inverse_problem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.problems
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

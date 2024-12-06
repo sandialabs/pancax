@@ -1,0 +1,94 @@
+pancax.fem package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pancax.fem.elements
+
+Submodules
+----------
+
+pancax.fem.dof\_manager module
+------------------------------
+
+.. automodule:: pancax.fem.dof_manager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.function\_space module
+---------------------------------
+
+.. automodule:: pancax.fem.function_space
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.mesh module
+----------------------
+
+.. automodule:: pancax.fem.mesh
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.quadrature\_rules module
+-----------------------------------
+
+.. automodule:: pancax.fem.quadrature_rules
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.read\_exodus\_mesh module
+------------------------------------
+
+.. automodule:: pancax.fem.read_exodus_mesh
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.sparse\_matrix\_assembler module
+-------------------------------------------
+
+.. automodule:: pancax.fem.sparse_matrix_assembler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.surface module
+-------------------------
+
+.. automodule:: pancax.fem.surface
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.fem.traction\_bc module
+------------------------------
+
+.. automodule:: pancax.fem.traction_bc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.fem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.constitutive_models package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.data package" href="pancax.data.html" />
+    <link rel="prev" title="pancax.bvps package" href="pancax.bvps.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax.constitutive_models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models.base">pancax.constitutive_models.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.cauchy_stress"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.cauchy_stress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.energy"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.invariants"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.invariants()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I1"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.I1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I1_bar"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.I1_bar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I2"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.I2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I2_bar"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.I2_bar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.jacobian"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.jacobian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.pk1_stress"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.pk1_stress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.properties"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.properties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel.__init__"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseConstitutiveModel._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models.blatz_ko">pancax.constitutive_models.blatz_ko module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.constitutive_models.blatz_ko.BlatzKo"><code class="docutils literal notranslate"><span class="pre">BlatzKo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.blatz_ko.BlatzKo.shear_modulus"><code class="docutils literal notranslate"><span class="pre">BlatzKo.shear_modulus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.blatz_ko.BlatzKo.energy"><code class="docutils literal notranslate"><span class="pre">BlatzKo.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.blatz_ko.BlatzKo.__init__"><code class="docutils literal notranslate"><span class="pre">BlatzKo.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.blatz_ko.BlatzKo._abc_impl"><code class="docutils literal notranslate"><span class="pre">BlatzKo._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models.gent">pancax.constitutive_models.gent module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent"><code class="docutils literal notranslate"><span class="pre">Gent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent.bulk_modulus"><code class="docutils literal notranslate"><span class="pre">Gent.bulk_modulus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent.shear_modulus"><code class="docutils literal notranslate"><span class="pre">Gent.shear_modulus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent.Jm_parameter"><code class="docutils literal notranslate"><span class="pre">Gent.Jm_parameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent.energy"><code class="docutils literal notranslate"><span class="pre">Gent.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent.__init__"><code class="docutils literal notranslate"><span class="pre">Gent.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.gent.Gent._abc_impl"><code class="docutils literal notranslate"><span class="pre">Gent._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models.neohookean">pancax.constitutive_models.neohookean module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.constitutive_models.neohookean.NeoHookean"><code class="docutils literal notranslate"><span class="pre">NeoHookean</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.neohookean.NeoHookean.bulk_modulus"><code class="docutils literal notranslate"><span class="pre">NeoHookean.bulk_modulus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.neohookean.NeoHookean.shear_modulus"><code class="docutils literal notranslate"><span class="pre">NeoHookean.shear_modulus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.neohookean.NeoHookean.energy"><code class="docutils literal notranslate"><span class="pre">NeoHookean.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.neohookean.NeoHookean.__init__"><code class="docutils literal notranslate"><span class="pre">NeoHookean.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.neohookean.NeoHookean._abc_impl"><code class="docutils literal notranslate"><span class="pre">NeoHookean._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models.properties">pancax.constitutive_models.properties module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty"><code class="docutils literal notranslate"><span class="pre">BoundedProperty</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty.__init__"><code class="docutils literal notranslate"><span class="pre">BoundedProperty.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty.prop_min"><code class="docutils literal notranslate"><span class="pre">BoundedProperty.prop_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty.prop_max"><code class="docutils literal notranslate"><span class="pre">BoundedProperty.prop_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty.prop_val"><code class="docutils literal notranslate"><span class="pre">BoundedProperty.prop_val</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty._abc_impl"><code class="docutils literal notranslate"><span class="pre">BoundedProperty._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty._check_other_type"><code class="docutils literal notranslate"><span class="pre">BoundedProperty._check_other_type()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models.swanson">pancax.constitutive_models.swanson module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson"><code class="docutils literal notranslate"><span class="pre">Swanson</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.bulk_modulus"><code class="docutils literal notranslate"><span class="pre">Swanson.bulk_modulus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.A1"><code class="docutils literal notranslate"><span class="pre">Swanson.A1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.P1"><code class="docutils literal notranslate"><span class="pre">Swanson.P1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.B1"><code class="docutils literal notranslate"><span class="pre">Swanson.B1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.Q1"><code class="docutils literal notranslate"><span class="pre">Swanson.Q1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.C1"><code class="docutils literal notranslate"><span class="pre">Swanson.C1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.R1"><code class="docutils literal notranslate"><span class="pre">Swanson.R1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.cutoff_strain"><code class="docutils literal notranslate"><span class="pre">Swanson.cutoff_strain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.energy"><code class="docutils literal notranslate"><span class="pre">Swanson.energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson.__init__"><code class="docutils literal notranslate"><span class="pre">Swanson.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.constitutive_models.swanson.Swanson._abc_impl"><code class="docutils literal notranslate"><span class="pre">Swanson._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.constitutive_models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.constitutive_models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.constitutive_models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-constitutive-models-package">
+<h1>pancax.constitutive_models package<a class="headerlink" href="#pancax-constitutive-models-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.constitutive_models.base">
+<span id="pancax-constitutive-models-base-module"></span><h2>pancax.constitutive_models.base module<a class="headerlink" href="#module-pancax.constitutive_models.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.constitutive_models.base.</span></span><span class="sig-name descname"><span class="pre">BaseConstitutiveModel</span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.cauchy_stress">
+<span class="sig-name descname"><span class="pre">cauchy_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.cauchy_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.cauchy_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.energy">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.energy" title="Link to this definition"></a></dt>
+<dd><p>This method returns the algorithmic strain energy density.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.invariants">
+<span class="sig-name descname"><span class="pre">invariants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.invariants"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.invariants" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.I1">
+<span class="sig-name descname"><span class="pre">I1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.I1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I1" title="Link to this definition"></a></dt>
+<dd><p>Calculates the first invariant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>F</strong> – the deformation gradient</p>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[I_1 = tr\left(\mathbf{F}^T\mathbf{F}\right)\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.I1_bar">
+<span class="sig-name descname"><span class="pre">I1_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.I1_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I1_bar" title="Link to this definition"></a></dt>
+<dd><p>Calculates the first distortional invariant</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>F</strong> – the deformation gradient</p>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[\bar{I}_1 = J^{-2/3}tr\left(\mathbf{F}^T\mathbf{F}\right)\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.I2">
+<span class="sig-name descname"><span class="pre">I2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.I2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.I2_bar">
+<span class="sig-name descname"><span class="pre">I2_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.I2_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.I2_bar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.jacobian">
+<span class="sig-name descname"><span class="pre">jacobian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.jacobian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.jacobian" title="Link to this definition"></a></dt>
+<dd><p>This simply calculate the jacobian but with guard rails
+to return nonsensical numbers if a non-positive jacobian
+is encountered during training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>F</strong> – the deformation gradient</p>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[J = det(\mathbf{F})\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.pk1_stress">
+<span class="sig-name descname"><span class="pre">pk1_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.pk1_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.pk1_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.properties">
+<span class="sig-name descname"><span class="pre">properties</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/base.html#BaseConstitutiveModel.properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.properties" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.base.BaseConstitutiveModel._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.constitutive_models.base.BaseConstitutiveModel._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.constitutive_models.blatz_ko">
+<span id="pancax-constitutive-models-blatz-ko-module"></span><h2>pancax.constitutive_models.blatz_ko module<a class="headerlink" href="#module-pancax.constitutive_models.blatz_ko" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.constitutive_models.blatz_ko.BlatzKo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.constitutive_models.blatz_ko.</span></span><span class="sig-name descname"><span class="pre">BlatzKo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shear_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">pancax.constitutive_models.properties.BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/blatz_ko.html#BlatzKo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.blatz_ko.BlatzKo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel" title="pancax.constitutive_models.base.BaseConstitutiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConstitutiveModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.blatz_ko.BlatzKo.shear_modulus">
+<span class="sig-name descname"><span class="pre">shear_modulus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.blatz_ko.BlatzKo.shear_modulus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.blatz_ko.BlatzKo.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/blatz_ko.html#BlatzKo.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.blatz_ko.BlatzKo.energy" title="Link to this definition"></a></dt>
+<dd><p>This method returns the algorithmic strain energy density.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.blatz_ko.BlatzKo.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shear_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.constitutive_models.blatz_ko.BlatzKo.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.blatz_ko.BlatzKo._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.constitutive_models.blatz_ko.BlatzKo._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.constitutive_models.gent">
+<span id="pancax-constitutive-models-gent-module"></span><h2>pancax.constitutive_models.gent module<a class="headerlink" href="#module-pancax.constitutive_models.gent" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.constitutive_models.gent.</span></span><span class="sig-name descname"><span class="pre">Gent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Jm_parameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/gent.html#Gent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.gent.Gent" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel" title="pancax.constitutive_models.base.BaseConstitutiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConstitutiveModel</span></code></a></p>
+<p>Gent model with the following model form</p>
+<div class="math notranslate nohighlight">
+\[\psi(\mathbf{F}) = \frac{1}{2}K\left[\frac{1}{2}\left(J^2 - \ln J\right)\right] -
+                                           \frac{1}{2}GJ_m\ln\left(1 - \frac{\bar{I}_1 - 3}{J_m}\right)\]</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent.bulk_modulus">
+<span class="sig-name descname"><span class="pre">bulk_modulus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.gent.Gent.bulk_modulus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent.shear_modulus">
+<span class="sig-name descname"><span class="pre">shear_modulus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.gent.Gent.shear_modulus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent.Jm_parameter">
+<span class="sig-name descname"><span class="pre">Jm_parameter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.gent.Gent.Jm_parameter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/gent.html#Gent.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.gent.Gent.energy" title="Link to this definition"></a></dt>
+<dd><p>This method returns the algorithmic strain energy density.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Jm_parameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.constitutive_models.gent.Gent.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.gent.Gent._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.constitutive_models.gent.Gent._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.constitutive_models.neohookean">
+<span id="pancax-constitutive-models-neohookean-module"></span><h2>pancax.constitutive_models.neohookean module<a class="headerlink" href="#module-pancax.constitutive_models.neohookean" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.constitutive_models.neohookean.NeoHookean">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.constitutive_models.neohookean.</span></span><span class="sig-name descname"><span class="pre">NeoHookean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/neohookean.html#NeoHookean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.neohookean.NeoHookean" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel" title="pancax.constitutive_models.base.BaseConstitutiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConstitutiveModel</span></code></a></p>
+<p>NeoHookean model with the following model form</p>
+<div class="math notranslate nohighlight">
+\[\psi(\mathbf{F}) = \frac{1}{2}K\left[\frac{1}{2}\left(J^2 - \ln J\right)\right] +
+                                   \frac{1}{2}G\left(\bar{I}_1 - 3\right)\]</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.neohookean.NeoHookean.bulk_modulus">
+<span class="sig-name descname"><span class="pre">bulk_modulus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.neohookean.NeoHookean.bulk_modulus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.neohookean.NeoHookean.shear_modulus">
+<span class="sig-name descname"><span class="pre">shear_modulus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.neohookean.NeoHookean.shear_modulus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.neohookean.NeoHookean.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'3</span> <span class="pre">3'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/neohookean.html#NeoHookean.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.neohookean.NeoHookean.energy" title="Link to this definition"></a></dt>
+<dd><p>This method returns the algorithmic strain energy density.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.neohookean.NeoHookean.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.constitutive_models.neohookean.NeoHookean.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.neohookean.NeoHookean._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.constitutive_models.neohookean.NeoHookean._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.constitutive_models.properties">
+<span id="pancax-constitutive-models-properties-module"></span><h2>pancax.constitutive_models.properties module<a class="headerlink" href="#module-pancax.constitutive_models.properties" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.constitutive_models.properties.</span></span><span class="sig-name descname"><span class="pre">BoundedProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_min:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_max:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">&lt;function</span> <span class="pre">PRNGKey</span> <span class="pre">at</span> <span class="pre">0x7f45f2104040&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/properties.html#BoundedProperty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PRNGKey</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/constitutive_models/properties.html#BoundedProperty.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty.prop_min">
+<span class="sig-name descname"><span class="pre">prop_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty.prop_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty.prop_max">
+<span class="sig-name descname"><span class="pre">prop_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty.prop_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty.prop_val">
+<span class="sig-name descname"><span class="pre">prop_val</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty.prop_val" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.properties.BoundedProperty._check_other_type">
+<span class="sig-name descname"><span class="pre">_check_other_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/properties.html#BoundedProperty._check_other_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.properties.BoundedProperty._check_other_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.constitutive_models.swanson">
+<span id="pancax-constitutive-models-swanson-module"></span><h2>pancax.constitutive_models.swanson module<a class="headerlink" href="#module-pancax.constitutive_models.swanson" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.constitutive_models.swanson.</span></span><span class="sig-name descname"><span class="pre">Swanson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_strain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/swanson.html#Swanson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.constitutive_models.base.BaseConstitutiveModel" title="pancax.constitutive_models.base.BaseConstitutiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConstitutiveModel</span></code></a></p>
+<p>Swanson model truncated to 4 parameters</p>
+<div class="math notranslate nohighlight">
+\[\psi(\mathbf{F}) = K\left(J\ln J - J + 1\right) +
+                                                 \frac{3}{2}A_1\left(\frac{\bar{I}_1}{3} - 1\right)^{P_1} +
+       \frac{3}{2}C_1\left(\frac{\bar{I}_1}{3} - 1\right)^{R_1}\]</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.bulk_modulus">
+<span class="sig-name descname"><span class="pre">bulk_modulus</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.bulk_modulus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.A1">
+<span class="sig-name descname"><span class="pre">A1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.A1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.P1">
+<span class="sig-name descname"><span class="pre">P1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.P1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.B1">
+<span class="sig-name descname"><span class="pre">B1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.B1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.Q1">
+<span class="sig-name descname"><span class="pre">Q1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.Q1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.C1">
+<span class="sig-name descname"><span class="pre">C1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.C1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.R1">
+<span class="sig-name descname"><span class="pre">R1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.R1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.cutoff_strain">
+<span class="sig-name descname"><span class="pre">cutoff_strain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.cutoff_strain" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/constitutive_models/swanson.html#Swanson.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.energy" title="Link to this definition"></a></dt>
+<dd><p>This method returns the algorithmic strain energy density.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_modulus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pancax.constitutive_models.properties.BoundedProperty" title="pancax.constitutive_models.properties.BoundedProperty"><span class="pre">BoundedProperty</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff_strain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.constitutive_models.swanson.Swanson._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.constitutive_models.swanson.Swanson._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.constitutive_models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.constitutive_models" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.bvps.html" class="btn btn-neutral float-left" title="pancax.bvps package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.data.html" class="btn btn-neutral float-right" title="pancax.data package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

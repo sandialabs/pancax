@@ -1,0 +1,86 @@
+pancax.loss\_functions package
+==============================
+
+Submodules
+----------
+
+pancax.loss\_functions.base\_loss\_function module
+--------------------------------------------------
+
+.. automodule:: pancax.loss_functions.base_loss_function
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.bc\_loss\_functions module
+-------------------------------------------------
+
+.. automodule:: pancax.loss_functions.bc_loss_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.data\_loss\_functions module
+---------------------------------------------------
+
+.. automodule:: pancax.loss_functions.data_loss_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.ic\_loss\_function module
+------------------------------------------------
+
+.. automodule:: pancax.loss_functions.ic_loss_function
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.physics\_loss\_functions\_strong\_form module
+--------------------------------------------------------------------
+
+.. automodule:: pancax.loss_functions.physics_loss_functions_strong_form
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.strong\_form\_loss\_functions module
+-----------------------------------------------------------
+
+.. automodule:: pancax.loss_functions.strong_form_loss_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.utils module
+-----------------------------------
+
+.. automodule:: pancax.loss_functions.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.loss\_functions.weak\_form\_loss\_functions module
+---------------------------------------------------------
+
+.. automodule:: pancax.loss_functions.weak_form_loss_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.loss_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

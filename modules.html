@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax package" href="pancax.html" />
+    <link rel="prev" title="Pancax" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html">pancax package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pancax</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax">
+<h1>pancax<a class="headerlink" href="#pancax" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pancax.html">pancax package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html#module-pancax.bcs.distance_functions">pancax.bcs.distance_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html#module-pancax.bcs.essential_bc">pancax.bcs.essential_bc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html#module-pancax.bcs.natural_bc">pancax.bcs.natural_bc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html#module-pancax.bcs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html#module-pancax.bvps.biaxial_tension">pancax.bvps.biaxial_tension module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html#module-pancax.bvps.simple_shear">pancax.bvps.simple_shear module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html#module-pancax.bvps.uniaxial_tension">pancax.bvps.uniaxial_tension module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html#module-pancax.bvps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models.base">pancax.constitutive_models.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models.blatz_ko">pancax.constitutive_models.blatz_ko module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models.gent">pancax.constitutive_models.gent module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models.neohookean">pancax.constitutive_models.neohookean module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models.properties">pancax.constitutive_models.properties module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models.swanson">pancax.constitutive_models.swanson module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html#module-pancax.constitutive_models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.data.html">pancax.data package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html#module-pancax.data.full_field_data">pancax.data.full_field_data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html#module-pancax.data.global_data">pancax.data.global_data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html#module-pancax.data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html#module-pancax.domains.base">pancax.domains.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html#module-pancax.domains.collocation_domain">pancax.domains.collocation_domain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html#module-pancax.domains.delta_pinn_domain">pancax.domains.delta_pinn_domain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html#module-pancax.domains.variational_domain">pancax.domains.variational_domain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html#module-pancax.domains">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.dof_manager">pancax.fem.dof_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.function_space">pancax.fem.function_space module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.mesh">pancax.fem.mesh module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.quadrature_rules">pancax.fem.quadrature_rules module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.read_exodus_mesh">pancax.fem.read_exodus_mesh module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.sparse_matrix_assembler">pancax.fem.sparse_matrix_assembler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.surface">pancax.fem.surface module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem.traction_bc">pancax.fem.traction_bc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html#module-pancax.fem">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#module-pancax.kernels.base_kernel">pancax.kernels.base_kernel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#module-pancax.kernels.laplace_beltrami">pancax.kernels.laplace_beltrami module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#module-pancax.kernels.linear_elasticity">pancax.kernels.linear_elasticity module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#module-pancax.kernels.poisson">pancax.kernels.poisson module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#pancax-kernels-solid-mechanics-module">pancax.kernels.solid_mechanics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html#module-pancax.kernels">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.base_loss_function">pancax.loss_functions.base_loss_function module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.bc_loss_functions">pancax.loss_functions.bc_loss_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.data_loss_functions">pancax.loss_functions.data_loss_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.ic_loss_function">pancax.loss_functions.ic_loss_function module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.physics_loss_functions_strong_form">pancax.loss_functions.physics_loss_functions_strong_form module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.strong_form_loss_functions">pancax.loss_functions.strong_form_loss_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.utils">pancax.loss_functions.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions.weak_form_loss_functions">pancax.loss_functions.weak_form_loss_functions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html#module-pancax.loss_functions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.math.html">pancax.math package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html#module-pancax.math.math">pancax.math.math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html#module-pancax.math.tensor_math">pancax.math.tensor_math module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html#module-pancax.math">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks.elm">pancax.networks.elm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks.field_property_pair">pancax.networks.field_property_pair module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks.initialization">pancax.networks.initialization module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks.mlp">pancax.networks.mlp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks.properties">pancax.networks.properties module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks.rbf">pancax.networks.rbf module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html#module-pancax.networks">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html#module-pancax.optimizers.adam">pancax.optimizers.adam module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html#module-pancax.optimizers.base">pancax.optimizers.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html#module-pancax.optimizers.lbfgs">pancax.optimizers.lbfgs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html#module-pancax.optimizers.utils">pancax.optimizers.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html#module-pancax.optimizers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels.base">pancax.physics_kernels.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels.burgers_equation">pancax.physics_kernels.burgers_equation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels.heat_equation">pancax.physics_kernels.heat_equation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels.laplace_beltrami">pancax.physics_kernels.laplace_beltrami module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels.poisson">pancax.physics_kernels.poisson module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels.solid_mechanics">pancax.physics_kernels.solid_mechanics module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html#module-pancax.physics_kernels">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html#module-pancax.problems.forward_problem">pancax.problems.forward_problem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html#module-pancax.problems.inverse_problem">pancax.problems.inverse_problem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html#module-pancax.problems">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.log_every"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.log_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.write_every"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.write_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.to_csv"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.to_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.write_data"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.write_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.write_aux_values"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.write_aux_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.write_epoch"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.write_epoch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.write_history"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.write_history()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.write_loss"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.write_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter.__init__"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.BaseHistoryWriter._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseHistoryWriter._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter"><code class="docutils literal notranslate"><span class="pre">HistoryWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.log_every"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.log_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.write_every"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.write_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.__init__"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.history_file"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.history_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.data_dict"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.data_dict</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.to_csv"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.to_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.write_aux_values"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.write_aux_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.write_epoch"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.write_epoch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter.write_loss"><code class="docutils literal notranslate"><span class="pre">HistoryWriter.write_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter._write_loss"><code class="docutils literal notranslate"><span class="pre">HistoryWriter._write_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.HistoryWriter._abc_impl"><code class="docutils literal notranslate"><span class="pre">HistoryWriter._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.log_every"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.log_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.write_every"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.write_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.__init__"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.history_writers"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.history_writers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.to_csv"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.to_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter._abc_impl"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.write_aux_values"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.write_aux_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.write_epoch"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.write_epoch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.history_writer.EnsembleHistoryWriter.write_loss"><code class="docutils literal notranslate"><span class="pre">EnsembleHistoryWriter.write_loss()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.kinematics.create_field_methods"><code class="docutils literal notranslate"><span class="pre">create_field_methods()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.kinematics.deformation_gradients"><code class="docutils literal notranslate"><span class="pre">deformation_gradients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.kinematics.invariants_old"><code class="docutils literal notranslate"><span class="pre">invariants_old()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.kinematics.invariants"><code class="docutils literal notranslate"><span class="pre">invariants()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.kinematics.plane_strain"><code class="docutils literal notranslate"><span class="pre">plane_strain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.kinematics.incompressible_plane_stress"><code class="docutils literal notranslate"><span class="pre">incompressible_plane_stress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.logging.log_loss"><code class="docutils literal notranslate"><span class="pre">log_loss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger"><code class="docutils literal notranslate"><span class="pre">BaseLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.log_every"><code class="docutils literal notranslate"><span class="pre">BaseLogger.log_every</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.flush"><code class="docutils literal notranslate"><span class="pre">BaseLogger.flush()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.log_loss"><code class="docutils literal notranslate"><span class="pre">BaseLogger.log_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.write_aux_values"><code class="docutils literal notranslate"><span class="pre">BaseLogger.write_aux_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.write_epoch_value"><code class="docutils literal notranslate"><span class="pre">BaseLogger.write_epoch_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.write_loss_value"><code class="docutils literal notranslate"><span class="pre">BaseLogger.write_loss_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger.__init__"><code class="docutils literal notranslate"><span class="pre">BaseLogger.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.BaseLogger._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseLogger._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.logging.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger.__init__"><code class="docutils literal notranslate"><span class="pre">Logger.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger.log_file"><code class="docutils literal notranslate"><span class="pre">Logger.log_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger.flush"><code class="docutils literal notranslate"><span class="pre">Logger.flush()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger.write_aux_values"><code class="docutils literal notranslate"><span class="pre">Logger.write_aux_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger.write_epoch_value"><code class="docutils literal notranslate"><span class="pre">Logger.write_epoch_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger.write_loss_value"><code class="docutils literal notranslate"><span class="pre">Logger.write_loss_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.Logger._abc_impl"><code class="docutils literal notranslate"><span class="pre">Logger._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger.__init__"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger.loggers"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger.loggers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger.flush"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger.flush()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger.write_aux_values"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger.write_aux_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger._abc_impl"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger.write_epoch_value"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger.write_epoch_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.logging.EnsembleLogger.write_loss_value"><code class="docutils literal notranslate"><span class="pre">EnsembleLogger.write_loss_value()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.element_quantity"><code class="docutils literal notranslate"><span class="pre">element_quantity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.element_quantity_new"><code class="docutils literal notranslate"><span class="pre">element_quantity_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.element_quantity_grad"><code class="docutils literal notranslate"><span class="pre">element_quantity_grad()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.element_quantity_hessian"><code class="docutils literal notranslate"><span class="pre">element_quantity_hessian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.potential_energy"><code class="docutils literal notranslate"><span class="pre">potential_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.residual_mse"><code class="docutils literal notranslate"><span class="pre">residual_mse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.mass_matrix"><code class="docutils literal notranslate"><span class="pre">mass_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.stiffness_matrix"><code class="docutils literal notranslate"><span class="pre">stiffness_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.traction_energy"><code class="docutils literal notranslate"><span class="pre">traction_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.internal_force"><code class="docutils literal notranslate"><span class="pre">internal_force()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.residual"><code class="docutils literal notranslate"><span class="pre">residual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.potential_energy_and_internal_force"><code class="docutils literal notranslate"><span class="pre">potential_energy_and_internal_force()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.potential_energy_and_residual"><code class="docutils literal notranslate"><span class="pre">potential_energy_and_residual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.potential_energy_residual_and_reaction_force"><code class="docutils literal notranslate"><span class="pre">potential_energy_residual_and_reaction_force()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.strong_form_residual"><code class="docutils literal notranslate"><span class="pre">strong_form_residual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.nodal_incompressibility_constraint"><code class="docutils literal notranslate"><span class="pre">nodal_incompressibility_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.quadrature_incompressibility_constraint"><code class="docutils literal notranslate"><span class="pre">quadrature_incompressibility_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.incompressible_energy"><code class="docutils literal notranslate"><span class="pre">incompressible_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.incompressible_internal_force"><code class="docutils literal notranslate"><span class="pre">incompressible_internal_force()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.incompressible_energy_and_internal_force"><code class="docutils literal notranslate"><span class="pre">incompressible_energy_and_internal_force()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.physics.incompressible_energy_and_residual"><code class="docutils literal notranslate"><span class="pre">incompressible_energy_and_residual()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.__init__"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.check_variable_names"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.check_variable_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.close"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.copy_mesh"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.copy_mesh()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.get_node_variable_number"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.get_node_variable_number()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.get_element_variable_number"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.get_element_variable_number()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.init"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.index_to_component"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.index_to_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.ExodusPostProcessor.write_outputs"><code class="docutils literal notranslate"><span class="pre">ExodusPostProcessor.write_outputs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.__init__"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.close"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.init"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.write_outputs"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.write_outputs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.convert_exodus_to_xml"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.convert_exodus_to_xml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.get_vtk_cell_type"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.get_vtk_cell_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.VtkPostProcessor.cell_type"><code class="docutils literal notranslate"><span class="pre">VtkPostProcessor.cell_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.post_processor.PostProcessor"><code class="docutils literal notranslate"><span class="pre">PostProcessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.PostProcessor.__init__"><code class="docutils literal notranslate"><span class="pre">PostProcessor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.PostProcessor.close"><code class="docutils literal notranslate"><span class="pre">PostProcessor.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.PostProcessor.init"><code class="docutils literal notranslate"><span class="pre">PostProcessor.init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.post_processor.PostProcessor.write_outputs"><code class="docutils literal notranslate"><span class="pre">PostProcessor.write_outputs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.timer.TimerError"><code class="docutils literal notranslate"><span class="pre">TimerError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.timer.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.timers"><code class="docutils literal notranslate"><span class="pre">Timer.timers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.name"><code class="docutils literal notranslate"><span class="pre">Timer.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.text"><code class="docutils literal notranslate"><span class="pre">Timer.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.logger"><code class="docutils literal notranslate"><span class="pre">Timer.logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer._start_time"><code class="docutils literal notranslate"><span class="pre">Timer._start_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.start"><code class="docutils literal notranslate"><span class="pre">Timer.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.stop"><code class="docutils literal notranslate"><span class="pre">Timer.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.timer.Timer.__init__"><code class="docutils literal notranslate"><span class="pre">Timer.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer.__init__"><code class="docutils literal notranslate"><span class="pre">Trainer.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer.init"><code class="docutils literal notranslate"><span class="pre">Trainer.init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer.serialise"><code class="docutils literal notranslate"><span class="pre">Trainer.serialise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer.step"><code class="docutils literal notranslate"><span class="pre">Trainer.step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer.train"><code class="docutils literal notranslate"><span class="pre">Trainer.train()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.html#pancax.trainer.Trainer.write_outputs"><code class="docutils literal notranslate"><span class="pre">Trainer.write_outputs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.utils.DataFileNotFoundException"><code class="docutils literal notranslate"><span class="pre">DataFileNotFoundException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.utils.MeshFileNotFoundException"><code class="docutils literal notranslate"><span class="pre">MeshFileNotFoundException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.utils.find_data_file"><code class="docutils literal notranslate"><span class="pre">find_data_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.utils.find_mesh_file"><code class="docutils literal notranslate"><span class="pre">find_mesh_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax.utils.set_checkpoint_file"><code class="docutils literal notranslate"><span class="pre">set_checkpoint_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Pancax" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.html" class="btn btn-neutral float-right" title="pancax package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

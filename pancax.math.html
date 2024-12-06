@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.math package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.networks package" href="pancax.networks.html" />
+    <link rel="prev" title="pancax.loss_functions package" href="pancax.loss_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax.math package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.math.math">pancax.math.math module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.math.safe_sqrt_jvp"><code class="docutils literal notranslate"><span class="pre">safe_sqrt_jvp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.math.sum2"><code class="docutils literal notranslate"><span class="pre">sum2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.math._two_sum"><code class="docutils literal notranslate"><span class="pre">_two_sum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.math.dot2"><code class="docutils literal notranslate"><span class="pre">dot2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.math._two_product"><code class="docutils literal notranslate"><span class="pre">_two_product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.math._float_split"><code class="docutils literal notranslate"><span class="pre">_float_split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.math.tensor_math">pancax.math.tensor_math module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.if_then_else"><code class="docutils literal notranslate"><span class="pre">if_then_else()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.compute_deviatoric_tensor"><code class="docutils literal notranslate"><span class="pre">compute_deviatoric_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.dev"><code class="docutils literal notranslate"><span class="pre">dev()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.tensor_norm"><code class="docutils literal notranslate"><span class="pre">tensor_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.norm_of_deviator_squared"><code class="docutils literal notranslate"><span class="pre">norm_of_deviator_squared()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.norm_of_deviator"><code class="docutils literal notranslate"><span class="pre">norm_of_deviator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.mises_equivalent_stress"><code class="docutils literal notranslate"><span class="pre">mises_equivalent_stress()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.triaxiality"><code class="docutils literal notranslate"><span class="pre">triaxiality()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.sym"><code class="docutils literal notranslate"><span class="pre">sym()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.logh"><code class="docutils literal notranslate"><span class="pre">logh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.logh_from_eigen"><code class="docutils literal notranslate"><span class="pre">logh_from_eigen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.tensor_2D_to_3D"><code class="docutils literal notranslate"><span class="pre">tensor_2D_to_3D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.eigen_sym33_non_unit"><code class="docutils literal notranslate"><span class="pre">eigen_sym33_non_unit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.eigen_sym33_unit"><code class="docutils literal notranslate"><span class="pre">eigen_sym33_unit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.cos_of_acos_divided_by_3"><code class="docutils literal notranslate"><span class="pre">cos_of_acos_divided_by_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.mtk_log_sqrt_jvp"><code class="docutils literal notranslate"><span class="pre">mtk_log_sqrt_jvp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.mtk_pow_jvp"><code class="docutils literal notranslate"><span class="pre">mtk_pow_jvp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.relative_log_difference_taylor"><code class="docutils literal notranslate"><span class="pre">relative_log_difference_taylor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.relative_log_difference_no_tolerance_check"><code class="docutils literal notranslate"><span class="pre">relative_log_difference_no_tolerance_check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.relative_log_difference"><code class="docutils literal notranslate"><span class="pre">relative_log_difference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.log_jvp"><code class="docutils literal notranslate"><span class="pre">log_jvp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.jvp_sqrtm"><code class="docutils literal notranslate"><span class="pre">jvp_sqrtm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.sqrtm_dbp"><code class="docutils literal notranslate"><span class="pre">sqrtm_dbp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.logm_jvp"><code class="docutils literal notranslate"><span class="pre">logm_jvp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math._logm_iss"><code class="docutils literal notranslate"><span class="pre">_logm_iss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.math.tensor_math.log_pade_pf"><code class="docutils literal notranslate"><span class="pre">log_pade_pf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.math">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.math package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.math.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-math-package">
+<h1>pancax.math package<a class="headerlink" href="#pancax-math-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.math.math">
+<span id="pancax-math-math-module"></span><h2>pancax.math.math module<a class="headerlink" href="#module-pancax.math.math" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.math.safe_sqrt_jvp">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.math.</span></span><span class="sig-name descname"><span class="pre">safe_sqrt_jvp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/math.html#safe_sqrt_jvp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.math.safe_sqrt_jvp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.math.sum2">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.math.</span></span><span class="sig-name descname"><span class="pre">sum2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/math.html#sum2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.math.sum2" title="Link to this definition"></a></dt>
+<dd><p>Sum a vector to much higher accuracy than numpy.sum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>ndarray</em><em>, </em><em>with only one axis</em><em> (</em><em>shape</em><em> [</em><em>n</em><em>,</em><em>]</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>sum</strong> – The sum of the numbers in the array</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+</dl>
+<p>This special sum method computes the result as accurate as if
+computed in quadruple precision.</p>
+<p>Reference:
+T. Ogita, S. M. Rump, and S. Oishi. Accurate sum and dot product.
+SIAM J. Sci. Comput., Vol 26, No 6, pp. 1955-1988.
+doi: 10.1137/030601818</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.math._two_sum">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.math.</span></span><span class="sig-name descname"><span class="pre">_two_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/math.html#_two_sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.math._two_sum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.math.dot2">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.math.</span></span><span class="sig-name descname"><span class="pre">dot2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/math.html#dot2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.math.dot2" title="Link to this definition"></a></dt>
+<dd><p>Compute inner product of 2 vectors to much higher accuracy than numpy.dot.</p>
+<p>:param :
+:type : param x: ndarray, with only one axis (shape [n,])
+:param :
+:type : param y: ndarray, with only one axis (shape [n,])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The inner product of the input vectors.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>return dotprod: real</p>
+</dd>
+</dl>
+<p>This special inner product  method computes the result as accurate
+as if computed in quadruple precision. This algorithm is useful to
+computing objective functions from numerical integration. It avoids
+accumulation of floating point cancellation error that can obscure
+whether an objective function has truly decreased.</p>
+<p>The environment variable setting
+‘XLA_FLAGS = “–xla_cpu_enable_fast_math=false”’
+is critical for this function to work on the CPU. Otherwise, xla
+apparently sets a flag for LLVM that allows unsafe floating point
+optimizations that can change associativity.</p>
+<p>Reference
+T. Ogita, S. M. Rump, and S. Oishi. Accurate sum and dot product.
+SIAM J. Sci. Comput., Vol 26, No 6, pp. 1955-1988.
+doi 10.1137/030601818</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.math._two_product">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.math.</span></span><span class="sig-name descname"><span class="pre">_two_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/math.html#_two_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.math._two_product" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.math._float_split">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.math.</span></span><span class="sig-name descname"><span class="pre">_float_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/math.html#_float_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.math._float_split" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pancax.math.tensor_math">
+<span id="pancax-math-tensor-math-module"></span><h2>pancax.math.tensor_math module<a class="headerlink" href="#module-pancax.math.tensor_math" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.if_then_else">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">if_then_else</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#if_then_else"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.if_then_else" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.compute_deviatoric_tensor">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">compute_deviatoric_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#compute_deviatoric_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.compute_deviatoric_tensor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.dev">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">dev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strain</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#dev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.dev" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.tensor_norm">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">tensor_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#tensor_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.tensor_norm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.norm_of_deviator_squared">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">norm_of_deviator_squared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#norm_of_deviator_squared"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.norm_of_deviator_squared" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.norm_of_deviator">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">norm_of_deviator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#norm_of_deviator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.norm_of_deviator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.mises_equivalent_stress">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">mises_equivalent_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stress</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#mises_equivalent_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.mises_equivalent_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.triaxiality">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">triaxiality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#triaxiality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.triaxiality" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.sym">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">sym</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#sym"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.sym" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.logh">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">logh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#logh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.logh" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.logh_from_eigen">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">logh_from_eigen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eVals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eVecs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#logh_from_eigen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.logh_from_eigen" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.tensor_2D_to_3D">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">tensor_2D_to_3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#tensor_2D_to_3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.tensor_2D_to_3D" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.eigen_sym33_non_unit">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">eigen_sym33_non_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#eigen_sym33_non_unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.eigen_sym33_non_unit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.eigen_sym33_unit">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">eigen_sym33_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#eigen_sym33_unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.eigen_sym33_unit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.cos_of_acos_divided_by_3">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">cos_of_acos_divided_by_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#cos_of_acos_divided_by_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.cos_of_acos_divided_by_3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.mtk_log_sqrt_jvp">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">mtk_log_sqrt_jvp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Cpack</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Hpack</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#mtk_log_sqrt_jvp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.mtk_log_sqrt_jvp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.mtk_pow_jvp">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">mtk_pow_jvp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cpack</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Hpack</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#mtk_pow_jvp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.mtk_pow_jvp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.relative_log_difference_taylor">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">relative_log_difference_taylor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lam1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#relative_log_difference_taylor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.relative_log_difference_taylor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.relative_log_difference_no_tolerance_check">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">relative_log_difference_no_tolerance_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lam1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#relative_log_difference_no_tolerance_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.relative_log_difference_no_tolerance_check" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.relative_log_difference">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">relative_log_difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lam1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#relative_log_difference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.relative_log_difference" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.log_jvp">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">log_jvp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Cpack</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Hpack</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#log_jvp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.log_jvp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.jvp_sqrtm">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">jvp_sqrtm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">primals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#jvp_sqrtm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.jvp_sqrtm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.sqrtm_dbp">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">sqrtm_dbp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#sqrtm_dbp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.sqrtm_dbp" title="Link to this definition"></a></dt>
+<dd><p>Matrix square root by product form of Denman-Beavers iteration.</p>
+<p>Translated from the Matrix Function Toolbox
+<a class="reference external" href="http://www.ma.man.ac.uk/~higham/mftoolbox">http://www.ma.man.ac.uk/~higham/mftoolbox</a>
+Nicholas J. Higham, Functions of Matrices: Theory and Computation,
+SIAM, Philadelphia, PA, USA, 2008. ISBN 978-0-898716-46-7,</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.logm_jvp">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">logm_jvp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">primals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#logm_jvp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.logm_jvp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math._logm_iss">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">_logm_iss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#_logm_iss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math._logm_iss" title="Link to this definition"></a></dt>
+<dd><p>Logarithmic map by inverse scaling and squaring and Padé approximants</p>
+<p>Translated from the Matrix Function Toolbox
+<a class="reference external" href="http://www.ma.man.ac.uk/~higham/mftoolbox">http://www.ma.man.ac.uk/~higham/mftoolbox</a>
+Nicholas J. Higham, Functions of Matrices: Theory and Computation,
+SIAM, Philadelphia, PA, USA, 2008. ISBN 978-0-898716-46-7,</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.math.tensor_math.log_pade_pf">
+<span class="sig-prename descclassname"><span class="pre">pancax.math.tensor_math.</span></span><span class="sig-name descname"><span class="pre">log_pade_pf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/math/tensor_math.html#log_pade_pf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.math.tensor_math.log_pade_pf" title="Link to this definition"></a></dt>
+<dd><p>Logarithmic map by Padé approximant and partial fractions</p>
+</dd></dl>
+
+</section>
+<section id="module-pancax.math">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.math" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.loss_functions.html" class="btn btn-neutral float-left" title="pancax.loss_functions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.networks.html" class="btn btn-neutral float-right" title="pancax.networks package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

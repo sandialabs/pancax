@@ -1,0 +1,115 @@
+pancax package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pancax.bcs
+   pancax.bvps
+   pancax.constitutive_models
+   pancax.data
+   pancax.domains
+   pancax.fem
+   pancax.kernels
+   pancax.loss_functions
+   pancax.math
+   pancax.networks
+   pancax.optimizers
+   pancax.physics_kernels
+   pancax.problems
+
+Submodules
+----------
+
+pancax.\_\_main\_\_ module
+--------------------------
+
+.. automodule:: pancax.__main__
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.history\_writer module
+-----------------------------
+
+.. automodule:: pancax.history_writer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.kinematics module
+------------------------
+
+.. automodule:: pancax.kinematics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.logging module
+---------------------
+
+.. automodule:: pancax.logging
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.physics module
+---------------------
+
+.. automodule:: pancax.physics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.post\_processor module
+-----------------------------
+
+.. automodule:: pancax.post_processor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.timer module
+-------------------
+
+.. automodule:: pancax.timer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.trainer module
+---------------------
+
+.. automodule:: pancax.trainer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.utils module
+-------------------
+
+.. automodule:: pancax.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.physics_kernels package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.problems package" href="pancax.problems.html" />
+    <link rel="prev" title="pancax.optimizers package" href="pancax.optimizers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.physics_kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.physics_kernels package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.physics_kernels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-physics-kernels-package">
+<h1>pancax.physics_kernels package<a class="headerlink" href="#pancax-physics-kernels-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.physics_kernels.base">
+<span id="pancax-physics-kernels-base-module"></span><h2>pancax.physics_kernels.base module<a class="headerlink" href="#module-pancax.physics_kernels.base" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.nodal_pp">
+<span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.base.</span></span><span class="sig-name descname"><span class="pre">nodal_pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#nodal_pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.nodal_pp" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – Function to use for a nodal property output variable</p></li>
+<li><p><strong>has_props</strong> – Whether or not this function need properties</p></li>
+<li><p><strong>jit</strong> – Whether or not to jit this function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.standard_pp">
+<span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.base.</span></span><span class="sig-name descname"><span class="pre">standard_pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#standard_pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.standard_pp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.base.</span></span><span class="sig-name descname"><span class="pre">BasePhysics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.var_name_to_method">
+<span class="sig-name descname"><span class="pre">var_name_to_method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.var_name_to_method" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.dirichlet_bc_func">
+<span class="sig-name descname"><span class="pre">dirichlet_bc_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.dirichlet_bc_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.x_mins">
+<span class="sig-name descname"><span class="pre">x_mins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.x_mins" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.x_maxs">
+<span class="sig-name descname"><span class="pre">x_maxs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.x_maxs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_values">
+<span class="sig-name descname"><span class="pre">field_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.field_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_gradients">
+<span class="sig-name descname"><span class="pre">field_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.field_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_gradients" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_hessians">
+<span class="sig-name descname"><span class="pre">field_hessians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.field_hessians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_hessians" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_laplacians">
+<span class="sig-name descname"><span class="pre">field_laplacians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.field_laplacians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_laplacians" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_time_derivatives">
+<span class="sig-name descname"><span class="pre">field_time_derivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.field_time_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_time_derivatives" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.field_second_time_derivatives">
+<span class="sig-name descname"><span class="pre">field_second_time_derivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.field_second_time_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.field_second_time_derivatives" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.update_dirichlet_bc_func">
+<span class="sig-name descname"><span class="pre">update_dirichlet_bc_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bc_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.update_dirichlet_bc_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.update_dirichlet_bc_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.update_normalization">
+<span class="sig-name descname"><span class="pre">update_normalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">domain</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.update_normalization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.update_normalization" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.update_var_name_to_method">
+<span class="sig-name descname"><span class="pre">update_var_name_to_method</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.update_var_name_to_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.update_var_name_to_method" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.vmap_field_values">
+<span class="sig-name descname"><span class="pre">vmap_field_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.vmap_field_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.vmap_field_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.vmap_field_gradients">
+<span class="sig-name descname"><span class="pre">vmap_field_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BasePhysics.vmap_field_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.vmap_field_gradients" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics.n_dofs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_dofs</span></span><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics.n_dofs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BasePhysics._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.base.BasePhysics._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseVariationalFormPhysics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.base.</span></span><span class="sig-name descname"><span class="pre">BaseVariationalFormPhysics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseVariationalFormPhysics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseVariationalFormPhysics" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePhysics</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseVariationalFormPhysics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.physics_kernels.base.BaseVariationalFormPhysics.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseVariationalFormPhysics._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.base.BaseVariationalFormPhysics._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.base.</span></span><span class="sig-name descname"><span class="pre">BaseEnergyFormPhysics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BaseVariationalFormPhysics" title="pancax.physics_kernels.base.BaseVariationalFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseVariationalFormPhysics</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.element_energy">
+<span class="sig-name descname"><span class="pre">element_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.element_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.element_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.element_kinetic_energy">
+<span class="sig-name descname"><span class="pre">element_kinetic_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.element_kinetic_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.element_kinetic_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.energy">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_on_block">
+<span class="sig-name descname"><span class="pre">potential_energy_on_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conns</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.potential_energy_on_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_on_block" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy">
+<span class="sig-name descname"><span class="pre">potential_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.potential_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_and_internal_force">
+<span class="sig-name descname"><span class="pre">potential_energy_and_internal_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.potential_energy_and_internal_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_and_internal_force" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_and_residual">
+<span class="sig-name descname"><span class="pre">potential_energy_and_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.potential_energy_and_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_and_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_residual_and_reaction_force">
+<span class="sig-name descname"><span class="pre">potential_energy_residual_and_reaction_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.potential_energy_residual_and_reaction_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.potential_energy_residual_and_reaction_force" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.mass_matrix">
+<span class="sig-name descname"><span class="pre">mass_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.mass_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.mass_matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.stiffness_matrix">
+<span class="sig-name descname"><span class="pre">stiffness_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">us</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.stiffness_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.stiffness_matrix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseEnergyFormPhysics.vmap_element_energy">
+<span class="sig-name descname"><span class="pre">vmap_element_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conns</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseEnergyFormPhysics.vmap_element_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.vmap_element_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseStrongFormPhysics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.base.</span></span><span class="sig-name descname"><span class="pre">BaseStrongFormPhysics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseStrongFormPhysics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseStrongFormPhysics" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BasePhysics" title="pancax.physics_kernels.base.BasePhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePhysics</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseStrongFormPhysics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_value_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.physics_kernels.base.BaseStrongFormPhysics.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseStrongFormPhysics._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.base.BaseStrongFormPhysics._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseStrongFormPhysics.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.base.BaseStrongFormPhysics.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseStrongFormPhysics.strong_form_neumann_bc">
+<span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseStrongFormPhysics.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseStrongFormPhysics.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.base.BaseStrongFormPhysics.strong_form_residual">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/base.html#BaseStrongFormPhysics.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.base.BaseStrongFormPhysics.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.physics_kernels.burgers_equation">
+<span id="pancax-physics-kernels-burgers-equation-module"></span><h2>pancax.physics_kernels.burgers_equation module<a class="headerlink" href="#module-pancax.physics_kernels.burgers_equation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.burgers_equation.BurgersEquation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.burgers_equation.</span></span><span class="sig-name descname"><span class="pre">BurgersEquation</span></span><a class="reference internal" href="_modules/pancax/physics_kernels/burgers_equation.html#BurgersEquation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.burgers_equation.BurgersEquation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BaseStrongFormPhysics" title="pancax.physics_kernels.base.BaseStrongFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStrongFormPhysics</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.burgers_equation.BurgersEquation.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.burgers_equation.BurgersEquation.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.burgers_equation.BurgersEquation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/burgers_equation.html#BurgersEquation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.burgers_equation.BurgersEquation.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.burgers_equation.BurgersEquation.strong_form_residual">
+<span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/burgers_equation.html#BurgersEquation.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.burgers_equation.BurgersEquation.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.burgers_equation.BurgersEquation._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.burgers_equation.BurgersEquation._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.physics_kernels.heat_equation">
+<span id="pancax-physics-kernels-heat-equation-module"></span><h2>pancax.physics_kernels.heat_equation module<a class="headerlink" href="#module-pancax.physics_kernels.heat_equation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.heat_equation.HeatEquation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.heat_equation.</span></span><span class="sig-name descname"><span class="pre">HeatEquation</span></span><a class="reference internal" href="_modules/pancax/physics_kernels/heat_equation.html#HeatEquation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.heat_equation.HeatEquation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BaseStrongFormPhysics" title="pancax.physics_kernels.base.BaseStrongFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStrongFormPhysics</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.heat_equation.HeatEquation.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.heat_equation.HeatEquation.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.heat_equation.HeatEquation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/heat_equation.html#HeatEquation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.heat_equation.HeatEquation.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.heat_equation.HeatEquation.strong_form_residual">
+<span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/heat_equation.html#HeatEquation.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.heat_equation.HeatEquation.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.heat_equation.HeatEquation.strong_form_neumann_bc">
+<span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/heat_equation.html#HeatEquation.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.heat_equation.HeatEquation.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.heat_equation.HeatEquation._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.heat_equation.HeatEquation._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.physics_kernels.laplace_beltrami">
+<span id="pancax-physics-kernels-laplace-beltrami-module"></span><h2>pancax.physics_kernels.laplace_beltrami module<a class="headerlink" href="#module-pancax.physics_kernels.laplace_beltrami" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.laplace_beltrami.</span></span><span class="sig-name descname"><span class="pre">LaplaceBeltrami</span></span><a class="reference internal" href="_modules/pancax/physics_kernels/laplace_beltrami.html#LaplaceBeltrami"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics" title="pancax.physics_kernels.base.BaseEnergyFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEnergyFormPhysics</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'u'</span></em><a class="headerlink" href="#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/laplace_beltrami.html#LaplaceBeltrami.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/laplace_beltrami.html#LaplaceBeltrami.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.kinetic_energy">
+<span class="sig-name descname"><span class="pre">kinetic_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/laplace_beltrami.html#LaplaceBeltrami.kinetic_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami.kinetic_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.physics_kernels.poisson">
+<span id="pancax-physics-kernels-poisson-module"></span><h2>pancax.physics_kernels.poisson module<a class="headerlink" href="#module-pancax.physics_kernels.poisson" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.poisson.</span></span><span class="sig-name descname"><span class="pre">Poisson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/poisson.html#Poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics" title="pancax.physics_kernels.base.BaseEnergyFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEnergyFormPhysics</span></code></a>, <a class="reference internal" href="#pancax.physics_kernels.base.BaseStrongFormPhysics" title="pancax.physics_kernels.base.BaseStrongFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseStrongFormPhysics</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'u'</span></em><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/physics_kernels/poisson.html#Poisson.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson.f">
+<span class="sig-name descname"><span class="pre">f</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson.f" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/poisson.html#Poisson.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson.strong_form_neumann_bc">
+<span class="sig-name descname"><span class="pre">strong_form_neumann_bc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/poisson.html#Poisson.strong_form_neumann_bc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson.strong_form_neumann_bc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.poisson.Poisson.strong_form_residual">
+<span class="sig-name descname"><span class="pre">strong_form_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/poisson.html#Poisson.strong_form_residual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.poisson.Poisson.strong_form_residual" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.physics_kernels.solid_mechanics">
+<span id="pancax-physics-kernels-solid-mechanics-module"></span><h2>pancax.physics_kernels.solid_mechanics module<a class="headerlink" href="#module-pancax.physics_kernels.solid_mechanics" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">BaseMechanicsFormulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#BaseMechanicsFormulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation.modify_field_gradient">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#BaseMechanicsFormulation.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">IncompressiblePlaneStress</span></span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#IncompressiblePlaneStress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#IncompressiblePlaneStress.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.deformation_gradient">
+<span class="sig-name descname"><span class="pre">deformation_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#IncompressiblePlaneStress.deformation_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.deformation_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.modify_field_gradient">
+<span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#IncompressiblePlaneStress.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.IncompressiblePlaneStress._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.PlaneStrain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">PlaneStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#PlaneStrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.PlaneStrain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.PlaneStrain.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.PlaneStrain.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.PlaneStrain.extract_stress">
+<span class="sig-name descname"><span class="pre">extract_stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#PlaneStrain.extract_stress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.PlaneStrain.extract_stress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.PlaneStrain.modify_field_gradient">
+<span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#PlaneStrain.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.PlaneStrain.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.PlaneStrain.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.PlaneStrain.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.PlaneStrain._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.PlaneStrain._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.ThreeDimensional">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">ThreeDimensional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#ThreeDimensional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.ThreeDimensional" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMechanicsFormulation</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.ThreeDimensional.n_dimensions">
+<span class="sig-name descname"><span class="pre">n_dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.ThreeDimensional.n_dimensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.ThreeDimensional.modify_field_gradient">
+<span class="sig-name descname"><span class="pre">modify_field_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#ThreeDimensional.modify_field_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.ThreeDimensional.modify_field_gradient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.ThreeDimensional.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_dimensions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.ThreeDimensional.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.ThreeDimensional._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.ThreeDimensional._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.physics_kernels.solid_mechanics.</span></span><span class="sig-name descname"><span class="pre">SolidMechanics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constitutive_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formulation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#SolidMechanics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.physics_kernels.base.BaseEnergyFormPhysics" title="pancax.physics_kernels.base.BaseEnergyFormPhysics"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEnergyFormPhysics</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constitutive_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formulation</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#SolidMechanics.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics.field_value_names">
+<span class="sig-name descname"><span class="pre">field_value_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics.field_value_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics.constitutive_model">
+<span class="sig-name descname"><span class="pre">constitutive_model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics.constitutive_model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics.formulation">
+<span class="sig-name descname"><span class="pre">formulation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation" title="pancax.physics_kernels.solid_mechanics.BaseMechanicsFormulation"><span class="pre">BaseMechanicsFormulation</span></a></em><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics.formulation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.physics_kernels.solid_mechanics.SolidMechanics.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_u</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/physics_kernels/solid_mechanics.html#SolidMechanics.energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.physics_kernels.solid_mechanics.SolidMechanics.energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.physics_kernels">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.physics_kernels" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.optimizers.html" class="btn btn-neutral float-left" title="pancax.optimizers package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.problems.html" class="btn btn-neutral float-right" title="pancax.problems package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

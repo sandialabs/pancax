@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.physics &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.physics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.physics</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">grad</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">hessian</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jacfwd</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">value_and_grad</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">vmap</span>
+<span class="kn">from</span> <span class="nn">pancax.fem</span> <span class="kn">import</span> <span class="n">assemble_sparse_stiffness_matrix</span>
+<span class="kn">from</span> <span class="nn">pancax.timer</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+
+<span class="c1"># TODO remove above and start using this method below</span>
+<div class="viewcode-block" id="element_quantity">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.element_quantity">[docs]</a>
+<span class="k">def</span> <span class="nf">element_quantity</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">conn</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">grad_N</span><span class="p">,</span> <span class="n">JxW</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="n">x_el</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">conn</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">u_el</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">conn</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="k">return</span> <span class="n">vmap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">x_el</span><span class="p">,</span> <span class="n">u_el</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">grad_N</span><span class="p">,</span> <span class="n">JxW</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span></div>
+
+	
+
+<div class="viewcode-block" id="element_quantity_new">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.element_quantity_new">[docs]</a>
+<span class="k">def</span> <span class="nf">element_quantity_new</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fspace</span><span class="p">,</span> <span class="n">x_el</span><span class="p">,</span> <span class="n">u_el</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="n">Ns</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">shape_function_values</span><span class="p">(</span><span class="n">x_el</span><span class="p">)</span>
+	<span class="n">grad_Ns</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">shape_function_gradients</span><span class="p">(</span><span class="n">x_el</span><span class="p">)</span>
+	<span class="n">JxWs</span> <span class="o">=</span> <span class="n">fspace</span><span class="o">.</span><span class="n">JxWs</span><span class="p">(</span><span class="n">x_el</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vmap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">x_el</span><span class="p">,</span> <span class="n">u_el</span><span class="p">,</span> <span class="n">Ns</span><span class="p">,</span> <span class="n">grad_Ns</span><span class="p">,</span> <span class="n">JxWs</span><span class="p">,</span> <span class="n">props</span><span class="p">))</span></div>
+
+
+
+<span class="n">element_quantity_grad</span> <span class="o">=</span> <span class="n">jacfwd</span><span class="p">(</span><span class="n">element_quantity_new</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">element_quantity_hessian</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">(</span><span class="n">element_quantity_new</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="potential_energy">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.potential_energy">[docs]</a>
+<span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+
+	<span class="c1"># unpack some stuff</span>
+	<span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">coords</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">func</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">energy</span>
+
+	<span class="n">pis</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">element_quantity_new</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+		<span class="n">func</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span>
+	<span class="p">)</span>
+	<span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pis</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="residual_mse">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.residual_mse">[docs]</a>
+<span class="k">def</span> <span class="nf">residual_mse</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="c1"># unpack some stuff</span>
+	<span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">coords</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">kernel</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span>
+
+	<span class="n">func</span> <span class="o">=</span> <span class="n">element_quantity_grad</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+		<span class="n">kernel</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span>
+	<span class="p">)</span>
+	<span class="k">def</span> <span class="nf">vmap_func</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">unknowns</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+	<span class="k">return</span> <span class="n">vmap</span><span class="p">(</span><span class="n">vmap_func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">fs</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">isUnknown</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="mass_matrix">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.mass_matrix">[docs]</a>
+<span class="k">def</span> <span class="nf">mass_matrix</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;mass matrix assembly&#39;</span><span class="p">):</span>
+		<span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+		<span class="n">coords</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+		<span class="n">kernel</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span>
+
+		<span class="n">func</span> <span class="o">=</span> <span class="n">element_quantity_hessian</span>
+		<span class="n">fs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+			<span class="n">kernel</span><span class="o">.</span><span class="n">kinetic_energy</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span>
+		<span class="p">)</span>
+		<span class="k">return</span> <span class="n">assemble_sparse_stiffness_matrix</span><span class="p">(</span>
+			<span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">),</span> <span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span>
+		<span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="stiffness_matrix">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.stiffness_matrix">[docs]</a>
+<span class="k">def</span> <span class="nf">stiffness_matrix</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="k">with</span> <span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;stiffness matrix assembly&#39;</span><span class="p">):</span>
+		<span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+		<span class="n">coords</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+		<span class="n">kernel</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span>
+
+		<span class="n">func</span> <span class="o">=</span> <span class="n">element_quantity_hessian</span>
+		<span class="n">fs</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+			<span class="n">kernel</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span>
+		<span class="p">)</span>
+		<span class="k">return</span> <span class="n">assemble_sparse_stiffness_matrix</span><span class="p">(</span>
+			<span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">onp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">),</span> <span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span>
+		<span class="p">)</span></div>
+
+
+
+<span class="c1"># TODO</span>
+<div class="viewcode-block" id="traction_energy">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.traction_energy">[docs]</a>
+<span class="k">def</span> <span class="nf">traction_energy</span><span class="p">():</span>
+  <span class="k">pass</span></div>
+
+
+
+<span class="c1"># internal force methods</span>
+<span class="n">internal_force</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span><span class="n">potential_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># residual methods</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">internal_force</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">x</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span>
+
+<span class="c1"># combined methods</span>
+<span class="n">potential_energy_and_internal_force</span> <span class="o">=</span> <span class="n">value_and_grad</span><span class="p">(</span><span class="n">potential_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="potential_energy_and_residual">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.potential_energy_and_residual">[docs]</a>
+<span class="k">def</span> <span class="nf">potential_energy_and_residual</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="n">pi</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">potential_energy_and_internal_force</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">pi</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="potential_energy_residual_and_reaction_force">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.potential_energy_residual_and_reaction_force">[docs]</a>
+<span class="k">def</span> <span class="nf">potential_energy_residual_and_reaction_force</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="n">pi</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">potential_energy_and_internal_force</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+	<span class="n">R</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span>
+	<span class="n">reaction</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">global_data</span><span class="o">.</span><span class="n">reaction_nodes</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">global_data</span><span class="o">.</span><span class="n">reaction_dof</span><span class="p">])</span>
+	<span class="k">return</span> <span class="n">pi</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">reaction</span></div>
+
+
+
+<div class="viewcode-block" id="strong_form_residual">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.strong_form_residual">[docs]</a>
+<span class="k">def</span> <span class="nf">strong_form_residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+	<span class="n">residuals</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">strong_form</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+	<span class="n">residual</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">residuals</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">residual</span></div>
+
+
+
+<span class="c1"># test</span>
+<div class="viewcode-block" id="nodal_incompressibility_constraint">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.nodal_incompressibility_constraint">[docs]</a>
+<span class="k">def</span> <span class="nf">nodal_incompressibility_constraint</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+	<span class="n">vals</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">nodal_incompressibility_constraint</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+		<span class="n">params</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span> <span class="n">t</span>
+	<span class="p">)</span>
+	<span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span></div>
+
+	<span class="c1"># return domain.physics.nodal_incompressibility_constraint(params, domain, t)</span>
+
+
+<div class="viewcode-block" id="quadrature_incompressibility_constraint">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.quadrature_incompressibility_constraint">[docs]</a>
+<span class="k">def</span> <span class="nf">quadrature_incompressibility_constraint</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="c1"># unpack some stuff</span>
+	<span class="n">us</span> <span class="o">=</span> <span class="n">us</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">coords</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">domain</span><span class="o">.</span><span class="n">conns</span><span class="p">,</span> <span class="p">:]</span>
+	<span class="n">func</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">physics</span><span class="o">.</span><span class="n">quadrature_incompressibility_constraint</span>
+
+	<span class="c1"># vmap over elements</span>
+	<span class="n">vals</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">element_quantity_new</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span>
+		<span class="n">func</span><span class="p">,</span> <span class="n">domain</span><span class="o">.</span><span class="n">fspace_centroid</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span>
+	<span class="p">)</span>
+	<span class="c1"># return jnp.mean(vals)</span>
+	<span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span></div>
+
+
+<span class="c1"># quadrature_incompressibility_constraint_energy_and_residual = grad(</span>
+<span class="c1"># 	quadrature_incompressibility_constraint, argnums=1</span>
+<span class="c1"># )</span>
+
+<span class="c1"># def quadrature_incompressibility_constraint_energy_and_residual(domain, us, props):</span>
+<span class="c1"># 	loss, f = quadrature_incompressibility_constraint_energy_and_residual(domain, us, props)</span>
+<span class="c1"># 	return loss, jnp.linalg.norm(f.flatten()[domain.dof_manager.unknownIndices])</span>
+
+
+<div class="viewcode-block" id="incompressible_energy">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.incompressible_energy">[docs]</a>
+<span class="k">def</span> <span class="nf">incompressible_energy</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="n">K</span> <span class="o">=</span> <span class="mf">100.0</span>
+	<span class="n">pi</span> <span class="o">=</span> <span class="n">potential_energy</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+	<span class="n">constraint</span> <span class="o">=</span> <span class="n">quadrature_incompressibility_constraint</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">pi</span> <span class="o">+</span> <span class="n">K</span> <span class="o">*</span> <span class="n">constraint</span></div>
+
+
+<span class="n">incompressible_internal_force</span> <span class="o">=</span> <span class="n">grad</span><span class="p">(</span><span class="n">incompressible_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">incompressible_energy_and_internal_force</span> <span class="o">=</span> <span class="n">value_and_grad</span><span class="p">(</span><span class="n">incompressible_energy</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="incompressible_energy_and_residual">
+<a class="viewcode-back" href="../../pancax.html#pancax.physics.incompressible_energy_and_residual">[docs]</a>
+<span class="k">def</span> <span class="nf">incompressible_energy_and_residual</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+	<span class="n">pi</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">incompressible_energy_and_internal_force</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">us</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">pi</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="n">domain</span><span class="o">.</span><span class="n">dof_manager</span><span class="o">.</span><span class="n">unknownIndices</span><span class="p">])</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

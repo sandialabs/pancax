@@ -1,0 +1,400 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.domains package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.fem package" href="pancax.fem.html" />
+    <link rel="prev" title="pancax.data package" href="pancax.data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax.domains package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.domains.base">pancax.domains.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.domains.base.BaseDomain"><code class="docutils literal notranslate"><span class="pre">BaseDomain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.base.BaseDomain.__init__"><code class="docutils literal notranslate"><span class="pre">BaseDomain.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.base.BaseDomain._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseDomain._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.base.BaseDomain.mesh_file"><code class="docutils literal notranslate"><span class="pre">BaseDomain.mesh_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.base.BaseDomain.mesh"><code class="docutils literal notranslate"><span class="pre">BaseDomain.mesh</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.base.BaseDomain.coords"><code class="docutils literal notranslate"><span class="pre">BaseDomain.coords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.base.BaseDomain.times"><code class="docutils literal notranslate"><span class="pre">BaseDomain.times</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.domains.collocation_domain">pancax.domains.collocation_domain module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain"><code class="docutils literal notranslate"><span class="pre">CollocationDomain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain.mesh_file"><code class="docutils literal notranslate"><span class="pre">CollocationDomain.mesh_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain.mesh"><code class="docutils literal notranslate"><span class="pre">CollocationDomain.mesh</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain.coords"><code class="docutils literal notranslate"><span class="pre">CollocationDomain.coords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain.times"><code class="docutils literal notranslate"><span class="pre">CollocationDomain.times</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain.__init__"><code class="docutils literal notranslate"><span class="pre">CollocationDomain.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.collocation_domain.CollocationDomain._abc_impl"><code class="docutils literal notranslate"><span class="pre">CollocationDomain._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.domains.delta_pinn_domain">pancax.domains.delta_pinn_domain module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.__init__"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.n_eigen_values"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain.n_eigen_values</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain._abc_impl"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.physics"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain.physics</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.eigen_modes"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain.eigen_modes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.solve_eigen_problem"><code class="docutils literal notranslate"><span class="pre">DeltaPINNDomain.solve_eigen_problem()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.domains.variational_domain">pancax.domains.variational_domain module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain"><code class="docutils literal notranslate"><span class="pre">VariationalDomain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.mesh_file"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.mesh_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.mesh"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.mesh</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.coords"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.coords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.times"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.times</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.__init__"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.conns"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.conns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain._abc_impl"><code class="docutils literal notranslate"><span class="pre">VariationalDomain._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.dof_manager"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.dof_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.fspace"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.fspace</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.fspace_centroid"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.fspace_centroid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain.update_dof_manager"><code class="docutils literal notranslate"><span class="pre">VariationalDomain.update_dof_manager()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.domains">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.domains package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.domains.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-domains-package">
+<h1>pancax.domains package<a class="headerlink" href="#pancax-domains-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.domains.base">
+<span id="pancax-domains-base-module"></span><h2>pancax.domains.base module<a class="headerlink" href="#module-pancax.domains.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.domains.base.</span></span><span class="sig-name descname"><span class="pre">BaseDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxtyping.Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/base.html#BaseDomain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.base.BaseDomain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/domains/base.html#BaseDomain.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.base.BaseDomain.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.domains.base.BaseDomain._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain.mesh_file">
+<span class="sig-name descname"><span class="pre">mesh_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pancax.domains.base.BaseDomain.mesh_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain.mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.fem.html#pancax.fem.mesh.Mesh" title="pancax.fem.mesh.Mesh"><span class="pre">Mesh</span></a></em><a class="headerlink" href="#pancax.domains.base.BaseDomain.mesh" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain.coords">
+<span class="sig-name descname"><span class="pre">coords</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.base.BaseDomain.coords" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.base.BaseDomain.times">
+<span class="sig-name descname"><span class="pre">times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">1'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.base.BaseDomain.times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.domains.collocation_domain">
+<span id="pancax-domains-collocation-domain-module"></span><h2>pancax.domains.collocation_domain module<a class="headerlink" href="#module-pancax.domains.collocation_domain" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.domains.collocation_domain.</span></span><span class="sig-name descname"><span class="pre">CollocationDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxtyping.Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/collocation_domain.html#CollocationDomain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDomain</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain.mesh_file">
+<span class="sig-name descname"><span class="pre">mesh_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain.mesh_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain.mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.fem.html#pancax.fem.mesh.Mesh" title="pancax.fem.mesh.Mesh"><span class="pre">Mesh</span></a></em><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain.mesh" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain.coords">
+<span class="sig-name descname"><span class="pre">coords</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain.coords" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain.times">
+<span class="sig-name descname"><span class="pre">times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">1'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain.times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pancax/domains/collocation_domain.html#CollocationDomain.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.collocation_domain.CollocationDomain._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.domains.collocation_domain.CollocationDomain._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.domains.delta_pinn_domain">
+<span id="pancax-domains-delta-pinn-domain-module"></span><h2>pancax.domains.delta_pinn_domain module<a class="headerlink" href="#module-pancax.domains.delta_pinn_domain" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.domains.delta_pinn_domain.</span></span><span class="sig-name descname"><span class="pre">DeltaPINNDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxtyping.Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_eigen_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/delta_pinn_domain.html#DeltaPINNDomain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.domains.variational_domain.VariationalDomain" title="pancax.domains.variational_domain.VariationalDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">VariationalDomain</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_eigen_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/delta_pinn_domain.html#DeltaPINNDomain.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain.n_eigen_values">
+<span class="sig-name descname"><span class="pre">n_eigen_values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.n_eigen_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain.physics">
+<span class="sig-name descname"><span class="pre">physics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.physics_kernels.html#pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami" title="pancax.physics_kernels.laplace_beltrami.LaplaceBeltrami"><span class="pre">LaplaceBeltrami</span></a></em><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.physics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain.eigen_modes">
+<span class="sig-name descname"><span class="pre">eigen_modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nev'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.eigen_modes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.domains.delta_pinn_domain.DeltaPINNDomain.solve_eigen_problem">
+<span class="sig-name descname"><span class="pre">solve_eigen_problem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/delta_pinn_domain.html#DeltaPINNDomain.solve_eigen_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.delta_pinn_domain.DeltaPINNDomain.solve_eigen_problem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.domains.variational_domain">
+<span id="pancax-domains-variational-domain-module"></span><h2>pancax.domains.variational_domain module<a class="headerlink" href="#module-pancax.domains.variational_domain" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.domains.variational_domain.</span></span><span class="sig-name descname"><span class="pre">VariationalDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxtyping.Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/variational_domain.html#VariationalDomain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.domains.base.BaseDomain" title="pancax.domains.base.BaseDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDomain</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.mesh_file">
+<span class="sig-name descname"><span class="pre">mesh_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.mesh_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.fem.html#pancax.fem.mesh.Mesh" title="pancax.fem.mesh.Mesh"><span class="pre">Mesh</span></a></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.mesh" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.coords">
+<span class="sig-name descname"><span class="pre">coords</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">nd'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.coords" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.times">
+<span class="sig-name descname"><span class="pre">times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nn</span> <span class="pre">1'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.times" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Float</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'nt'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/variational_domain.html#VariationalDomain.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.conns">
+<span class="sig-name descname"><span class="pre">conns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Int</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ne</span> <span class="pre">nnpe'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.conns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.dof_manager">
+<span class="sig-name descname"><span class="pre">dof_manager</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.fem.html#pancax.fem.dof_manager.DofManager" title="pancax.fem.dof_manager.DofManager"><span class="pre">DofManager</span></a></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.dof_manager" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.fspace">
+<span class="sig-name descname"><span class="pre">fspace</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.fem.html#pancax.fem.function_space.FunctionSpace" title="pancax.fem.function_space.FunctionSpace"><span class="pre">FunctionSpace</span></a></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.fspace" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.fspace_centroid">
+<span class="sig-name descname"><span class="pre">fspace_centroid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="pancax.fem.html#pancax.fem.function_space.FunctionSpace" title="pancax.fem.function_space.FunctionSpace"><span class="pre">FunctionSpace</span></a></em><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.fspace_centroid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.domains.variational_domain.VariationalDomain.update_dof_manager">
+<span class="sig-name descname"><span class="pre">update_dof_manager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirichlet_bcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dofs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/domains/variational_domain.html#VariationalDomain.update_dof_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.domains.variational_domain.VariationalDomain.update_dof_manager" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.domains">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.domains" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.data.html" class="btn btn-neutral float-left" title="pancax.data package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.fem.html" class="btn btn-neutral float-right" title="pancax.fem package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

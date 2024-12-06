@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.data.global_data &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pancax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.loss_functions.html">pancax.loss_functions package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pancax.data.global_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pancax.data.global_data</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">jaxtyping</span> <span class="kn">import</span> <span class="n">Array</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">equinox</span> <span class="k">as</span> <span class="nn">eqx</span>
+<span class="kn">import</span> <span class="nn">exodus3</span> <span class="k">as</span> <span class="nn">exodus</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+
+
+<span class="c1"># TODO currently hardcoded to force which may be limiting</span>
+<span class="c1"># for others interested in doing other physics</span>
+<div class="viewcode-block" id="GlobalData">
+<a class="viewcode-back" href="../../../pancax.data.html#pancax.data.global_data.GlobalData">[docs]</a>
+<span class="k">class</span> <span class="nc">GlobalData</span><span class="p">(</span><span class="n">eqx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Data structure that holds global data to be used as</span>
+<span class="sd">  ground truth for some global field calculated from</span>
+<span class="sd">  PINN outputs used in inverse modeling training</span>
+
+<span class="sd">  :param times: A set of times used to compare to physics calculations</span>
+<span class="sd">  :param displacements: Currently hardcoded to use a displacement-force curve TODO</span>
+<span class="sd">  :param outputs: Field used as ground truth, hardcoded essentially to a reaction force now</span>
+<span class="sd">  :param n_nodes: Book-keeping variable for number of nodes on nodeset to measure global response from</span>
+<span class="sd">  :param n_time_steps: Book-keeping variable</span>
+<span class="sd">  :param reaction_nodes: Node set nodes for where to measure reaction forces</span>
+<span class="sd">  :param reaction_dof: Degree of freedom to use for reaction force calculation</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">times</span><span class="p">:</span> <span class="n">Array</span> <span class="c1"># change to inputs?</span>
+  <span class="n">displacements</span><span class="p">:</span> <span class="n">Array</span>
+  <span class="n">outputs</span><span class="p">:</span> <span class="n">Array</span>
+  <span class="n">n_nodes</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">n_time_steps</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">reaction_nodes</span><span class="p">:</span> <span class="n">Array</span>
+  <span class="n">reaction_dof</span><span class="p">:</span> <span class="nb">int</span>
+  
+<div class="viewcode-block" id="GlobalData.__init__">
+<a class="viewcode-back" href="../../../pancax.data.html#pancax.data.global_data.GlobalData.__init__">[docs]</a>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">times_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">disp_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">force_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mesh_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nset_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">reaction_dof</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> 
+    <span class="n">n_time_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">plotting</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+  <span class="p">):</span>
+    <span class="c1"># read in data</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>  
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">times_in</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">times_key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">disps_in</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">disp_key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">forces_in</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">force_key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># interpolate data onto times</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">times_in</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">times_in</span><span class="p">),</span> <span class="n">n_time_steps</span><span class="p">)</span>
+    <span class="n">disp_interp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">times_in</span><span class="p">,</span> <span class="n">disps_in</span><span class="p">)</span>
+    <span class="n">force_interp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">times_in</span><span class="p">,</span> <span class="n">forces_in</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">plotting</span><span class="p">:</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times_in</span><span class="p">,</span> <span class="n">disps_in</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Raw Data&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">disp_interp</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Interpolated&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Displacement (mm)&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;mts_time_displacement.png&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+      <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times_in</span><span class="p">,</span> <span class="n">forces_in</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Raw Data&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">force_interp</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Interpolated&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Force (N)&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;mts_time_force.png&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+      <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">disps_in</span><span class="p">,</span> <span class="n">forces_in</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Raw Data&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">disp_interp</span><span class="p">,</span> <span class="n">force_interp</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Interpolated&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Displacement (mm)&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Force (N)&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;mts_displacement_force.png&#39;</span><span class="p">)</span>
+      <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+    <span class="c1"># mesh related stuff</span>
+    <span class="n">exo</span> <span class="o">=</span> <span class="n">exodus</span><span class="o">.</span><span class="n">exodus</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">array_type</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">)</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">exo</span><span class="o">.</span><span class="n">get_node_set_nodes</span><span class="p">(</span><span class="n">nset_id</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">reaction_nodes</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reaction_nodes</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reaction_dof</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+      <span class="n">reaction_dof</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">reaction_dof</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+      <span class="n">reaction_dof</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">reaction_dof</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span>
+      <span class="n">reaction_dof</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;reaction_dof needs to be either x or y.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># set things</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">displacements</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">disp_interp</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">force_interp</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">=</span> <span class="n">n_nodes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_time_steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">reaction_nodes</span> <span class="o">=</span> <span class="n">reaction_nodes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">reaction_dof</span> <span class="o">=</span> <span class="n">reaction_dof</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

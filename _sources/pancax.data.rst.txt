@@ -1,0 +1,32 @@
+pancax.data package
+===================
+
+Submodules
+----------
+
+pancax.data.full\_field\_data module
+------------------------------------
+
+.. automodule:: pancax.data.full_field_data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+pancax.data.global\_data module
+-------------------------------
+
+.. automodule:: pancax.data.global_data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: pancax.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

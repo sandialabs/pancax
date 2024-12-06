@@ -1,0 +1,808 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pancax.loss_functions package &mdash; pancax 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pancax.math package" href="pancax.math.html" />
+    <link rel="prev" title="pancax.kernels package" href="pancax.kernels.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pancax
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pancax</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pancax.html">pancax package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pancax.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pancax.loss_functions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.physics_kernels.html">pancax.physics_kernels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pancax.problems.html">pancax.problems package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#pancax-main-module">pancax.__main__ module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.history_writer">pancax.history_writer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.kinematics">pancax.kinematics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.logging">pancax.logging module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.physics">pancax.physics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.post_processor">pancax.post_processor module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.timer">pancax.timer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.trainer">pancax.trainer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax.utils">pancax.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pancax.html#module-pancax">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bcs.html">pancax.bcs package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.bvps.html">pancax.bvps package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.constitutive_models.html">pancax.constitutive_models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.data.html">pancax.data package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.domains.html">pancax.domains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.fem.html">pancax.fem package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.kernels.html">pancax.kernels package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pancax.loss_functions package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.base_loss_function">pancax.loss_functions.base_loss_function module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction"><code class="docutils literal notranslate"><span class="pre">BaseLossFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction.filtered_loss"><code class="docutils literal notranslate"><span class="pre">BaseLossFunction.filtered_loss()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction.__init__"><code class="docutils literal notranslate"><span class="pre">BaseLossFunction.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction._abc_impl"><code class="docutils literal notranslate"><span class="pre">BaseLossFunction._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BCLossFunction"><code class="docutils literal notranslate"><span class="pre">BCLossFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BCLossFunction.load_step"><code class="docutils literal notranslate"><span class="pre">BCLossFunction.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BCLossFunction.__init__"><code class="docutils literal notranslate"><span class="pre">BCLossFunction.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.BCLossFunction._abc_impl"><code class="docutils literal notranslate"><span class="pre">BCLossFunction._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction.load_step"><code class="docutils literal notranslate"><span class="pre">PhysicsLossFunction.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction.__init__"><code class="docutils literal notranslate"><span class="pre">PhysicsLossFunction.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction._abc_impl"><code class="docutils literal notranslate"><span class="pre">PhysicsLossFunction._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.bc_loss_functions">pancax.loss_functions.bc_loss_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss"><code class="docutils literal notranslate"><span class="pre">DirichletBCLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss.__init__"><code class="docutils literal notranslate"><span class="pre">DirichletBCLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss.weight"><code class="docutils literal notranslate"><span class="pre">DirichletBCLoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss.load_step"><code class="docutils literal notranslate"><span class="pre">DirichletBCLoss.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">DirichletBCLoss._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss"><code class="docutils literal notranslate"><span class="pre">NeumannBCLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss.__init__"><code class="docutils literal notranslate"><span class="pre">NeumannBCLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss.weight"><code class="docutils literal notranslate"><span class="pre">NeumannBCLoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">NeumannBCLoss._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss.load_step"><code class="docutils literal notranslate"><span class="pre">NeumannBCLoss.load_step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.data_loss_functions">pancax.loss_functions.data_loss_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss"><code class="docutils literal notranslate"><span class="pre">FullFieldDataLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss.__init__"><code class="docutils literal notranslate"><span class="pre">FullFieldDataLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss.weight"><code class="docutils literal notranslate"><span class="pre">FullFieldDataLoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">FullFieldDataLoss._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.ic_loss_function">pancax.loss_functions.ic_loss_function module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.ic_loss_function.ICLossFunction"><code class="docutils literal notranslate"><span class="pre">ICLossFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.ic_loss_function.ICLossFunction.weight"><code class="docutils literal notranslate"><span class="pre">ICLossFunction.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.ic_loss_function.ICLossFunction.__init__"><code class="docutils literal notranslate"><span class="pre">ICLossFunction.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.ic_loss_function.ICLossFunction._abc_impl"><code class="docutils literal notranslate"><span class="pre">ICLossFunction._abc_impl</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.physics_loss_functions_strong_form">pancax.loss_functions.physics_loss_functions_strong_form module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.physics_loss_functions_strong_form.StrongFormResidualLoss"><code class="docutils literal notranslate"><span class="pre">StrongFormResidualLoss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.physics_loss_functions_strong_form.StrongFormNeumannBCLoss"><code class="docutils literal notranslate"><span class="pre">StrongFormNeumannBCLoss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.physics_loss_functions_strong_form.StrongFormIncompressibilityConstraint"><code class="docutils literal notranslate"><span class="pre">StrongFormIncompressibilityConstraint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.strong_form_loss_functions">pancax.loss_functions.strong_form_loss_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss"><code class="docutils literal notranslate"><span class="pre">StrongFormResidualLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.__init__"><code class="docutils literal notranslate"><span class="pre">StrongFormResidualLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.weight"><code class="docutils literal notranslate"><span class="pre">StrongFormResidualLoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">StrongFormResidualLoss._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.load_step"><code class="docutils literal notranslate"><span class="pre">StrongFormResidualLoss.load_step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.utils">pancax.loss_functions.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.utils.CombineLossFunctions"><code class="docutils literal notranslate"><span class="pre">CombineLossFunctions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.utils.CombineLossFunctions.__init__"><code class="docutils literal notranslate"><span class="pre">CombineLossFunctions.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.utils.CombineLossFunctions.funcs"><code class="docutils literal notranslate"><span class="pre">CombineLossFunctions.funcs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.utils.CombineLossFunctions._abc_impl"><code class="docutils literal notranslate"><span class="pre">CombineLossFunctions._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.utils.CombineLossFunctions.with_props"><code class="docutils literal notranslate"><span class="pre">CombineLossFunctions.with_props</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions.weak_form_loss_functions">pancax.loss_functions.weak_form_loss_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss"><code class="docutils literal notranslate"><span class="pre">EnergyLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss.__init__"><code class="docutils literal notranslate"><span class="pre">EnergyLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss.weight"><code class="docutils literal notranslate"><span class="pre">EnergyLoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss.load_step"><code class="docutils literal notranslate"><span class="pre">EnergyLoss.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">EnergyLoss._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss"><code class="docutils literal notranslate"><span class="pre">EnergyAndResidualLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.__init__"><code class="docutils literal notranslate"><span class="pre">EnergyAndResidualLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.energy_weight"><code class="docutils literal notranslate"><span class="pre">EnergyAndResidualLoss.energy_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.residual_weight"><code class="docutils literal notranslate"><span class="pre">EnergyAndResidualLoss.residual_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.load_step"><code class="docutils literal notranslate"><span class="pre">EnergyAndResidualLoss.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">EnergyAndResidualLoss._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.__init__"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.energy_weight"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss.energy_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.residual_weight"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss.residual_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.reaction_weight"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss.reaction_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.load_step"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">EnergyResidualAndReactionLoss._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint"><code class="docutils literal notranslate"><span class="pre">QuadratureIncompressibilityConstraint</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.__init__"><code class="docutils literal notranslate"><span class="pre">QuadratureIncompressibilityConstraint.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.weight"><code class="docutils literal notranslate"><span class="pre">QuadratureIncompressibilityConstraint.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.load_step"><code class="docutils literal notranslate"><span class="pre">QuadratureIncompressibilityConstraint.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint._abc_impl"><code class="docutils literal notranslate"><span class="pre">QuadratureIncompressibilityConstraint._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss"><code class="docutils literal notranslate"><span class="pre">ResidualMSELoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.__init__"><code class="docutils literal notranslate"><span class="pre">ResidualMSELoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.weight"><code class="docutils literal notranslate"><span class="pre">ResidualMSELoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.load_step"><code class="docutils literal notranslate"><span class="pre">ResidualMSELoss.load_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">ResidualMSELoss._abc_impl</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.__init__"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyLoss._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.weight"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyLoss.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.load_step"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyLoss.load_step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyAndResidualLoss</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss._abc_impl"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyAndResidualLoss._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.__init__"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyAndResidualLoss.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.energy_weight"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyAndResidualLoss.energy_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.residual_weight"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyAndResidualLoss.residual_weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.load_step"><code class="docutils literal notranslate"><span class="pre">IncompressibleEnergyAndResidualLoss.load_step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pancax.loss_functions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.math.html">pancax.math package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.networks.html">pancax.networks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pancax.optimizers.html">pancax.optimizers package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pancax</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pancax</a></li>
+          <li class="breadcrumb-item"><a href="pancax.html">pancax package</a></li>
+      <li class="breadcrumb-item active">pancax.loss_functions package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pancax.loss_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pancax-loss-functions-package">
+<h1>pancax.loss_functions package<a class="headerlink" href="#pancax-loss-functions-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pancax.loss_functions.base_loss_function">
+<span id="pancax-loss-functions-base-loss-function-module"></span><h2>pancax.loss_functions.base_loss_function module<a class="headerlink" href="#module-pancax.loss_functions.base_loss_function" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BaseLossFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.base_loss_function.</span></span><span class="sig-name descname"><span class="pre">BaseLossFunction</span></span><a class="reference internal" href="_modules/pancax/loss_functions/base_loss_function.html#BaseLossFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BaseLossFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Base class for loss functions.
+Currently does nothing but helps build a
+type hierarchy.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BaseLossFunction.filtered_loss">
+<span class="sig-name descname"><span class="pre">filtered_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/base_loss_function.html#BaseLossFunction.filtered_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BaseLossFunction.filtered_loss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BaseLossFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BaseLossFunction.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BaseLossFunction._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BaseLossFunction._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BCLossFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.base_loss_function.</span></span><span class="sig-name descname"><span class="pre">BCLossFunction</span></span><a class="reference internal" href="_modules/pancax/loss_functions/base_loss_function.html#BCLossFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BCLossFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction" title="pancax.loss_functions.base_loss_function.BaseLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseLossFunction</span></code></a></p>
+<p>Base class for boundary condition loss functions.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">load_step</span></code> method is expect with the following
+type signature
+<code class="docutils literal notranslate"><span class="pre">load_step(self,</span> <span class="pre">params,</span> <span class="pre">domain,</span> <span class="pre">t)</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BCLossFunction.load_step">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/base_loss_function.html#BCLossFunction.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BCLossFunction.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BCLossFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BCLossFunction.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.BCLossFunction._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.base_loss_function.BCLossFunction._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.PhysicsLossFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.base_loss_function.</span></span><span class="sig-name descname"><span class="pre">PhysicsLossFunction</span></span><a class="reference internal" href="_modules/pancax/loss_functions/base_loss_function.html#PhysicsLossFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction" title="pancax.loss_functions.base_loss_function.BaseLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseLossFunction</span></code></a></p>
+<p>Base class for physics loss functions.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">load_step</span></code> method is expect with the following
+type signature
+<code class="docutils literal notranslate"><span class="pre">load_step(self,</span> <span class="pre">params,</span> <span class="pre">domain,</span> <span class="pre">t)</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.PhysicsLossFunction.load_step">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/base_loss_function.html#PhysicsLossFunction.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.PhysicsLossFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.base_loss_function.PhysicsLossFunction._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.bc_loss_functions">
+<span id="pancax-loss-functions-bc-loss-functions-module"></span><h2>pancax.loss_functions.bc_loss_functions module<a class="headerlink" href="#module-pancax.loss_functions.bc_loss_functions" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.DirichletBCLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.bc_loss_functions.</span></span><span class="sig-name descname"><span class="pre">DirichletBCLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/bc_loss_functions.html#DirichletBCLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BCLossFunction" title="pancax.loss_functions.base_loss_function.BCLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BCLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.DirichletBCLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/bc_loss_functions.html#DirichletBCLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.DirichletBCLoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.DirichletBCLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/bc_loss_functions.html#DirichletBCLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.DirichletBCLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.DirichletBCLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.NeumannBCLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.bc_loss_functions.</span></span><span class="sig-name descname"><span class="pre">NeumannBCLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/bc_loss_functions.html#NeumannBCLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BCLossFunction" title="pancax.loss_functions.base_loss_function.BCLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BCLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.NeumannBCLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/bc_loss_functions.html#NeumannBCLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.NeumannBCLoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.NeumannBCLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.bc_loss_functions.NeumannBCLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/bc_loss_functions.html#NeumannBCLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.bc_loss_functions.NeumannBCLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.data_loss_functions">
+<span id="pancax-loss-functions-data-loss-functions-module"></span><h2>pancax.loss_functions.data_loss_functions module<a class="headerlink" href="#module-pancax.loss_functions.data_loss_functions" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.data_loss_functions.FullFieldDataLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.data_loss_functions.</span></span><span class="sig-name descname"><span class="pre">FullFieldDataLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/data_loss_functions.html#FullFieldDataLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction" title="pancax.loss_functions.base_loss_function.BaseLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.data_loss_functions.FullFieldDataLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/data_loss_functions.html#FullFieldDataLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.data_loss_functions.FullFieldDataLoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.data_loss_functions.FullFieldDataLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.data_loss_functions.FullFieldDataLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.ic_loss_function">
+<span id="pancax-loss-functions-ic-loss-function-module"></span><h2>pancax.loss_functions.ic_loss_function module<a class="headerlink" href="#module-pancax.loss_functions.ic_loss_function" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.ic_loss_function.ICLossFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.ic_loss_function.</span></span><span class="sig-name descname"><span class="pre">ICLossFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/ic_loss_function.html#ICLossFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.ic_loss_function.ICLossFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction" title="pancax.loss_functions.base_loss_function.BaseLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseLossFunction</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.ic_loss_function.ICLossFunction.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#pancax.loss_functions.ic_loss_function.ICLossFunction.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.ic_loss_function.ICLossFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pancax.loss_functions.ic_loss_function.ICLossFunction.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.ic_loss_function.ICLossFunction._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.ic_loss_function.ICLossFunction._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.physics_loss_functions_strong_form">
+<span id="pancax-loss-functions-physics-loss-functions-strong-form-module"></span><h2>pancax.loss_functions.physics_loss_functions_strong_form module<a class="headerlink" href="#module-pancax.loss_functions.physics_loss_functions_strong_form" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.loss_functions.physics_loss_functions_strong_form.StrongFormResidualLoss">
+<span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.physics_loss_functions_strong_form.</span></span><span class="sig-name descname"><span class="pre">StrongFormResidualLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/physics_loss_functions_strong_form.html#StrongFormResidualLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.physics_loss_functions_strong_form.StrongFormResidualLoss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.loss_functions.physics_loss_functions_strong_form.StrongFormNeumannBCLoss">
+<span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.physics_loss_functions_strong_form.</span></span><span class="sig-name descname"><span class="pre">StrongFormNeumannBCLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/physics_loss_functions_strong_form.html#StrongFormNeumannBCLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.physics_loss_functions_strong_form.StrongFormNeumannBCLoss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pancax.loss_functions.physics_loss_functions_strong_form.StrongFormIncompressibilityConstraint">
+<span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.physics_loss_functions_strong_form.</span></span><span class="sig-name descname"><span class="pre">StrongFormIncompressibilityConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/physics_loss_functions_strong_form.html#StrongFormIncompressibilityConstraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.physics_loss_functions_strong_form.StrongFormIncompressibilityConstraint" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.strong_form_loss_functions">
+<span id="pancax-loss-functions-strong-form-loss-functions-module"></span><h2>pancax.loss_functions.strong_form_loss_functions module<a class="headerlink" href="#module-pancax.loss_functions.strong_form_loss_functions" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.strong_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">StrongFormResidualLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/strong_form_loss_functions.html#StrongFormResidualLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/strong_form_loss_functions.html#StrongFormResidualLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/strong_form_loss_functions.html#StrongFormResidualLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.strong_form_loss_functions.StrongFormResidualLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.utils">
+<span id="pancax-loss-functions-utils-module"></span><h2>pancax.loss_functions.utils module<a class="headerlink" href="#module-pancax.loss_functions.utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.utils.CombineLossFunctions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.utils.</span></span><span class="sig-name descname"><span class="pre">CombineLossFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">funcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/utils.html#CombineLossFunctions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.utils.CombineLossFunctions" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.BaseLossFunction" title="pancax.loss_functions.base_loss_function.BaseLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.utils.CombineLossFunctions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">funcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/utils.html#CombineLossFunctions.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.utils.CombineLossFunctions.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.utils.CombineLossFunctions.funcs">
+<span class="sig-name descname"><span class="pre">funcs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">any</span></em><a class="headerlink" href="#pancax.loss_functions.utils.CombineLossFunctions.funcs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.utils.CombineLossFunctions._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.utils.CombineLossFunctions._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.utils.CombineLossFunctions.with_props">
+<span class="sig-name descname"><span class="pre">with_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pancax.loss_functions.utils.CombineLossFunctions.with_props" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions.weak_form_loss_functions">
+<span id="pancax-loss-functions-weak-form-loss-functions-module"></span><h2>pancax.loss_functions.weak_form_loss_functions module<a class="headerlink" href="#module-pancax.loss_functions.weak_form_loss_functions" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">EnergyLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<p>Energy loss function akin to the deep energy method.</p>
+<p>Calculates the following quantity</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = w\Pi\left[u\right] = w\int_\Omega\psi\left(\mathbf{F}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>weight</strong> – weight for this loss function</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyLoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">EnergyAndResidualLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyAndResidualLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<p>Energy and residual loss function used in Hamel et. al</p>
+<p>Calculates the following quantity</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = w_1\Pi\left[u\right] + w_2\delta\Pi\left[u\right]_{free}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energy_weight</strong> – Weight for the energy w_1</p></li>
+<li><p><strong>residual_weight</strong> – Weight for the residual w_2</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyAndResidualLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.energy_weight">
+<span class="sig-name descname"><span class="pre">energy_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.energy_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.residual_weight">
+<span class="sig-name descname"><span class="pre">residual_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.residual_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyAndResidualLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">EnergyResidualAndReactionLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reaction_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyResidualAndReactionLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reaction_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyResidualAndReactionLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.energy_weight">
+<span class="sig-name descname"><span class="pre">energy_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.energy_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.residual_weight">
+<span class="sig-name descname"><span class="pre">residual_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.residual_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.reaction_weight">
+<span class="sig-name descname"><span class="pre">reaction_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.reaction_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#EnergyResidualAndReactionLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.EnergyResidualAndReactionLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">QuadratureIncompressibilityConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#QuadratureIncompressibilityConstraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#QuadratureIncompressibilityConstraint.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#QuadratureIncompressibilityConstraint.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.QuadratureIncompressibilityConstraint._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">ResidualMSELoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#ResidualMSELoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#ResidualMSELoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#ResidualMSELoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.ResidualMSELoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">IncompressibleEnergyLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#IncompressibleEnergyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<p>Energy loss function akin to the deep energy method.</p>
+<p>Calculates the following quantity</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = w\Pi\left[u\right] = w\int_\Omega\psi\left(\mathbf{F}\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>weight</strong> – weight for this loss function</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#IncompressibleEnergyLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#IncompressibleEnergyLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pancax.loss_functions.weak_form_loss_functions.</span></span><span class="sig-name descname"><span class="pre">IncompressibleEnergyAndResidualLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#IncompressibleEnergyAndResidualLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction" title="pancax.loss_functions.base_loss_function.PhysicsLossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicsLossFunction</span></code></a></p>
+<p>Energy and residual loss function used in Hamel et. al</p>
+<p>Calculates the following quantity</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L} = w_1\Pi\left[u\right] + w_2\delta\Pi\left[u\right]_{free}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energy_weight</strong> – Weight for the energy w_1</p></li>
+<li><p><strong>residual_weight</strong> – Weight for the residual w_2</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss._abc_impl">
+<span class="sig-name descname"><span class="pre">_abc_impl</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;_abc._abc_data</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss._abc_impl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residual_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#IncompressibleEnergyAndResidualLoss.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.energy_weight">
+<span class="sig-name descname"><span class="pre">energy_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.energy_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.residual_weight">
+<span class="sig-name descname"><span class="pre">residual_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.residual_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.load_step">
+<span class="sig-name descname"><span class="pre">load_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pancax/loss_functions/weak_form_loss_functions.html#IncompressibleEnergyAndResidualLoss.load_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pancax.loss_functions.weak_form_loss_functions.IncompressibleEnergyAndResidualLoss.load_step" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pancax.loss_functions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pancax.loss_functions" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pancax.kernels.html" class="btn btn-neutral float-left" title="pancax.kernels package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pancax.math.html" class="btn btn-neutral float-right" title="pancax.math package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Craig M. Hamel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
