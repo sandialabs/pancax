@@ -43,7 +43,29 @@ class FullFieldData(eqx.Module):
     plt.ylabel('Y coordinate (mm)')
     plt.legend(loc='best')
     plt.savefig('dic_data_mesh_registration.png')
-    plt.clf()
+    print('here')
+    # plt.clf()
 
   def plot_data(self, domain, time_step):
     pass
+
+  def shift_inputs(self, x, y, z):
+    shifted_inputs = self.inputs
+    shifted_inputs = shifted_inputs.at[:, 0].set(shifted_inputs[:, 0] + x)
+    shifted_inputs = shifted_inputs.at[:, 1].set(shifted_inputs[:, 1] + y)
+    shifted_inputs = shifted_inputs.at[:, 2].set(shifted_inputs[:, 2] + z)
+    return eqx.tree_at(lambda x: x.inputs, self, shifted_inputs)
+
+  def set_input_component_values(self, component, val):
+    if component == 'x':
+      component = 0
+    elif component == 'y':
+      component = 1
+    elif component == 'z':
+      component = 2
+    else:
+      raise ValueError('Needs to be x, y, or z')
+
+    set_inputs = self.inputs
+    set_inputs = set_inputs.at[:, component].set(val)
+    return eqx.tree_at(lambda x: x.inputs, self, set_inputs)
