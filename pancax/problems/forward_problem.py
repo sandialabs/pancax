@@ -39,6 +39,8 @@ class ForwardProblem(eqx.Module):
       # TODO also need a weak form catch here
       # TODO or just maybe make a base variational physics class
       if not issubclass(type(physics), BaseVariationalFormPhysics):
+        print(physics.__class__.__bases__)
+        print(physics.__class__.__mro__)
         raise DomainPhysicsCompatabilityError(
           f'Incompatable domain and physics.\n'
           f'Got domain of type = {type(domain)}\n'

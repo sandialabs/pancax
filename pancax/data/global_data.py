@@ -57,7 +57,7 @@ class GlobalData(eqx.Module):
       plt.xlabel('Time (s)')
       plt.ylabel('Displacement (mm)')
       plt.savefig('mts_time_displacement.png')
-      plt.clf()
+      # plt.clf()
 
       plt.figure(2)
       plt.plot(times_in, forces_in, label='Raw Data')
@@ -65,7 +65,7 @@ class GlobalData(eqx.Module):
       plt.xlabel('Time (s)')
       plt.ylabel('Force (N)')
       plt.savefig('mts_time_force.png')
-      plt.clf()
+      # plt.clf()
 
       plt.figure(3)
       plt.plot(disps_in, forces_in, label='Raw Data')
@@ -73,7 +73,7 @@ class GlobalData(eqx.Module):
       plt.xlabel('Displacement (mm)')
       plt.ylabel('Force (N)')
       plt.savefig('mts_displacement_force.png')
-      plt.clf()
+      # plt.clf()
 
     # mesh related stuff
     exo = exodus.exodus(mesh_file, 'r', array_type='numpy')
