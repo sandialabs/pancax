@@ -1,9 +1,9 @@
 from jaxtyping import Array
 from typing import Optional, Union
 import equinox as eqx
-import exodus3 as exodus
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
+import netCDF4 as nc
 import numpy as np
 import pandas
 
@@ -75,11 +75,11 @@ class GlobalData(eqx.Module):
       plt.savefig('mts_displacement_force.png')
       # plt.clf()
 
-    # mesh related stuff
-    exo = exodus.exodus(mesh_file, 'r', array_type='numpy')
-    nodes = exo.get_node_set_nodes(nset_id) - 1
-    reaction_nodes = jnp.array(nodes)
-    n_nodes = len(reaction_nodes)
+    with nc.Dataset(mesh_file, 'r') as dataset:
+      nodes = dataset.variables[f'node_ns{nset_id}'][:] - 1
+      reaction_nodes = jnp.array(nodes)
+      n_nodes = len(reaction_nodes)
+
 
     if reaction_dof == 'x':
       reaction_dof = 0
