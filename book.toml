@@ -1,0 +1,17 @@
+[book]
+authors = ["Craig M. Hamel"]
+language = "en"
+multilingual = false
+src = "book/"
+title = "pancax"
+
+[build]
+build-dir = "book/build/"
+create-missing = false
+
+[rust]
+edition = "2021"
+
+[output.html]
+edit-url-template = "https://github.com/sandialabs/pancax/edit/main/{path}"
+git-repository-url = "https://github.com/sandialabs/pancax"
