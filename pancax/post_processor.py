@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from pancax.physics import incompressible_internal_force, internal_force
 from typing import List, Optional
 
@@ -13,11 +14,195 @@ except:
 
 import jax
 import os
+import netCDF4 as nc
 import numpy as onp
 # import vtk
 
 
-class ExodusPostProcessor:
+class BasePostProcessor:
+  mesh_file: str = None
+  node_variables: List[str] = None
+  element_variables: List[str] = None
+
+  # def __init__(
+  #   self, 
+  #   mesh_file: str, 
+  #   node_variables: List[str], 
+  #   element_variables: List[str]
+  # ) -> None:
+  #   self.mesh_file = mesh_file
+  #   self.node_variables = node_variables
+  #   self.element_variables = element_variables
+
+  def check_variable_names(self, domain, variables) -> None:
+    for var in variables:
+      if var == 'internal_force' or var == 'incompressible_internal_force':
+        continue
+
+      if var not in domain.physics.var_name_to_method.keys():
+        str = f'Unsupported variable requested for output {var}.\n'
+        str += f'Supported variables include:\n'
+        for v in domain.physics.var_name_to_method.keys():
+          str += f'  {v}\n'
+        raise ValueError(str)
+
+  def get_node_variable_number(self, domain, variables) -> int:
+    n = 0
+    for var in variables:
+      if var == 'internal_force' or var == 'incompressible_internal_force':
+        n = n + len(domain.physics.field_value_names)
+      else:
+        n = n + len(domain.physics.var_name_to_method[var]['names'])
+    
+    return n
+
+  def get_element_variable_number(self, domain, variables) -> int:
+    n = 0
+    for var in variables:
+      n = n + len(domain.physics.var_name_to_method[var]['names'])
+    if n > 0:
+      q_points = len(domain.fspace.quadrature_rule)
+      return n * q_points
+    else:
+      return 0
+
+  @abstractmethod
+  def close(self) -> None:
+    pass
+
+  @abstractmethod
+  def init(
+    self, 
+    domain, output_file: str, 
+    node_variables: List[str],
+    element_variables: List[str]
+  ) -> None:
+    pass
+
+  @abstractmethod
+  def write_outputs(self, params, domain):
+    pass
+
+
+class ExodusPostProcessor(BasePostProcessor):
+  def __init__(self, mesh_file: str) -> None:
+    self.mesh_file = mesh_file
+    self.output_file = None
+
+  def close(self) -> None:
+    pass
+
+  def init(
+    self, 
+    domain, output_file: str, 
+    node_variables: List[str],
+    element_variables: List[str]
+  ) -> None:
+    self.output_file = output_file
+    self.check_variable_names(domain, node_variables)
+    self.check_variable_names(domain, element_variables)
+    self.node_variables = node_variables
+    self.element_variables = element_variables
+
+    with nc.Dataset(self.mesh_file, 'r') as src:
+      print(src.data_model)
+      with nc.Dataset(output_file, 'w', format=src.data_model) as dst:
+        # Copy global attributes from the source file to the destination file
+        dst.setncatts({k: src.getncattr(k) for k in src.ncattrs()})
+
+        # Copy dimensions from the source file to the destination file
+        for name, dimension in src.dimensions.items():
+          dst.createDimension(name, (len(dimension) if not dimension.isunlimited() else None))
+
+        # Copy variables from the source file to the destination file
+        for name, variable in src.variables.items():
+            # Create a new variable in the destination file
+            new_var = dst.createVariable(name, variable.datatype, variable.dimensions)
+            # Copy variable attributes
+            new_var.setncatts({k: variable.getncattr(k) for k in variable.ncattrs()})
+            # Copy variable data
+            new_var[:] = variable[:]
+
+        # max_str_len = dst.dimensions['len_name']
+        max_str_len = 256 # TODO read from src file so things are consistent
+
+        # now add new dimensions
+        if len(node_variables) > 0:
+          # get total number of node variables
+          num_node_vars = 0
+          for var in node_variables:
+            for v in domain.physics.var_name_to_method[var]['names']:
+              num_node_vars = num_node_vars + 1
+
+          dst.createDimension('num_nod_var', num_node_vars)
+          node_var_names = dst.createVariable('name_nod_var', 'c', ('num_nod_var', 'len_name'))
+
+          n = 0
+          for var in node_variables:
+            for v in domain.physics.var_name_to_method[var]['names']:
+              name = v.ljust(max_str_len)[:max_str_len]
+              node_var_names[n, :] = onp.array(list(name))
+              name = f'vals_nod_var{n + 1}'
+              new_var = dst.createVariable(name, 'double', ('time_step', 'num_nodes'))
+              n = n + 1
+
+        if len(element_variables) > 0:
+          q_points = len(domain.fspace.quadrature_rule)
+          # get total number of node variables
+          num_elem_vars = 0
+          for var in element_variables:
+            for v in domain.physics.var_name_to_method[var]['names']:
+              for _ in range(q_points):
+                num_elem_vars = num_elem_vars + 1
+
+          dst.createDimension('num_elem_var', num_elem_vars)
+          elem_var_names = dst.createVariable('name_elem_var', 'c', ('num_elem_var', 'len_name'))
+
+          for var in element_variables:
+            for v in domain.physics.var_name_to_method[var]['names']:
+              for q in range(q_points):
+                name = var.ljust(max_str_len)[:max_str_len]
+                elem_var_names[n, :] = onp.array(list(name))
+                name = f'vals_elem_var{n + 1}_{q + 1}'
+                new_var = dst.createVariable(name, 'double', ('time_step', 'num_elem'))
+
+
+  def write_outputs(self, params, domain):
+    physics = domain.physics
+    times = domain.times
+
+    with nc.Dataset(self.output_file, 'a') as dataset:
+      for n, time in enumerate(times):
+        # write new time value
+        time_var = dataset.variables['time_whole']
+        time_var[n] = time
+
+        node_var_num = 0
+        for var in self.node_variables:
+          if var == 'internal_force' or var == 'incompressible_internal_force':
+            assert False, 'implement internal force stuff'
+            # us = jax.vmap(physics.field_values, in_axes=(None, 0, None))(params.fields, domain.coords, time)
+            # fs = onp.array(internal_force(domain, us, params.properties()))
+            # for i in range(fs.shape[1]):
+            #   self.exo.put_node_variable_values(f'internal_force_{self.index_to_component(i)}', n + 1, fs[:, i])
+          else:
+            output = physics.var_name_to_method[var]
+            pred = onp.array(output['method'](params, domain, time))
+            if len(pred.shape) > 2:
+              for i in range(pred.shape[1]):
+                for j in range(pred.shape[2]):
+                  k = pred.shape[1] * i + j
+                  assert False, 'Support this'
+                  # self.exo.put_node_variable_values(output['names'][k], n + 1, pred[:, i, j])
+            else:
+              for i in range(pred.shape[1]):
+                # self.exo.put_node_variable_values(output['names'][i], n + 1, pred[:, i])
+                # node_var = dataset.variables[output['names'][i]]
+                node_var = dataset.variables[f'vals_nod_var{node_var_num + 1}']
+                node_var[n, :] = pred[:, i]
+                node_var_num = node_var_num + 1
+
+class ExodusPostProcessor_old:
   def __init__(self, mesh_file: str) -> None:
     self.mesh_file = mesh_file
     self.exo = None

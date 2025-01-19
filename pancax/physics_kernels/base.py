@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from jax import hessian, jacfwd, value_and_grad, vmap
+from jax import grad, hessian, jacfwd, value_and_grad, vmap
 from jax.lax import stop_gradient
 from jaxtyping import Array, Float
 from pancax.fem import assemble_sparse_stiffness_matrix
@@ -150,6 +150,11 @@ class BaseEnergyFormPhysics(BaseVariationalFormPhysics):
   @abstractmethod
   def energy(self, params, x, t, u, grad_u, *args):
     pass
+
+  # def internal_force(self, params, domain, t, us, *args):
+  #   return grad(self.potential_energy, argnums=3)(params, domain, t, us, *args)
+  #   # def inner_func(params, domain, t):
+       
 
   # TODO currently only valid for one block
   def potential_energy_on_block(self, params, x, t, us, fspace, conns, *args):
