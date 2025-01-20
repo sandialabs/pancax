@@ -38,6 +38,9 @@ test = [
   'pytest',
   'pytest-cov',
 ]
+viz = [
+  'pyvista'
+]
 
 [tool.setuptools]
 packages = [
