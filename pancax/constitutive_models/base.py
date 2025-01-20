@@ -34,10 +34,11 @@ class BaseConstitutiveModel(eqx.Module):
     r"""
     Calculates the first invariant
 
-    :param F: the deformation gradient
+    - **F**: the deformation gradient
     
-    .. math::
-      I_1 = tr\left(\mathbf{F}^T\mathbf{F}\right)
+    $$
+    I_1 = tr\left(\mathbf{F}^T\mathbf{F}\right)
+    $$
     """
     I1 = jnp.trace(F @ F.T)
     return I1
@@ -46,10 +47,11 @@ class BaseConstitutiveModel(eqx.Module):
     r"""
     Calculates the first distortional invariant
 
-    :param F: the deformation gradient
-    
-    .. math::
-      \bar{I}_1 = J^{-2/3}tr\left(\mathbf{F}^T\mathbf{F}\right)
+    - **F**: the deformation gradient
+
+    $$
+    \bar{I}_1 = J^{-2/3}tr\left(\mathbf{F}^T\mathbf{F}\right)
+    $$
     """
     I1 = jnp.trace(F @ F.T)
     J = self.jacobian(F)
@@ -76,11 +78,11 @@ class BaseConstitutiveModel(eqx.Module):
     to return nonsensical numbers if a non-positive jacobian
     is encountered during training.
 
-    :param F: the deformation gradient
+    - **F**: the deformation gradient
 
-    .. math::
-      J = det(\mathbf{F})
-    
+    $$
+    J = det(\mathbf{F})
+    $$
     """
     J = jnp.linalg.det(F)
     J = jax.lax.cond(

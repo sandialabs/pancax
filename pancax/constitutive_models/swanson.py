@@ -8,10 +8,11 @@ class Swanson(BaseConstitutiveModel):
   r"""
 	Swanson model truncated to 4 parameters
 
-	.. math::
-		\psi(\mathbf{F}) = K\left(J\ln J - J + 1\right) +
-							         \frac{3}{2}A_1\left(\frac{\bar{I}_1}{3} - 1\right)^{P_1} + 
-                       \frac{3}{2}C_1\left(\frac{\bar{I}_1}{3} - 1\right)^{R_1}
+	$$
+  \psi(\mathbf{F}) = K\left(J\ln J - J + 1\right) +
+                     \frac{3}{2}A_1\left(\frac{\bar{I}_1}{3} - 1\right)^{P_1} + 
+                     \frac{3}{2}C_1\left(\frac{\bar{I}_1}{3} - 1\right)^{R_1}
+  $$
 	"""
   bulk_modulus: Property
   A1: Property
