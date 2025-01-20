@@ -1,0 +1,54 @@
+name: Book
+on:
+  pull_request:
+    branches: main
+  push:
+    branches: main
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  mdbook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: pancax
+        run: cargo install --path .
+      - name: mdbook
+        run: cargo install mdbook mdbook-katex
+      - name: rust
+        run: cargo build --release
+      - name: python
+        run: pip install -e .[cpu,docs] pancax
+      # - name: test
+      #   run: mdbook test --library-path target/release/deps/
+      - name: pydoc-markdown
+        run: |
+          pip install pydoc-markdown
+          pydoc-markdown -I . -p pancax --render-toc > book/api/pancax.md
+      - name: build
+        run: mdbook build
+      - name: move
+        run: mkdir -p _site/ && cp -r book/build/* _site/
+      - name: upload
+        uses: actions/upload-pages-artifact@v3
+  deploy:
+    if: github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: mdbook
+    permissions:
+      id-token: write
+      pages: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

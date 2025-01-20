@@ -15,3 +15,8 @@ edition = "2021"
 [output.html]
 edit-url-template = "https://github.com/sandialabs/pancax/edit/main/{path}"
 git-repository-url = "https://github.com/sandialabs/pancax"
+
+# [preprocessor.cmdrun]
+
+[preprocessor.katex]
+after = ["links"]

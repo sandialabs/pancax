@@ -7,9 +7,9 @@ class NeoHookean(BaseConstitutiveModel):
   r"""
 	NeoHookean model with the following model form
 
-	.. math::
-		\psi(\mathbf{F}) = \frac{1}{2}K\left[\frac{1}{2}\left(J^2 - \ln J\right)\right] +
-						   \frac{1}{2}G\left(\bar{I}_1 - 3\right)
+	$$
+  \psi(\mathbf{F}) = \frac{1}{2}K\left[\frac{1}{2}\left(J^2 - \ln J\right)\right] + \frac{1}{2}G\left(\bar{I}_1 - 3\right)
+  $$
 	"""
   bulk_modulus: Property
   shear_modulus: Property

@@ -11,6 +11,7 @@
 *.vtm
 *.vtu
 .coverage
+book/api/*
 book/build
 docs/source/modules.rst
 docs/source/pancax.*
