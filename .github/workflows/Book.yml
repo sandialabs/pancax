@@ -19,12 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
-      # - name: pancax
-      #   run: cargo install --path .
       - name: mdbook
         run: cargo install mdbook mdbook-katex
-      - name: rust
-        run: cargo build --release
       - name: pancax
         run: pip install -e .[cpu,docs] pancax
       # - name: test
