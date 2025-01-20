@@ -33,7 +33,7 @@ jobs:
       - name: mdbook
         run: cargo install mdbook mdbook-katex
       - name: pancax
-        run: pip install -e .[cpu,docs] pancax
+        run: pip install -e .[cpu,docs,viz] pancax
       - name: pydoc-markdown
         run: |
           pip install pydoc-markdown

@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.4'
+version = '0.0.5'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -38,6 +38,9 @@ test = [
   'pytest',
   'pytest-cov',
 ]
+viz = [
+  'pyvista'
+]
 
 [tool.setuptools]
 packages = [
@@ -48,6 +51,7 @@ packages = [
   'pancax.data',
   'pancax.domains',
   'pancax.fem',
+  'pancax.fem.elements',
   'pancax.kernels',
   'pancax.loss_functions',
   'pancax.math',
