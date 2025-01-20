@@ -24,7 +24,7 @@ jobs:
       run: |
         python -m venv venv
         . venv/bin/activate
-        pip install .[cpu,test]
+        pip install .[cpu,test,viz]
         JAX_ENABLE_X64=true pytest test --cov=pancax
     - name: codecov
       uses: codecov/codecov-action@v4
