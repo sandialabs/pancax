@@ -1,4 +1,4 @@
-# General PDEs
+# Strong Form
 Consider a general PDE defined in the strong form as follows
 $$
 \mathbf{A}\frac{\partial^2 \mathbf{u}}{\partial t^2} + \mathbf{B}\frac{\partial \mathbf{u}}{\partial t} + \mathcal{L}\left[\mathbf{u}\left(\mathbf{x}, t\right)\right] = 0,
@@ -27,3 +27,19 @@ $$
 \frac{\partial \mathbf{u}}{\partial t} \approx \frac{\partial \mathcal{N}\left(\mathbf{x}, t\right)}{\partial t},
 $$
 which put another way is saying to differentiate the outputs of the neural network with respect to a subset of some of it's inputs. This can be achieved in any standard modern neural network library through automatic differentiation. However, this is not always an optimal approach in terms of both runtime and numerical accuracy, especially when it comes to nested differentiation.
+
+Other derivatives can re written similarly and some are given below
+$$
+\frac{\partial^2 \mathbf{u}}{\partial t^2} \approx \frac{\partial^2 \mathcal{N}\left(\mathbf{x}, t\right)}{\partial t^2},
+$$
+$$
+\nabla\mathbf{u} \approx \frac{\partial \mathcal{N}\left(\mathbf{x}, t\right)}{\partial \mathbf{x}},
+$$
+$$
+\nabla\cdot\mathbf{u} \approx \frac{\partial \mathcal{N}\left(\mathbf{x}, t\right)}{\partial \mathbf{x}}:\mathbf{I}.
+$$
+
+One of the more common examples encountered in the PINN literature is the Burger's equation. This is given by
+$$
+\frac{\partial u}{\partial t} + u\cdot\nabla u = 0
+$$
