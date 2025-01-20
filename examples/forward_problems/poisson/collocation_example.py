@@ -59,7 +59,7 @@ loss_function = StrongFormResidualLoss()
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
 opt_st = opt.init(params)
 
-for epoch in range(5000):
+for epoch in range(500):
   params, opt_st, loss = opt.step(params, problem, opt_st)
 
   if epoch % 100 == 0:
@@ -74,3 +74,8 @@ pp.init(problem, 'output.e',
 )
 pp.write_outputs(params, problem)
 pp.close()
+
+import pyvista as pv
+exo = pv.read('output.e')[0][0]
+exo.set_active_scalars('u')
+exo.plot(show_axes=False, cpos='xy', show_edges=True)
