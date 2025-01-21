@@ -37,7 +37,7 @@ class EnergyLoss(PhysicsLossFunction):
     # pi = potential_energy(domain, us, props)
     field, physics = params
     us = physics.vmap_field_values(field, domain.coords, t)
-    pi = physics.potential_energy(params, domain.domain, t, us)
+    pi = physics.potential_energy(physics, domain.domain, t, us)
     return pi
 
 

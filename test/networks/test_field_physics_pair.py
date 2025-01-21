@@ -1,4 +1,4 @@
-from pancax import FieldPropertyPair, Properties, MLP
+from pancax import FieldPhysicsPair, Properties, MLP
 from pathlib import Path
 import equinox as eqx
 import jax
@@ -12,7 +12,7 @@ def test_field_property_pair():
         prop_maxs=[2., 3.],
         key=jax.random.key(0)
     )
-    model = FieldPropertyPair(network, props)
+    model = FieldPhysicsPair(network, props)
     x = jax.numpy.ones(3)
 
     network, props = model
@@ -30,7 +30,7 @@ def test_model_serialisation():
         prop_maxs=[2., 3.],
         key=jax.random.key(0)
     )
-    model = FieldPropertyPair(network, props)
+    model = FieldPhysicsPair(network, props)
     x = jax.numpy.ones(3)
 
     network, props = model
