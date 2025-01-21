@@ -1,5 +1,4 @@
 from jax import vmap
-from pancax.physics import nodal_incompressibility_constraint
 from typing import Optional
 import jax.numpy as jnp
 
@@ -43,10 +42,10 @@ def StrongFormNeumannBCLoss(weight: Optional[float] = 1.0):
   return loss_func
 
 
-def StrongFormIncompressibilityConstraint(weight: Optional[bool] = 1.0):
-  def loss_func(params, domain):
-    def vmap_func(params, domain, time):
-      return nodal_incompressibility_constraint(params, domain, time)
-    loss = jnp.mean(vmap(vmap_func, in_axes=(None, None, 0))(params, domain, domain.times))
-    return weight * loss, dict(incompressibility_error=loss)
-  return loss_func
+# def StrongFormIncompressibilityConstraint(weight: Optional[bool] = 1.0):
+#   def loss_func(params, domain):
+#     def vmap_func(params, domain, time):
+#       return nodal_incompressibility_constraint(params, domain, time)
+#     loss = jnp.mean(vmap(vmap_func, in_axes=(None, None, 0))(params, domain, domain.times))
+#     return weight * loss, dict(incompressibility_error=loss)
+#   return loss_func

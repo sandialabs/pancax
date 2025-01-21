@@ -52,7 +52,6 @@ packages = [
   'pancax.domains',
   'pancax.fem',
   'pancax.fem.elements',
-  'pancax.kernels',
   'pancax.loss_functions',
   'pancax.math',
   'pancax.networks',
