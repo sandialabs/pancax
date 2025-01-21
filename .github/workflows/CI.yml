@@ -25,10 +25,12 @@ jobs:
         python -m venv venv
         . venv/bin/activate
         pip install .[cpu,test,viz]
-        JAX_ENABLE_X64=true pytest test --cov=pancax
+        JAX_ENABLE_X64=true pytest test --cov=pancax --cov-report=xml --cov-report=term
     - name: codecov
       uses: codecov/codecov-action@v4
       with:
-        files: .coverage
+        files: ./coverage.xml
+        flags: unittests
+        fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
   
