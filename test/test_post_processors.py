@@ -1,6 +1,6 @@
 from jax import random
 from pancax import EssentialBC, VariationalDomain, NeoHookean, ThreeDimensional, SolidMechanics
-from pancax import FieldPropertyPair, MLP
+from pancax import FieldPhysicsPair, MLP
 from pancax import PostProcessor, ForwardProblem
 from pathlib import Path
 import jax
@@ -37,7 +37,7 @@ def problem():
 def params(problem):
     key = random.key(10)
     field_network = MLP(4, 3, 20, 3, jax.nn.tanh, key)
-    return FieldPropertyPair(field_network, problem.physics)
+    return FieldPhysicsPair(field_network, problem.physics)
 
 
 def test_post_processor(params, problem):

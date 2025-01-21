@@ -39,6 +39,7 @@ def test_global_data():
     )
 
 
+@pytest.mark.skip(reason='Failing on missions with bad tk')
 def test_global_data_with_plotting():
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')

@@ -95,6 +95,10 @@ class BasePhysics(eqx.Module):
   def update_normalization(self, domain):
     x_mins = jnp.min(domain.coords, axis=0)
     x_maxs = jnp.max(domain.coords, axis=0)
+
+    # x_mins = jnp.append(x_mins, jnp.min(domain.times))
+    # x_maxs = jnp.append(x_maxs, jnp.max(domain.times))
+
     new_pytree = eqx.tree_at(lambda x: x.x_mins, self, x_mins)
     new_pytree = eqx.tree_at(lambda x: x.x_maxs, new_pytree, x_maxs)
     return new_pytree

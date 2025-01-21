@@ -18,7 +18,8 @@ class StrongFormResidualLoss(PhysicsLossFunction):
     return self.weight * residual, dict(residual=residual)
 
   def load_step(self, params, domain, t):
-    func = domain.physics.strong_form_residual
+    # func = domain.physics.strong_form_residual
+    func = params.physics.strong_form_residual
     # TODO this will fail on delta PINNs currently
-    residuals = vmap(func, in_axes=(None, 0, None))(params, domain.coords, t)
+    residuals = vmap(func, in_axes=(None, 0, None))(params.fields, domain.coords, t)
     return jnp.square(residuals).mean()

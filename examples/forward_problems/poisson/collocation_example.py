@@ -53,13 +53,13 @@ problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
 ##################
 n_dims = domain.coords.shape[1]
 field = MLP(n_dims + 1, physics.n_dofs, 50, 3, jax.nn.tanh, key)
-params = FieldPropertyPair(field, problem.physics)
+params = FieldPhysicsPair(field, problem.physics)
 
 loss_function = StrongFormResidualLoss()
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
 opt_st = opt.init(params)
 
-for epoch in range(500):
+for epoch in range(5000):
   params, opt_st, loss = opt.step(params, problem, opt_st)
 
   if epoch % 100 == 0:
