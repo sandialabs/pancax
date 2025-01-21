@@ -17,12 +17,10 @@ class Poisson(BaseEnergyFormPhysics, BaseStrongFormPhysics):
     return jnp.sum(pi)
 
   def strong_form_neumann_bc(self, params, x, t, n, *args):
-    field, _ = params
-    grad_u = self.field_gradients(field, x, t, *args)
+    grad_u = self.field_gradients(params, x, t, *args)
     return -jnp.dot(grad_u, n)
 
   def strong_form_residual(self, params, x, t, *args):
-    field, _ = params
-    delta_u = self.field_laplacians(field, x, t, *args)
+    delta_u = self.field_laplacians(params, x, t, *args)
     f = self.f(x)
     return -delta_u - f
