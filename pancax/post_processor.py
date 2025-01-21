@@ -1,11 +1,6 @@
 from abc import abstractmethod
-from pancax.physics import incompressible_internal_force, internal_force
+# from pancax.physics import incompressible_internal_force, internal_force
 from typing import List, Optional
-
-try:
-  import exodus3 as exodus
-except:
-  print('WARNING: Could not find exodus3 module. You\'ll need to use vtk output')
 
 try:
   import vtk

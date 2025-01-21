@@ -4,7 +4,6 @@ from .constitutive_models import *
 from .data import *
 from .domains import CollocationDomain, DeltaPINNDomain, VariationalDomain
 from .fem import *
-from .kinematics import *
 from .history_writer import EnsembleHistoryWriter, HistoryWriter
 from .logging import EnsembleLogger, Logger, log_loss
 from .loss_functions import *
