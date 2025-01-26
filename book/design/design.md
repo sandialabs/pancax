@@ -1,0 +1,2 @@
+# Design
+This chapter goes through the design of pancax for those interested in embarking on development, whether that be adding a simple physics kernel, or developing an entirely new PINN formulation where pancax is just being leveraged for IO and other utilities common to different PINN formulations.

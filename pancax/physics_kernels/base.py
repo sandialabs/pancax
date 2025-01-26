@@ -66,7 +66,8 @@ class BasePhysics(eqx.Module):
 
   # TODO need to modify for delta pinn
   def field_values(self, field, x, t, *args):
-    x = (x - stop_gradient(self.x_mins)) / (stop_gradient(self.x_maxs) - stop_gradient(self.x_mins))
+    # x = (x - stop_gradient(self.x_mins)) / (stop_gradient(self.x_maxs) - stop_gradient(self.x_mins))
+    x = (x - self.x_mins) / (self.x_maxs - self.x_mins)
     inputs = jnp.hstack((x, t))
     z = field(inputs)
     u = self.dirichlet_bc_func(x, t, z)
@@ -123,10 +124,34 @@ class BasePhysics(eqx.Module):
 
 
 class BaseVariationalFormPhysics(BasePhysics):
-  pass
+  field_value_names: tuple[str, ...]
+
+  def element_residual(self, params, x, t, u, fspace, *args):
+    vs = fspace.shape_function_values(x)
+    grad_vs = fspace.shape_function_gradients(x)
+    JxWs = fspace.JxWs(x)
+    xs = vmap(lambda y: jnp.dot(y, x))(vs)
+    us = vmap(lambda y: jnp.dot(y, u))(vs)
+    grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+    in_axes = (None, 0, None, 0, 0, 0, 0) + len(args) * (None,)
+    pis = vmap(self.residual, in_axes=in_axes)(params, xs, t, us, vs, grad_us, grad_vs, *args)
+    return jnp.dot(JxWs, pis)
+
+  @abstractmethod
+  def residual(self, params, x, t, u, v, grad_u, grad_v, *args):
+    pass
+
+  def vmap_element_residual(self, params, domain, t, us, *args):
+    conns, fspace = domain.conns, domain.fspace
+    us = us[domain.conns, :]
+    xs = domain.coords[domain.conns, :]
+
+    in_axes = (None, 0, None, 0, None, 0) + len(args) * (None,)
+    rs = vmap(self.element_residual, in_axes=in_axes)(params, xs, t, us, fspace, conns, *args)
+    return rs
 
 
-class BaseEnergyFormPhysics(BaseVariationalFormPhysics):
+class BaseEnergyFormPhysics(BasePhysics):
   field_value_names: tuple[str, ...]
 
   def element_energy(self, params, x, t, u, fspace, *args):

@@ -52,8 +52,9 @@ problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
 # ML setup
 ##################
 loss_function = EnergyLoss()
-field_network = MLP(physics.n_dofs + 1, physics.n_dofs, 50, 5, jax.nn.tanh, key)
-params = FieldPhysicsPair(field_network, problem.physics)
+# field = MLP(physics.n_dofs + 1, physics.n_dofs, 50, 5, jax.nn.tanh, key)
+field = Field(problem, key, seperate_networks=True)
+params = FieldPhysicsPair(field, problem.physics)
 
 ##################
 # train network
