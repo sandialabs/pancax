@@ -27,36 +27,36 @@ def Linear(
   return model
 
 
-def MLP(
-  n_inputs: int,
-  n_outputs: int,
-  n_neurons: int,
-  n_layers: int,
-  activation: Callable,
-  key: jax.random.PRNGKey,
-  use_final_bias: Optional[bool] = False,
-  init_func: Optional[Callable] = trunc_init
-):
-  """
-  :param n_inputs: Number of inputs to the MLP
-  :param n_outputs: Number of outputs of the MLP
-  :param n_neurons: Number of neurons in each hidden layer of the MLP
-  :param n_layers: Number of hidden layers in the MLP
-  :param activation: Activation function, e.g. tanh or relu
-  :param key: rng key
-  :param use_final_bias: Boolean for whether or not to use a bias
-    vector in the final layer
-  :return: Equinox MLP layer
-  """
-  model = eqx.nn.MLP(
-    n_inputs, n_outputs, n_neurons, n_layers, 
-    activation=activation, 
-    use_final_bias=use_final_bias,
-    key=key
-  )
-  # model = init_linear_weight(model, init_func, key)
-  # model = init_linear(model, init_func, key)
-  return model
+# def MLP(
+#   n_inputs: int,
+#   n_outputs: int,
+#   n_neurons: int,
+#   n_layers: int,
+#   activation: Callable,
+#   key: jax.random.PRNGKey,
+#   use_final_bias: Optional[bool] = False,
+#   init_func: Optional[Callable] = trunc_init
+# ):
+#   """
+#   :param n_inputs: Number of inputs to the MLP
+#   :param n_outputs: Number of outputs of the MLP
+#   :param n_neurons: Number of neurons in each hidden layer of the MLP
+#   :param n_layers: Number of hidden layers in the MLP
+#   :param activation: Activation function, e.g. tanh or relu
+#   :param key: rng key
+#   :param use_final_bias: Boolean for whether or not to use a bias
+#     vector in the final layer
+#   :return: Equinox MLP layer
+#   """
+#   model = eqx.nn.MLP(
+#     n_inputs, n_outputs, n_neurons, n_layers, 
+#     activation=activation, 
+#     use_final_bias=use_final_bias,
+#     key=key
+#   )
+#   # model = init_linear_weight(model, init_func, key)
+#   # model = init_linear(model, init_func, key)
+#   return model
 
 
 def MLPBasis(
@@ -76,28 +76,34 @@ def MLPBasis(
   )
 
 
-# class MLP(BaseNetwork):
-#   mlp: eqx.nn.MLP
+class MLP(eqx.Module):
+  mlp: eqx.Module
 
-#   def __init__(
-#     self,
-#     n_inputs: int,
-#     n_outputs: int,
-#     n_neurons: int,
-#     n_layers: int,
-#     activation: Callable,
-#     key: jax.random.PRNGKey,
-#     use_final_bias: Optional[bool] = False
-#   ):
-#     super().__init__(self)
-#     model = eqx.nn.MLP(
-#       n_inputs, n_outputs, n_neurons, n_layers, 
-#       activation=activation, 
-#       use_final_bias=use_final_bias,
-#       key=key
-#     )
-#     model = init_linear_weight(model, trunc_init, key)
-#     self.mlp = model
+  def __init__(
+    self,
+    n_inputs: int,
+    n_outputs: int,
+    n_neurons: int,
+    n_layers: int,
+    activation: Callable,
+    key: jax.random.PRNGKey,
+    use_final_bias: Optional[bool] = False,
+    init_func: Optional[Callable] = trunc_init,
+    ensure_positivity: Optional[bool] = False
+  ):
+    if ensure_positivity:
+      final_activation = lambda x: jax.nn.softplus(x)
+    else: 
+      final_activation = lambda x: x
 
-#   def __call__(self, params, x):
-#     return self.mlp(params, x)
+    model = eqx.nn.MLP(
+      n_inputs, n_outputs, n_neurons, n_layers, 
+      activation=activation, 
+      final_activation=final_activation,
+      use_final_bias=use_final_bias,
+      key=key
+    )
+    self.mlp = model
+
+  def __call__(self, x):
+    return self.mlp(x)

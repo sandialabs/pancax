@@ -1,7 +1,7 @@
 # Strong Form
 Consider a general PDE defined in the strong form as follows
 $$
-\mathbf{A}\frac{\partial^2 \mathbf{u}}{\partial t^2} + \mathbf{B}\frac{\partial \mathbf{u}}{\partial t} + \mathcal{L}\left[\mathbf{u}\left(\mathbf{x}, t\right)\right] = 0,
+\mathbf{A}\frac{\partial^2 \mathbf{u}}{\partial t^2} + \mathbf{B}\frac{\partial \mathbf{u}}{\partial t} + \mathcal{O}\left[\mathbf{u}\left(\mathbf{x}, t\right)\right] = 0,
 $$
 where $\mathbf{u}$ is an arbitrary solution field (potentially vector or tensor valued) and $\mathcal{L}$ is a differential operator. To fully close an initial boundary value problem (IBVP) we also need appropriate initial and boundary conditions. We can write this generally as
 $$
@@ -14,7 +14,7 @@ $$
 \mathbf{u}\left(\mathbf{x}, t\right) = h\left(\mathbf{x}\right) \quad\text{for}\quad\mathbf{x}\in\partial\Omega_\mathbf{u},
 $$
 $$
-a\mathbf{u}\left(\mathbf{x}, t\right) + b\nabla\cdot\mathbf{u}\left(\mathbf{x}, t\right) = h\left(\mathbf{x}\right) \quad\text{for}\quad\mathbf{x}\in\partial\Omega_\mathbf{u},
+a\mathbf{u}\left(\mathbf{x}, t\right) + b\mathbf{n}\cdot\nabla\mathbf{u}\left(\mathbf{x}, t\right) = m\left(\mathbf{x}\right) \quad\text{for}\quad\mathbf{x}\in\partial\Omega_\mathbf{u},
 $$
 where the above represent general initial conditions on the solution field and time derivative and general boundary conditions on the the solution field in the form of general Dirichlet BCs and general Robin/Neumann BCs.
 

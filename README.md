@@ -42,8 +42,6 @@ these can be displayed with the help message
 
 ``python -m pancax -h``
 
-![Pancax](https://github.com/sandialabs/pancax/blob/main/assets/pancax.png?raw=true)
-
 If you leverage these tools for your own research, please cite the following article
 
 ## Citation

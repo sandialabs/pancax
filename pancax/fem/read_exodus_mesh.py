@@ -24,7 +24,7 @@ def read_exodus_mesh(fileName: str):
                 basis = Hex8Element()
                 basis1d = Quad4Element()
                 simplexNodesOrdinals = np.arange(coords.shape[0])
-            elif elementType == "quad4":
+            elif elementType == "quad4" or elementType == "quad":
                 basis = Quad4Element()
                 basis1d = LineElement(degree=1)
                 simplexNodesOrdinals = np.arange(coords.shape[0])

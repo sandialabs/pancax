@@ -1,6 +1,6 @@
 from ..bcs import EssentialBC, NaturalBC
 from ..domains import BaseDomain, CollocationDomain, VariationalDomain
-from ..physics_kernels import BasePhysics, BaseStrongFormPhysics, BaseVariationalFormPhysics
+from ..physics_kernels import BasePhysics, BaseStrongFormPhysics, BaseVariationalFormPhysics, BaseEnergyFormPhysics
 from typing import Callable, List
 import equinox as eqx
 
@@ -38,7 +38,8 @@ class ForwardProblem(eqx.Module):
     elif type(domain) == VariationalDomain:
       # TODO also need a weak form catch here
       # TODO or just maybe make a base variational physics class
-      if not issubclass(type(physics), BaseVariationalFormPhysics):
+      if not issubclass(type(physics), BaseVariationalFormPhysics) and \
+         not issubclass(type(physics), BaseEnergyFormPhysics):
         print(physics.__class__.__bases__)
         print(physics.__class__.__mro__)
         raise DomainPhysicsCompatabilityError(
@@ -85,6 +86,14 @@ class ForwardProblem(eqx.Module):
   @property
   def mesh_file(self):
     return self.domain.mesh_file
+
+  @property
+  def n_dims(self):
+    return self.domain.coords.shape[1]
+
+  @property
+  def n_dofs(self):
+    return self.physics.n_dofs
 
   @property
   def times(self):

@@ -1,4 +1,5 @@
 from .elm import ELM, ELM2
+from .fields import Field
 from .field_physics_pair import FieldPhysicsPair
 from .mlp import Linear
 from .mlp import MLP

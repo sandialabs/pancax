@@ -20,3 +20,10 @@ git-repository-url = "https://github.com/sandialabs/pancax"
 
 [preprocessor.katex]
 after = ["links"]
+
+# [preprocessor.repl]
+# # iframe url, default is https://mr-addict.github.io/mdbook-repl/embed/
+# src = "https://mr-addict.github.io/mdbook-repl/embed/"
+
+# # python is disabled by default and loading is lazy
+# python.enable = true

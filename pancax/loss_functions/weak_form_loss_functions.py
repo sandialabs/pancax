@@ -41,6 +41,25 @@ class EnergyLoss(PhysicsLossFunction):
     return pi
 
 
+class ResidualMSELoss(PhysicsLossFunction):
+  weight: float
+
+  def __init__(self, weight: Optional[float] = 1.0):
+    self.weight = weight
+
+  def __call__(self, params, domain):
+    mses = vmap(self.load_step, in_axes=(None, None, 0))(
+      params, domain, domain.times
+    )
+    mse = mses.mean()
+    return self.weight * mse, dict(residual=mse)
+
+  def load_step(self, params, domain, t):
+    field, physics = params
+    us = physics.vmap_field_values(field, domain.coords, t)
+    rs = jnp.linalg.norm(physics.vmap_element_residual(field, domain, t, us))
+    return rs.mean()
+
 class EnergyAndResidualLoss(PhysicsLossFunction):
   r"""
   Energy and residual loss function used in Hamel et. al

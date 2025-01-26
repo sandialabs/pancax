@@ -37,31 +37,38 @@ class Adam(Optimizer):
         optax.scale(-1.0)
       )
     
-    if filter_spec is None:
-      self.loss_and_grads = eqx.filter_value_and_grad(self.loss_function, has_aux=self.has_aux)
-    else:
-      self.loss_and_grads = eqx.filter_value_and_grad(self.loss_function.filtered_loss, has_aux=self.has_aux)
+    # if filter_spec is None:
+    #   self.loss_and_grads = eqx.filter_value_and_grad(self.loss_function, has_aux=self.has_aux)
+    # else:
+    #   self.loss_and_grads = eqx.filter_value_and_grad(self.loss_function.filtered_loss, has_aux=self.has_aux)
+    # self.filter_spec = filter_spec
+    self.loss_and_grads = eqx.filter_value_and_grad(self.loss_function.filtered_loss, has_aux=self.has_aux)
     self.filter_spec = filter_spec
-  
-  def make_step_method(self):
-    if self.filter_spec is None:
-      def step(params, domain, opt_st):
-        loss, grads = self.loss_and_grads(params, domain)
-        updates, opt_st = self.opt.update(grads, opt_st)
-        params = eqx.apply_updates(params, updates)
-        # add grad props to output
-        # TODO what to do about below?
-        # loss[1].update({'dprops': grads.properties.prop_params})
-        return params, opt_st, loss
-    else:
-      def step(params, domain, opt_st):
-        diff_params, static_params = eqx.partition(params, self.filter_spec)
-        loss, grads = self.loss_and_grads(diff_params, static_params, domain)
-        updates, opt_st = self.opt.update(grads, opt_st)
-        params = eqx.apply_updates(params, updates)
 
-        # add grad props to output
-        # loss[1].update({'dprops': grads.properties()})
-        return params, opt_st, loss
+  def make_step_method(self):
+    # if self.filter_spec is None:
+    #   def step(params, domain, opt_st):
+    #     loss, grads = self.loss_and_grads(params, domain)
+    #     updates, opt_st = self.opt.update(grads, opt_st)
+    #     params = eqx.apply_updates(params, updates)
+    #     # add grad props to output
+    #     # TODO what to do about below?
+    #     # loss[1].update({'dprops': grads.properties.prop_params})
+    #     return params, opt_st, loss
+    # else:
+    def step(params, domain, opt_st):
+      if self.filter_spec is None:
+        filter_spec = params.freeze_physics_normalization_filter()
+      else:
+        filter_spec = self.filter_spec
+
+      diff_params, static_params = eqx.partition(params, filter_spec)
+      loss, grads = self.loss_and_grads(diff_params, static_params, domain)
+      updates, opt_st = self.opt.update(grads, opt_st)
+      params = eqx.apply_updates(params, updates)
+
+      # add grad props to output
+      # loss[1].update({'dprops': grads.properties()})
+      return params, opt_st, loss
 
     return step
