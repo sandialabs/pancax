@@ -1,5 +1,5 @@
 from jax import random
-from pancax import EssentialBC, VariationalDomain, NeoHookean, ThreeDimensional, SolidMechanics
+from pancax import DirichletBC, VariationalDomain, NeoHookean, ThreeDimensional, SolidMechanics
 from pancax import FieldPhysicsPair, MLP
 from pancax import PostProcessor, ForwardProblem
 from pathlib import Path
@@ -20,12 +20,12 @@ def problem():
     ]
     essential_bc_func = lambda x, t, z: z
     essential_bcs = [
-        EssentialBC('nset_4', 0),
-        EssentialBC('nset_4', 1),
-        EssentialBC('nset_4', 2),
-        EssentialBC('nset_6', 0),
-        EssentialBC('nset_6', 1),
-        EssentialBC('nset_6', 2)
+        DirichletBC('nset_4', 0),
+        DirichletBC('nset_4', 1),
+        DirichletBC('nset_4', 2),
+        DirichletBC('nset_6', 0),
+        DirichletBC('nset_6', 1),
+        DirichletBC('nset_6', 2)
     ]
     natural_bcs = [
     ]

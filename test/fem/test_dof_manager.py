@@ -1,4 +1,4 @@
-from pancax.bcs import EssentialBC
+from pancax.bcs import DirichletBC
 from pancax.fem import QuadratureRule
 from pancax.fem import DofManager
 from pancax.fem import construct_function_space
@@ -14,8 +14,8 @@ mesh, _ = create_mesh_and_disp(Nx, Ny, xRange, yRange, lambda x : 0*x)
 
 quadRule = QuadratureRule(mesh.parentElement, 1)
 fs = construct_function_space(mesh, quadRule)
-ebcs = [EssentialBC(nodeSet='top', component=0),
-        EssentialBC(nodeSet='right', component=1)]
+ebcs = [DirichletBC(nodeSet='top', component=0),
+        DirichletBC(nodeSet='right', component=1)]
 nNodes = Nx * Ny
 nFields = 2
 dofManager = DofManager(mesh, nFields, ebcs)

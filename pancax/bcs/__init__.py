@@ -1,2 +1,2 @@
-from .essential_bc import EssentialBC, EssentialBCSet
-from .natural_bc import NaturalBC
+from .dirichlet_bc import DirichletBC, DirichletBCSet
+from .neumann_bc import NeumannBC

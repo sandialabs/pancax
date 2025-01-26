@@ -1,6 +1,7 @@
 from .elm import ELM, ELM2
 from .fields import Field
 from .field_physics_pair import FieldPhysicsPair
+from .ml_dirichlet_field import MLDirichletField
 from .mlp import Linear
 from .mlp import MLP
 from .mlp import MLPBasis

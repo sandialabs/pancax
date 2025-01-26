@@ -1,6 +1,6 @@
 from .function_space import FunctionSpace
 from jaxtyping import Array, Bool, Float, Int
-from pancax.bcs import EssentialBC
+from pancax.bcs import DirichletBC
 from pancax.timer import Timer
 from typing import List, Tuple
 import jax.numpy as np
@@ -15,16 +15,16 @@ class DofManager:
 
     TODO better document the parameters in this guy
     """
-    def __init__(self, mesh, dim: int, EssentialBCs: List[EssentialBC]) -> None:
+    def __init__(self, mesh, dim: int, DirichletBCs: List[DirichletBC]) -> None:
         """
         :param functionSpace: ``FunctionSpace`` object
         :param dim: The number of dims (really the number of active dofs for the physics)
-        :param EssentialBCs: A list of of ``EssentialBC`` objects
+        :param DirichletBCs: A list of of ``DirichletBC`` objects
         """
         with Timer('DofManager.__init__'):
             self.fieldShape = mesh.num_nodes, dim
             self.isBc = onp.full(self.fieldShape, False, dtype=bool)
-            for ebc in EssentialBCs:
+            for ebc in DirichletBCs:
                 self.isBc[mesh.nodeSets[ebc.nodeSet], ebc.component] = True
 
             self.isUnknown = ~self.isBc
