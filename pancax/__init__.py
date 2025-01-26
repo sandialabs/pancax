@@ -1,4 +1,4 @@
-from .bcs import EssentialBC, NaturalBC
+from .bcs import DirichletBC, NeumannBC
 from .bvps import *
 from .constitutive_models import *
 from .data import *

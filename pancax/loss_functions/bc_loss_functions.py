@@ -20,7 +20,7 @@ class DirichletBCLoss(BCLossFunction):
     field_network, props = params
     # TODO switch to using a jax.lax.scan below
     # error = 0.0
-    # for bc in domain.essential_bcs:
+    # for bc in domain.dirichlet_bcs:
     #   coords = domain.coords[domain.mesh.nodeSets[bc.nodeSet]]
     #   us_predicted = vmap(domain.physics.field_values, in_axes=(None, 0, None))(
     #     field_network, coords, t
@@ -28,7 +28,7 @@ class DirichletBCLoss(BCLossFunction):
     #   us_expected = vmap(bc.function, in_axes=(0, None))(coords, t)
     #   error += jnp.square(us_predicted - us_expected).mean()
     
-    # print(type(domain.essential_bcs))
+    # print(type(domain.dirichlet_bcs))
     def vmap_func(bc):
       coords = domain.coords[domain.mesh.nodeSets[bc.nodeSet]]
       us_predicted = vmap(domain.physics.field_values, in_axes=(None, 0, None))(
@@ -37,10 +37,10 @@ class DirichletBCLoss(BCLossFunction):
       us_expected = vmap(bc.function, in_axes=(0, None))(coords, t)
       return jnp.square(us_predicted - us_expected).mean()
 
-    # errors = vmap(vmap_func)(domain.essential_bcs)
+    # errors = vmap(vmap_func)(domain.dirichlet_bcs)
     # error = jnp.sum(errors)
     error = 0.0
-    for bc in domain.essential_bcs:
+    for bc in domain.dirichlet_bcs:
       error = error + vmap_func(bc)
     return error
 

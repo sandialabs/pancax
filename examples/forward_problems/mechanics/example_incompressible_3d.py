@@ -1,11 +1,6 @@
 from pancax import *
 
 ##################
-# for debugging nans... this will slow things down though.
-##################
-# jax.config.update("jax_debug_nans", True)
-
-##################
 # for reproducibility
 ##################
 key = random.key(10)
@@ -18,56 +13,65 @@ logger = Logger('pinn.log', log_every=250)
 pp = PostProcessor(mesh_file)
 
 ##################
-# physics setup
+# domain setup
 ##################
 times = jnp.linspace(0.0, 1.0, 11)
-essential_bc_func = UniaxialTensionLinearRamp(
+domain = VariationalDomain(mesh_file, times, q_order=2)
+
+##################
+# physics setup
+##################
+dirichlet_bc_func = UniaxialTensionLinearRamp(
   final_displacement=1.0, length=1.0, direction='y', n_dimensions=3
 )
-model = NeoHookean()
+model = NeoHookean(
+  bulk_modulus=1000.0,
+  shear_modulus=1.,
+)
 formulation = ThreeDimensional()
-physics_kernel = SolidMechanics(mesh_file, essential_bc_func, model, formulation)
-essential_bcs = [
-  EssentialBC('nset_3', 0),
-  EssentialBC('nset_3', 1),
-  EssentialBC('nset_3', 2),
-  EssentialBC('nset_5', 0),
-  EssentialBC('nset_5', 1),
-  EssentialBC('nset_5', 2)
+physics = SolidMechanics(model, formulation)
+physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+ics = [
 ]
-natural_bcs = [
+dirichlet_bcs = [
+  DirichletBC('nset_3', 0),
+  DirichletBC('nset_3', 1),
+  DirichletBC('nset_3', 2),
+  DirichletBC('nset_5', 0),
+  DirichletBC('nset_5', 1),
+  DirichletBC('nset_5', 2)
 ]
-domain = VariationalDomain(physics_kernel, essential_bcs, natural_bcs, mesh_file, times, q_order=2)
+neumann_bcs = [
+]
+
+##################
+# problem setup
+##################
+problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 
 ##################
 # ML setup
 ##################
-# loss_function = CombineLossFunctions(
-#   EnergyAndResidualLoss(residual_weight=250.0),
-#   QuadratureIncompressibilityConstraint(weight=100.0)
-# )
 loss_function = EnergyLoss()
-field_network = MLP(physics_kernel.n_dofs + 1, physics_kernel.n_dofs, 50, 5, jax.nn.tanh, key)
-# props = FixedProperties([1000.0, 0.3846])
-shear = 1.0
-props = FixedProperties([1000.0 * shear, shear])
-params = FieldPropertyPair(field_network, props)
+field = Field(problem, key, seperate_networks=True)
+params = FieldPhysicsPair(field, problem.physics)
 
 ##################
 # train network
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt_st = opt.init(params)
-for epoch in range(100000):
-  params, opt_st, loss = opt.step(params, domain, opt_st)
+for epoch in range(25000):
+  params, opt_st, loss = opt.step(params, problem, opt_st)
   logger.log_loss(loss, epoch)
 
 ##################
 # post-processing
 ##################
-pp.init(domain, 'output.e', 
+pp.init(problem, 'output.e', 
   node_variables=[
-    'displacement',
+    'field_values'
+    # 'displacement',
     # 'internal_force'
   ], 
   element_variables=[
@@ -78,5 +82,5 @@ pp.init(domain, 'output.e',
     # 'element_pk1_stress'
   ]
 )
-pp.write_outputs(params, domain)
+pp.write_outputs(params, problem)
 pp.close()

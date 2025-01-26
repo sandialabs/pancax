@@ -1,4 +1,4 @@
-from ..bcs import EssentialBC, NaturalBC
+from ..bcs import DirichletBC, NeumannBC
 from ..domains import BaseDomain, CollocationDomain, VariationalDomain
 from ..physics_kernels import BasePhysics, BaseStrongFormPhysics, BaseVariationalFormPhysics, BaseEnergyFormPhysics
 from typing import Callable, List
@@ -15,16 +15,16 @@ class ForwardProblem(eqx.Module):
   domain: BaseDomain
   physics: BasePhysics
   ics: List[Callable]
-  essential_bcs: List[EssentialBC]
-  natural_bcs: List[NaturalBC]
+  dirichlet_bcs: List[DirichletBC]
+  neumann_bcs: List[NeumannBC]
 
   def __init__(
     self, 
     domain: BaseDomain,
     physics: BasePhysics,
     ics: List[Callable],
-    essential_bcs: List[EssentialBC],
-    natural_bcs: List[NaturalBC]
+    dirichlet_bcs: List[DirichletBC],
+    neumann_bcs: List[NeumannBC]
   ) -> None:
     
     # check compatability between domain and physics
@@ -51,14 +51,14 @@ class ForwardProblem(eqx.Module):
       assert False, 'wtf is this domain'
 
     if type(domain) == VariationalDomain:
-      domain = domain.update_dof_manager(essential_bcs, physics.n_dofs)
+      domain = domain.update_dof_manager(dirichlet_bcs, physics.n_dofs)
 
     self.domain = domain
     physics = physics.update_normalization(domain)
     self.physics = physics.update_var_name_to_method()
     self.ics = ics
-    self.essential_bcs = essential_bcs
-    self.natural_bcs = natural_bcs
+    self.dirichlet_bcs = dirichlet_bcs
+    self.neumann_bcs = neumann_bcs
 
   # TODO a lot of these below are for some backwards
   # compatability during a transition period to

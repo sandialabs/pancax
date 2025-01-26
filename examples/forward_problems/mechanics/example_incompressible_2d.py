@@ -21,8 +21,7 @@ domain = VariationalDomain(mesh_file, times, q_order=2)
 ##################
 # physics setup
 ##################
-times = jnp.linspace(0.0, 1.0, 11)
-essential_bc_func = UniaxialTensionLinearRamp(
+dirichlet_bc_func = UniaxialTensionLinearRamp(
   final_displacement=1.0, length=1.0, direction='y', n_dimensions=2
 )
 model = NeoHookean(
@@ -31,28 +30,27 @@ model = NeoHookean(
 )
 formulation = PlaneStrain()
 physics = SolidMechanics(model, formulation)
-physics = physics.update_dirichlet_bc_func(essential_bc_func)
+physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 ics = [
 ]
-essential_bcs = [
-  EssentialBC('nset_1', 0),
-  EssentialBC('nset_1', 1),
-  EssentialBC('nset_3', 0),
-  EssentialBC('nset_3', 1),
+dirichlet_bcs = [
+  DirichletBC('nset_1', 0),
+  DirichletBC('nset_1', 1),
+  DirichletBC('nset_3', 0),
+  DirichletBC('nset_3', 1),
 ]
-natural_bcs = [
+neumann_bcs = [
 ]
 
 ##################
 # problem setup
 ##################
-problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
+problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 
 ##################
 # ML setup
 ##################
 loss_function = EnergyLoss()
-# field = MLP(physics.n_dofs + 1, physics.n_dofs, 50, 5, jax.nn.tanh, key)
 field = Field(problem, key, seperate_networks=True)
 params = FieldPhysicsPair(field, problem.physics)
 

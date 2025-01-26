@@ -11,7 +11,7 @@ BCFunc = Callable[[Float[Array, "nd"], float], Float[Array, "nf"]]
 # remove component from the definition.
 # it doesn't appear to be doing anything
 # class NaturalBC(NamedTuple):
-class NaturalBC(eqx.Module):
+class NeumannBC(eqx.Module):
   sideset: str
   function: Optional[BCFunc] = lambda x, t: 0.0
 

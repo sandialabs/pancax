@@ -1,5 +1,5 @@
 from .forward_problem import ForwardProblem
-from pancax.bcs import EssentialBC, NaturalBC
+from pancax.bcs import DirichletBC, NeumannBC
 from pancax.data import FullFieldData, GlobalData
 from pancax.domains import BaseDomain
 from pancax.physics_kernels import BasePhysics
@@ -15,11 +15,11 @@ class InverseProblem(ForwardProblem):
     domain: BaseDomain,
     physics: BasePhysics,
     ics: List[Callable],
-    essential_bcs: List[EssentialBC],
-    natural_bcs: List[NaturalBC],
+    dirichlet_bcs: List[DirichletBC],
+    neumann_bcs: List[NeumannBC],
     field_data: FullFieldData,
     global_data: GlobalData
   ) -> None:
-    super().__init__(domain, physics, ics, essential_bcs, natural_bcs)
+    super().__init__(domain, physics, ics, dirichlet_bcs, neumann_bcs)
     self.field_data = field_data
     self.global_data = global_data
