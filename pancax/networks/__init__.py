@@ -5,7 +5,7 @@ from .ml_dirichlet_field import MLDirichletField
 from .mlp import Linear
 from .mlp import MLP
 from .mlp import MLPBasis
-from .properties import *
+from .parameters import Parameters
 from .rbf import RBFBasis
 from .rbf import rbf_normalization
 from .initialization import *
