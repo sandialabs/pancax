@@ -27,7 +27,7 @@ def nodal_pp(func, has_props=False, jit=True):
 	else:
 		new_func = lambda p, d, t: vmap(
 			func, in_axes=(None, 0, None)
-		)(p.field, d.coords, t)
+		)(p.fields, d.coords, t)
 	
 	if jit:
 		return eqx.filter_jit(new_func)
