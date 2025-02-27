@@ -1,7 +1,7 @@
 from ..bcs import DirichletBC, NeumannBC
 from ..domains import BaseDomain, CollocationDomain, VariationalDomain
 from ..physics_kernels import BasePhysics, BaseStrongFormPhysics, BaseVariationalFormPhysics, BaseEnergyFormPhysics
-from typing import Callable, List
+from typing import Callable, List, Optional
 import equinox as eqx
 
 
@@ -22,9 +22,9 @@ class ForwardProblem(eqx.Module):
     self, 
     domain: BaseDomain,
     physics: BasePhysics,
-    ics: List[Callable],
-    dirichlet_bcs: List[DirichletBC],
-    neumann_bcs: List[NeumannBC]
+    ics: Optional[List[Callable]] = [],
+    dirichlet_bcs: Optional[List[DirichletBC]] = [],
+    neumann_bcs: Optional[List[NeumannBC]] = []
   ) -> None:
     
     # check compatability between domain and physics

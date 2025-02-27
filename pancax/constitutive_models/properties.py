@@ -75,5 +75,5 @@ class BoundedProperty(eqx.Module):
       raise TypeError(f'Unsupported type {type(other)} when doing {op_str} with BoundingProperty')
 
 
-FixedProperty = float #= eqx.field(static=True)
+FixedProperty = float
 Property = Union[BoundedProperty, FixedProperty]

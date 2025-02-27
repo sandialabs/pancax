@@ -57,6 +57,7 @@ class SolidMechanics(BaseEnergyFormPhysics):
 	formulation: BaseMechanicsFormulation
 
 	def __init__(self, constitutive_model, formulation) -> None:
+		# TODO clean this up below
 		field_value_names = ('displ_x', 'displ_y')
 		super().__init__(field_value_names)
 		if formulation.n_dimensions > 2:

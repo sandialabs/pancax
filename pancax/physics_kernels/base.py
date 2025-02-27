@@ -53,6 +53,7 @@ class BasePhysics(eqx.Module):
   dirichlet_bc_func: Callable #= lambda x, t, z: z
   # TODO how to make this dimension dependent?
   # finally use generics in python?
+  # maybe loop in the mechanics formulation here and rename it?
   x_mins: Float[Array, "nd"] #= jnp.zeros(3)
   x_maxs: Float[Array, "nd"] #= jnp.zeros(3)
 
@@ -252,34 +253,3 @@ class BaseStrongFormPhysics(BasePhysics):
   @abstractmethod
   def strong_form_residual(self, params, x, t, *args):
     pass
-
-  # def vmap_strong_form_residual(    # us = self.field_values(params, x, t, *args)
-    # us = us[fspace.conns, :]
-    # xs = x[fspace.conns, :])
-
-# class BaseWeakFormPhysics(BasePhysics):
-#   n_dofs: int
-#   field_value_names: tuple[int, ...]
-
-#   def element_field(self, params, x, t, func, u, fspace):
-#     # x_el = x[conn, :]
-#     # u_el = u[conn, :]
-#     # return vmap(func, in_axes=(None, None, None, ))
-#     v = fspace.shape_function_values(x)
-#     grad_v = fspace.shape_function_gradients(x)
-#     JxWs = fspace.JxWs(x)
-#     return jnp
-#     pass
-
-#   def element_field_gradient(self, params, x, t, *args):
-#     pass
-
-#   def quadrature_field(self, params, x, t, *args):
-#     pass
-  
-#   # def quadrature_field_gradient(self):
-#   #   pass
-
-#   @abstractmethod
-#   def energy(self, params, x, t, u, grad_u, *args):
-#     pass

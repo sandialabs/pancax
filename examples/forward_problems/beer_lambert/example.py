@@ -26,24 +26,20 @@ physics = BeerLambertLaw(jnp.array([0., 1.]), 1.e3)
 ##################
 # bcs
 ##################
-ics = [
-]
 dirichlet_bcs = [
   DirichletBC('nodeset_3', 0, lambda x, t: 10. * jnp.exp(-(x[0] / 100e-6)**2))
-]
-neumann_bcs = [
 ]
 
 ##################
 # problem setup
 ##################
-problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
+problem = ForwardProblem(domain, physics, dirichlet_bcs=dirichlet_bcs)
 
 ##################
 # ML setup
 ##################
 field = MLDirichletField(problem, key, ensure_positivity=True)
-params = FieldPhysicsPair(field, problem.physics)
+params = Parameters(field, problem.physics)
 loss_function = ResidualMSELoss(1.)
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True, transition_steps=5000, decay_rate=0.95)
 opt_st = opt.init(params)
