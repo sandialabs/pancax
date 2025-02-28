@@ -68,9 +68,5 @@ class SolidMechanics(BaseEnergyFormPhysics):
 		self.formulation = formulation
 		
 	def energy(self, params, x, t, u, grad_u, *args):
-		# _, model = params
 		grad_u = self.formulation.modify_field_gradient(grad_u)
-		F = grad_u + jnp.eye(3)
-		return self.constitutive_model.energy(F)
-		# return self.constitutive_model.energy(grad_u)
-		# return model.energy(grad_u)
+		return self.constitutive_model.energy(grad_u)

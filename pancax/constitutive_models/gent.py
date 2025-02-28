@@ -16,14 +16,13 @@ class Gent(BaseConstitutiveModel):
   shear_modulus: Property
   Jm_parameter: Property
 
-  def energy(self, F):
+  def energy(self, grad_u):
     # unpack properties
     K, G, Jm = self.bulk_modulus, self.shear_modulus, self.Jm_parameter
 
     # kinematics
-    C = F.T @ F
-    J = self.jacobian(F)
-    I_1_bar = jnp.trace(jnp.power(J, -2. / 3.) * C)
+    J = self.jacobian(grad_u)
+    I_1_bar = self.I1_bar(grad_u)
 
     # guard rail
     check_value = I_1_bar > Jm + 3.0 - 0.001

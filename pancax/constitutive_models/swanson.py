@@ -24,7 +24,7 @@ class Swanson(BaseConstitutiveModel):
   # hack because Swanson is a stupid model
   cutoff_strain: float = eqx.field(static=True)
 
-  def energy(self, F):
+  def energy(self, grad_u):
     K = self.bulk_modulus
     A1, P1 = self.A1, self.P1
     B1, Q1 = self.B1, self.Q1
@@ -32,21 +32,24 @@ class Swanson(BaseConstitutiveModel):
     tau_cutoff = (1. / 3.) * (3. + self.cutoff_strain**2) - 1.
 
     # kinematics
-    J = self.jacobian(F)
-    C = F.T @ F
-    C_bar = jnp.power(J, -2. / 3.) * C
-    I_1_bar = jnp.trace(C_bar)
+    J = self.jacobian(grad_u)
+    I_1_bar = self.I1_bar(grad_u)
+    I_2_bar = self.I2_bar(grad_u)
     tau_1 = (1. / 3.) * I_1_bar - 1.
+    tau_2 = (1. / 3.) * I_2_bar - 1.
     tau_tilde_1 = tau_1 + tau_cutoff
+    tau_tilde_2 = tau_2 + tau_cutoff
 
     # constitutive
     W_vol = K * (J * jnp.log(J) - J + 1.)
     W_dev_tau = 3. / 2. * (
       A1 / (P1 + 1.) * (tau_tilde_1**(P1 + 1.)) +
+      B1 / (Q1 + 1.) * (tau_tilde_2**(Q1 + 1.)) +  
       C1 / (R1 + 1.) * (tau_tilde_1**(R1 + 1.))
     )
     W_dev_cutoff = 3. / 2. * (
       A1 / (P1 + 1.) * (tau_cutoff**(P1 + 1.)) +
+      B1 / (Q1 + 1.) * (tau_cutoff**(Q1 + 1.)) +
       C1 / (R1 + 1.) * (tau_cutoff**(R1 + 1.))
     )
     W_dev = W_dev_tau - W_dev_cutoff
