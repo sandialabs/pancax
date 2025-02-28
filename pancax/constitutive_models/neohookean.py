@@ -14,14 +14,12 @@ class NeoHookean(BaseConstitutiveModel):
   bulk_modulus: Property
   shear_modulus: Property
 
-  def energy(self, F: Tensor) -> Scalar:
+  def energy(self, grad_u: Tensor) -> Scalar:
     K, G = self.bulk_modulus, self.shear_modulus
 
     # kinematics
-    # F = jnp.eye(3) + grad_u
-    C = F.T @ F
-    J = self.jacobian(F)
-    I_1_bar = jnp.trace(1. / jnp.square(jnp.cbrt(J)) * C)
+    J = self.jacobian(grad_u)
+    I_1_bar = self.I1_bar(grad_u)
 
     # constitutive
     W_vol = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J))

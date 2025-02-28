@@ -6,6 +6,7 @@ authors = [
 ]
 dependencies = [
   'matplotlib',
+  'meshio',
   'netCDF4',
   'pandas',
   'scipy',
