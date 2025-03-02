@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from ..base import ConstitutiveModel, Scalar, Tensor
+from ...math import tensor_math
 from typing import Tuple
 import jax
 import jax.numpy as jnp
@@ -100,6 +101,11 @@ class MechanicsModel(ConstitutiveModel):
       J
     )
     return J
+
+  def log_strain(self, grad_u: Tensor) -> Tensor:
+    F = self.deformation_gradient(grad_u)
+    C = F.T @ F
+    return tensor_math.mtk_log_sqrt(C)
 
   def pk1_stress(self, grad_u: Tensor, *args) -> Tensor:
     return jax.grad(self.energy, argnums=0)(grad_u, *args)
