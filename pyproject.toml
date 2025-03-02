@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.5'
+version = '0.0.6'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
