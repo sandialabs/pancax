@@ -1,9 +1,9 @@
-from .base import BaseConstitutiveModel
-from .properties import Property
+from ..base import HyperelasticModel
+from ...properties import Property
 import jax.numpy as jnp
 
 
-class BlatzKo(BaseConstitutiveModel):
+class BlatzKo(HyperelasticModel):
   shear_modulus: Property
 
   def energy(self, grad_u):

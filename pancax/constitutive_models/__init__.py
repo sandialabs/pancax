@@ -1,8 +1,8 @@
-from .base import BaseConstitutiveModel
+from .base import ConstitutiveModel
 from .properties import BoundedProperty, FixedProperty, Property
 
 # models
-from .blatz_ko import BlatzKo
-from .gent import Gent
-from .neohookean import NeoHookean
-from .swanson import Swanson
+from .mechanics.hyperelasticity.blatz_ko import BlatzKo
+from .mechanics.hyperelasticity.gent import Gent
+from .mechanics.hyperelasticity.neohookean import NeoHookean
+from .mechanics.hyperelasticity.swanson import Swanson

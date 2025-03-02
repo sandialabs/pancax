@@ -1,9 +1,9 @@
-from .base import BaseConstitutiveModel, Scalar, Tensor
-from .properties import Property
+from ..base import HyperelasticModel, Scalar, Tensor
+from ...properties import Property
 import jax.numpy as jnp
 
 
-class NeoHookean(BaseConstitutiveModel):
+class NeoHookean(HyperelasticModel):
   r"""
 	NeoHookean model with the following model form
 
