@@ -1,10 +1,10 @@
-from .base import BaseConstitutiveModel
-from .properties import Property
+from ..base import HyperelasticModel
+from ...properties import Property
 import equinox as eqx
 import jax.numpy as jnp
 
 
-class Swanson(BaseConstitutiveModel):
+class Swanson(HyperelasticModel):
   r"""
 	Swanson model truncated to 4 parameters
 

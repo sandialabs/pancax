@@ -1,10 +1,10 @@
-from .base import BaseConstitutiveModel
-from .properties import Property
+from ..base import HyperelasticModel
+from ...properties import Property
 import jax
 import jax.numpy as jnp
 
 
-class Gent(BaseConstitutiveModel):
+class Gent(HyperelasticModel):
   r"""
 	Gent model with the following model form
 
