@@ -60,6 +60,7 @@ class ResidualMSELoss(PhysicsLossFunction):
     rs = jnp.linalg.norm(physics.vmap_element_residual(field, domain, t, us))
     return rs.mean()
 
+
 class EnergyAndResidualLoss(PhysicsLossFunction):
   r"""
   Energy and residual loss function used in Hamel et. al
