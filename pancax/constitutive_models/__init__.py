@@ -2,8 +2,24 @@ from .base import ConstitutiveModel
 from .properties import BoundedProperty, FixedProperty, Property
 
 # models
-from .mechanics.hyperelasticity.blatz_ko import BlatzKo
-from .mechanics.hyperelasticity.gent import Gent
-from .mechanics.hyperelasticity.hencky import Hencky
-from .mechanics.hyperelasticity.neohookean import NeoHookean
-from .mechanics.hyperelasticity.swanson import Swanson
+# from .mechanics import hyperelasticity
+from .mechanics.hyperelasticity import *
+
+__all__ = [
+  # submodules to include
+  # "mechanics",
+  # "mechanics.hyperelasticity",
+  # Base class
+  "ConstitutiveModel",
+  # Properties
+  "BoundedProperty",
+  "FixedProperty",
+  "Property",
+  # Actual Models
+  # Hyperelasticity
+  "BlatzKo",
+  "Gent",
+  "Hencky",
+  "NeoHookean",
+  "Swanson"
+]
