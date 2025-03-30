@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.6'
+version = '0.0.7'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -49,6 +49,7 @@ packages = [
   'pancax.bcs',
   'pancax.bvps',
   'pancax.constitutive_models',
+  'pancax.constitutive_models.mechanics',
   'pancax.data',
   'pancax.domains',
   'pancax.fem',
