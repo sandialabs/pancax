@@ -3,14 +3,13 @@ from ..base import HyperelasticModel, MechanicsModel
 from ...base import ConstitutiveModel, Scalar, State, Tensor
 from jaxtyping import Array, Float
 from ...properties import Property
-from typing import List
 import equinox as eqx
 import jax.numpy as jnp
 
 
 # has general bookkeeping methods
 class PathDependentModel(ConstitutiveModel):
-  def extract_scalar(self, state: State, start_index: int) -> Tensor:
+  def extract_scalar(self, state: State, start_index: int) -> Scalar:
     return state[start_index]
 
   def extract_tensor(self, state: State, start_index: int) -> Tensor:
@@ -25,12 +24,12 @@ class PronySeries(eqx.Module):
   moduli: Float[Array, "nprony"] = eqx.field(converter=jnp.asarray)
   relaxation_times: Float[Array, "nprony"] = eqx.field(converter=jnp.asarray)
 
-  def __init__(self, moduli, relaxation_times):
+  def __init__(self, moduli, relaxation_times) -> None:
     assert len(moduli) == len(relaxation_times)
     self.moduli = moduli
     self.relaxation_times = relaxation_times
 
-  def __len__(self):
+  def __len__(self) -> int:
     return len(self.moduli)
 
 
@@ -59,5 +58,5 @@ class HyperViscoElastic(MechanicsModel, PathDependentModel):
   prony_series: PronySeries
   shift_factor_model: ShiftFactorModel
 
-  def num_prony_terms(self):
+  def num_prony_terms(self) -> int:
     return len(self.prony_series)
