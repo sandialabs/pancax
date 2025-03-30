@@ -9,3 +9,20 @@ from .laplace_beltrami import LaplaceBeltrami
 from .poisson import Poisson
 from .solid_mechanics import BaseMechanicsFormulation, IncompressiblePlaneStress, PlaneStrain, ThreeDimensional
 from .solid_mechanics import SolidMechanics
+
+__all__ = [
+  "BasePhysics",
+  "BaseEnergyFormPhysics",
+  "BaseStrongFormPhysics",
+  "BaseVariationalFormPhysics",
+  "BeerLambertLaw",
+  "BurgersEquation",
+  "HeatEquation",
+  "LaplaceBeltrami",
+  "Poisson",
+  "BaseMechanicsFormulation",
+  "IncompressiblePlaneStress",
+  "PlaneStrain",
+  "ThreeDimensional",
+  "SolidMechanics"
+]
