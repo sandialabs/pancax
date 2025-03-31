@@ -9,7 +9,9 @@ Physics augmented neural computations in jax
 ## Table of Contents
 1. [Installation](#installation)
 2. [Usage](#usage)
-3. [Citation](#citation)
+4. [Contributing](#contributing)
+5. [Citation](#citation)
+
 
 ## Installation
 ### CPU installation instructions
@@ -56,9 +58,11 @@ these can be displayed with the help message
 
 ``python -m pancax -h``
 
-If you leverage these tools for your own research, please cite the following article
+## Contributing
+If you would like to contribute to the project, please open a pull request with small changes. If you would like to see big changes in the source code, please open an issue or discussion so we can start a conversation.
 
 ## Citation
+If you leverage these tools for your own research, please cite the following article
 ```bibtex
 @article{hamel2023calibrating,
   title={Calibrating constitutive models with full-field data via physics informed neural networks},
