@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pancax[cuda]==0.0.7",
+# ]
+#
+# ///
 from pancax import *
 
 ##################
@@ -35,10 +42,10 @@ physics = physics.update_dirichlet_bc_func(bc_func)
 ics = [
 ]
 essential_bcs = [
-  EssentialBC('nset_1', 0),
-  EssentialBC('nset_2', 0),
-  EssentialBC('nset_3', 0),
-  EssentialBC('nset_4', 0),
+  DirichletBC('nset_1', 0),
+  DirichletBC('nset_2', 0),
+  DirichletBC('nset_3', 0),
+  DirichletBC('nset_4', 0),
 ]
 natural_bcs = [
 ]
@@ -53,7 +60,7 @@ problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
 ##################
 n_dims = domain.coords.shape[1]
 field = MLP(n_dims + 1, physics.n_dofs, 50, 3, jax.nn.tanh, key)
-params = FieldPropertyPair(field, problem.physics)
+params = FieldPhysicsPair(field, problem.physics)
 
 loss_function = EnergyLoss()
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)

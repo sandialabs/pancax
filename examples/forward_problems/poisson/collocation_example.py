@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pancax[cuda,viz]==0.0.7",
+# ]
+# ///
 from pancax import *
 
 ##################
@@ -35,10 +41,10 @@ physics = physics.update_dirichlet_bc_func(bc_func)
 ics = [
 ]
 essential_bcs = [
-  EssentialBC('nset_1', 0),
-  EssentialBC('nset_2', 0),
-  EssentialBC('nset_3', 0),
-  EssentialBC('nset_4', 0),
+  DirichletBC('nset_1', 0),
+  DirichletBC('nset_2', 0),
+  DirichletBC('nset_3', 0),
+  DirichletBC('nset_4', 0),
 ]
 natural_bcs = [
 ]
