@@ -35,6 +35,13 @@ docs = [
   'sphinxcontrib-bibtex',
   'sphinxcontrib-napoleon'
 ]
+rocm = [
+  'chex',
+  'equinox',
+  'jax[rocm]==0.4.33',
+  'jaxtyping',
+  'optax'
+]
 test = [
   'pytest',
   'pytest-cov',
