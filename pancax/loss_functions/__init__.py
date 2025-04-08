@@ -7,3 +7,16 @@ from .utils import CombineLossFunctions
 from .weak_form_loss_functions import EnergyLoss, EnergyAndResidualLoss
 from .weak_form_loss_functions import EnergyResidualAndReactionLoss
 from .weak_form_loss_functions import ResidualMSELoss
+
+__all__ = [
+  "DirichletBCLoss",
+  "NeumannBCLoss",
+  "FullFieldDataLoss",
+  "ICLossFunction",
+  "StrongFormResidualLoss",
+  "CombineLossFunctions",
+  "EnergyLoss",
+  "EnergyAndResidualLoss",
+  "EnergyResidualAndReactionLoss",
+  "ResidualMSELoss"
+]

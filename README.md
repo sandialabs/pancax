@@ -9,7 +9,9 @@ Physics augmented neural computations in jax
 ## Table of Contents
 1. [Installation](#installation)
 2. [Usage](#usage)
-3. [Citation](#citation)
+4. [Contributing](#contributing)
+5. [Citation](#citation)
+
 
 ## Installation
 ### CPU installation instructions
@@ -18,11 +20,25 @@ To install pancax using pip (recommended) for CPU usage you can type the followi
 ``pip install pancax[cpu]``
 
 ### GPU installation instructions
-Currently only CUDA has been tested, so only a CUDA option is supplied.
 #### CUDA installation instructions
 To install pancax using pip (recommended) for CPU usage you can type the following command
 
 ``pip install pancax[cuda]``
+
+#### ROCm Installation instructions
+To use pancax on amd gpus, matters are slightly more complicated due to the amd gpus being supported in an experimental status for jax. This requires using a docker container. The necessary commands to achieve this are the following
+```
+docker run -it -d --network=host --device=/dev/kfd --device=/dev/dri --ipc=host --shm-size 64G \
+--group-add video --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $(pwd):/home/temp_user/pancax \
+--name rocm_jax rocm/jax-community:rocm6.2.3-jax0.4.33-py3.12.6 /bin/bash
+
+docker attach rocm_jax
+```
+then pancax can be installed with the following command within the container
+
+``pip install pancax[rocm]``
+
+This currently needs to be done each time you start the container listed above. We have plans to ship our own containers in the future to simplify matters.
 
 ### Developer installation instructions
 If you would like to do development in pancax, please first clone the repo and in the pancax 
@@ -42,9 +58,11 @@ these can be displayed with the help message
 
 ``python -m pancax -h``
 
-If you leverage these tools for your own research, please cite the following article
+## Contributing
+If you would like to contribute to the project, please open a pull request with small changes. If you would like to see big changes in the source code, please open an issue or discussion so we can start a conversation.
 
 ## Citation
+If you leverage these tools for your own research, please cite the following article
 ```bibtex
 @article{hamel2023calibrating,
   title={Calibrating constitutive models with full-field data via physics informed neural networks},
