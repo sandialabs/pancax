@@ -4,8 +4,8 @@ from .delta_pinn_domain import DeltaPINNDomain
 from .variational_domain import VariationalDomain
 
 __all__ = [
-  "BaseDomain",
-  "CollocationDomain",
-  "DeltaPINNDomain",
-  "VariationalDomain"
+    "BaseDomain",
+    "CollocationDomain",
+    "DeltaPINNDomain",
+    "VariationalDomain"
 ]
