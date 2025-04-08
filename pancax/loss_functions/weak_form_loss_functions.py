@@ -21,23 +21,18 @@ class EnergyLoss(PhysicsLossFunction):
   def __init__(self, weight: Optional[float] = 1.0):
     self.weight = weight
 
-  def __call__(self, params, domain):
+  def __call__(self, params, problem):
     energies = vmap(self.load_step, in_axes=(None, None, 0))(
-      params, domain, domain.times
+      params, problem, problem.times
     )
     energy = jnp.sum(energies)
     loss = energy
     return self.weight * loss, dict(energy=energy)
 
-  def load_step(self, params, domain, t):
-    # field_network, props = params
-    # us = domain.physics.field_values(field_network, t)
-    # us = domain.physics.vmap_field_values(field_network, domain.coords, t)
-    # props = props()
-    # pi = potential_energy(domain, us, props)
-    field, physics = params
-    us = physics.vmap_field_values(field, domain.coords, t)
-    pi = physics.potential_energy(physics, domain.domain, t, us)
+  def load_step(self, params, problem, t):
+    field, physics, state = params
+    us = physics.vmap_field_values(field, problem.coords, t)
+    pi = physics.potential_energy(physics, problem.domain, t, us)
     return pi
 
 
@@ -55,10 +50,11 @@ class ResidualMSELoss(PhysicsLossFunction):
     return self.weight * mse, dict(residual=mse)
 
   def load_step(self, params, domain, t):
-    field, physics = params
+    field, physics, state = params
     us = physics.vmap_field_values(field, domain.coords, t)
     rs = jnp.linalg.norm(physics.vmap_element_residual(field, domain, t, us))
     return rs.mean()
+
 
 class EnergyAndResidualLoss(PhysicsLossFunction):
   r"""
@@ -95,7 +91,7 @@ class EnergyAndResidualLoss(PhysicsLossFunction):
     # props = props()
     # pi, R = potential_energy_and_residual(domain, us, props)
     # return pi, R
-    field, physics = params
+    field, physics, state = params
     us = physics.vmap_field_values(field, domain.coords, t)
     return physics.potential_energy_and_residual(params, domain, t, us)
   
@@ -126,13 +122,27 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
 
   def load_step(self, params, domain, t):
     # field_network, props = params
-    field, physics = params
+    field, physics, state = params
     # us = domain.field_values(field_network, t)
     us = physics.vmap_field_values(field, domain.coords, t)
     return physics.potential_energy_residual_and_reaction_force(params, domain, t, us, domain.global_data)
     # props = props()
     # return potential_energy_residual_and_reaction_force(domain, us, props)
 
+
+class PathDependentEnergyLoss(PhysicsLossFunction):
+  weight: float # consider making this a jax array so we can trace through this for meta learning
+
+  def __init__(self, weight: Optional[float] = 1.0) -> None:
+    self.weight = weight
+
+  def __call__(self, params, domain):
+    # TODO for a naive implementation 
+    pass
+
+  def load_step(self, field, physics, state_old, t, dt):
+    us = physics.vmap_field_values(field, domain.coords, t)
+    pi, state_new = physics.potential_energy(physics, )
 
 # class QuadratureIncompressibilityConstraint(PhysicsLossFunction):
 #   weight: float
