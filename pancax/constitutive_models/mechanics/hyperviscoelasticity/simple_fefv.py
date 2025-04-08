@@ -18,8 +18,8 @@ class SimpleFeFv(HyperViscoElastic):
         return eta * tensor_math.norm_of_deviator_squared(Dv)
 
     def energy(
-      self,
-      grad_u: Tensor, theta: Scalar, Z: State, dt: Scalar
+        self,
+        grad_u: Tensor, theta: Scalar, Z: State, dt: Scalar
     ) -> Scalar:
         # setup properties
         a_T = self.shift_factor_model(grad_u, theta, Z, dt)
@@ -51,7 +51,7 @@ class SimpleFeFv(HyperViscoElastic):
         # constitutive calculation (energy and dissipation)
         psi_eq = self.eq_model.energy(F)
         psi_neq = jnp.sum(vmap(self.neq_strain_energy, in_axes=(0, 0))(
-          Ees, Gs
+            Ees, Gs
         ))
         d = jnp.sum(vmap(self.dissipation, in_axes=(0, 0, 0))(Dvs, Gs, taus))
         return psi_eq + psi_neq + d, Z
