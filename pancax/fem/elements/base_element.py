@@ -23,7 +23,7 @@ def pascal_triangle_monomials(degree):
         p += monomialIndices
         monomialIndices.reverse()
         q += monomialIndices
-    return np.column_stack((q,p))
+    return np.column_stack((q, p))
 
 
 def vander1d(x, degree):
@@ -32,8 +32,8 @@ def vander1d(x, degree):
     dA = np.zeros((x.shape[0], degree + 1))
     domain = [0.0, 1.0]
     for i in range(degree + 1):
-        p = np.polynomial.Legendre.basis(i, domain=domain) 
-        p *= np.sqrt(2.0*i + 1.0) # keep polynomial orthonormal
+        p = np.polynomial.Legendre.basis(i, domain=domain)
+        p *= np.sqrt(2.0 * i + 1.0)  # keep polynomial orthonormal
         A[:, i] = p(x)
         dp = p.deriv()
         dA[:, i] = dp(x)
@@ -42,18 +42,18 @@ def vander1d(x, degree):
 
 def vander2d(x, degree):
     x = np.asarray(x)
-    nNodes = (degree+1)*(degree+2)//2
+    nNodes = (degree + 1) * (degree + 2) // 2
     pq = pascal_triangle_monomials(degree)
 
     # It's easier to process if the input arrays
     # always have the same shape
     # If a 1D array is given (a single point),
     # convert to the equivalent 2D array
-    x = x.reshape(-1,2)
-    
+    x = x.reshape(-1, 2)
+
     # switch to bi-unit triangle (-1,-1)--(1,-1)--(-1,1)
-    z = 2.0*x - 1.0
-    
+    z = 2.0 * x - 1.0
+
     def map_from_tri_to_square(xi):
         small = 1e-12
         # The mapping has a singularity at the vertex (-1, 1).
@@ -62,51 +62,55 @@ def vander2d(x, degree):
         xiShifted = xi.copy()
         xiShifted[indexSingular, 1] = 1.0 - small
         eta = np.zeros_like(xi)
-        eta[:, 0] = 2.0*(1.0 + xiShifted[:, 0])/(1.0 - xiShifted[:, 1]) - 1.0
+        eta[:, 0] = 2.0 * (1.0 + xiShifted[:, 0]) / \
+            (1.0 - xiShifted[:, 1]) - 1.0
         eta[:, 1] = xiShifted[:, 1]
         eta[indexSingular, 0] = -1.0
         eta[indexSingular, 1] = 1.0
-        
-        # Jacobian of map. 
+
+        # Jacobian of map.
         # Actually, deta is just the first row of the Jacobian.
         # The second row is trivially [0, 1], so we don't compute it.
         # We just use that fact directly in the derivative Vandermonde
         # expressions.
         deta = np.zeros_like(xi)
-        deta[:, 0] = 2/(1 - xiShifted[:, 1])
-        deta[:, 1] = 2*(1 + xiShifted[:, 0])/(1 - xiShifted[:, 1])**2
+        deta[:, 0] = 2 / (1 - xiShifted[:, 1])
+        deta[:, 1] = 2 * (1 + xiShifted[:, 0]) / (1 - xiShifted[:, 1]) ** 2
         return eta, deta
-    
+
     E, dE = map_from_tri_to_square(np.asarray(z))
-    
+
     A = np.zeros((x.shape[0], nNodes))
     Ax = A.copy()
     Ay = A.copy()
     N1D = np.polynomial.Polynomial([0.5, -0.5])
     for i in range(nNodes):
         p = np.polynomial.Legendre.basis(pq[i, 0])
-        
+
         # SciPy's polynomials use the deprecated poly1d type
         # of NumPy. To convert to the modern Polynomial type,
         # we need to reverse the order of the coefficients.
-        qPoly1d = special.jacobi(pq[i, 1], 2*pq[i, 0] + 1, 0)
+        qPoly1d = special.jacobi(pq[i, 1], 2 * pq[i, 0] + 1, 0)
         q = np.polynomial.Polynomial(qPoly1d.coef[::-1])
-        
+
         for j in range(pq[i, 0]):
             q *= N1D
-        
+
         # orthonormality weight
-        weight = np.sqrt((2*pq[i,0] + 1) * 2*(pq[i, 0] + pq[i, 1] + 1))
-        
-        A[:, i] = weight*p(E[:, 0])*q(E[:, 1])
-        
+        weight = np.sqrt((2 * pq[i, 0] + 1) * 2 * (pq[i, 0] + pq[i, 1] + 1))
+
+        A[:, i] = weight * p(E[:, 0]) * q(E[:, 1])
+
         # derivatives
         dp = p.deriv()
         dq = q.deriv()
-        Ax[:, i] = 2*weight*dp(E[:, 0])*q(E[:, 1])*dE[:, 0]
-        Ay[:, i] = 2*weight*(dp(E[:, 0])*q(E[:, 1])*dE[:, 1]
-                             + p(E[:, 0])*dq(E[:, 1]))
-        
+        Ax[:, i] = 2 * weight * dp(E[:, 0]) * q(E[:, 1]) * dE[:, 0]
+        Ay[:, i] = (
+            2
+            * weight
+            * (dp(E[:, 0]) * q(E[:, 1]) * dE[:, 1] + p(E[:, 0]) * dq(E[:, 1]))
+        )
+
     return A, Ax, Ay
 
 
@@ -120,11 +124,13 @@ class ShapeFunctions(NamedTuple):
         points at which the shame functinos are evaluated, and ``nNodes``
         is the number of nodes in the element (which is equal to the
         number of shape functions).
-    :param gradients: Values of the parametric gradients of the shape functions.
+    :param gradients: Values of the parametric gradients of \
+        the shape functions.
         Shape is ``(nPts, nDim, nNodes)``, where ``nDim`` is the number
         of spatial dimensions. Line elements are an exception, which
         have shape ``(nPts, nNdodes)``.
     """
+
     values: Float[Array, "np nn"]
     gradients: Float[Array, "np nd nn"]
 
@@ -140,20 +146,13 @@ class BaseElement(eqx.Module):
     :param faceNodes: Nodes associated with each face, 0-based
     :param interiorNodes: Nodes in the interior, 0-based or empty
     """
+
     elementType: str
     degree: int
     coordinates: Float[Array, "nn nd"]
     vertexNodes: Int[Array, "nn"]
     faceNodes: Int[Array, "nf nnpf"]
     interiorNodes: Int[Array, "nni"]
-
-    # def __init__(self, elementType, degree, coordinates, vertexNodes, faceNodes, interiorNodes):
-    #     self.elementType = elementType
-    #     self.degree = degree
-    #     self.coordinates = coordinates
-    #     self.vertexNodes = vertexNodes
-    #     self.faceNodes = faceNodes
-    #     self.interiorNodes = interiorNodes
 
     @abstractmethod
     def compute_shapes(self, nodalPoints, evaluationPoints):
