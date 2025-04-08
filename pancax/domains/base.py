@@ -13,6 +13,7 @@ class BaseDomain(eqx.Module):
   mesh: Mesh
   coords: Float[Array, "nn nd"]
   times: Union[Float[Array, "nt"], Float[Array, "nn 1"]]
+  dt: float # TODO assumes times were generated with linspace
 
   def __init__(
     self, 
@@ -28,7 +29,15 @@ class BaseDomain(eqx.Module):
       else:
         print('WARNING: Ignoring polynomial order flag for non tri mesh')
 
+      
+      if len(times) > 1:
+        dt = times[1] - times[0]
+      else:
+        print('WARNING: setting dt = 0. since this is a static problem. Is this what you want?')
+        dt = 0.
+
       self.mesh_file = mesh_file
       self.mesh = mesh
       self.coords = jnp.array(mesh.coords)
       self.times = times
+      self.dt = dt

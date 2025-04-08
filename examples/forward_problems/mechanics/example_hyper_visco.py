@@ -1,5 +1,4 @@
 from pancax import *
-from pancax.constitutive_models.mechanics.hyperviscoelasticity import *
 
 ##################
 # for reproducibility
@@ -31,8 +30,8 @@ model = SimpleFeFv(
     shear_modulus=0.855
   ),
   PronySeries(
-    moduli=[1., 2., 3.], 
-    relaxation_times=[1., 10., 100.]
+    moduli=[1.], 
+    relaxation_times=[10.]
   ),
   WLF(
     C1=17.44, 
@@ -42,7 +41,6 @@ model = SimpleFeFv(
 )
 physics = SolidMechanics(model, PlaneStrain())
 physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
-print(physics)
 
 ics = [
 ]
@@ -63,13 +61,10 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 ##################
 # ML setup
 ##################
-
-# TODO write a new loss function
-class PathDependentEnergyLoss(PhysicsLossFunction):
-  pass
-
-
-field = Field(problem, key, seperate_networks=True)
-params = FieldPhysicsPair(field, problem.physics)
+loss_function = EnergyLoss()
+params = Parameters(problem, key, seperate_networks=True)
 print(params)
 
+##################
+# train network
+##################

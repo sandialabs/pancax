@@ -9,5 +9,5 @@ Vector = Float[Array, "3"]
 
 
 class ConstitutiveModel(eqx.Module):
-  def properties(self):
-    return self.__dataclass_fields__
+    def properties(self):
+        return self.__dataclass_fields__

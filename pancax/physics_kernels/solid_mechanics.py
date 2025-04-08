@@ -8,7 +8,7 @@ import jax.numpy as jnp
 
 # different formulations e.g. plane strain/stress, axisymmetric etc.
 class BaseMechanicsFormulation(eqx.Module):
-  n_dimensions: int = eqx.field(static=True)
+  n_dimensions: int = eqx.field(static=True) # does this need to be static?
 
   @abstractmethod
   def modify_field_gradient(self, grad_u):

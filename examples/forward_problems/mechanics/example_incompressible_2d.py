@@ -28,8 +28,7 @@ model = NeoHookean(
   bulk_modulus=1000.0,
   shear_modulus=1.,
 )
-formulation = PlaneStrain()
-physics = SolidMechanics(model, formulation)
+physics = SolidMechanics(model, PlaneStrain())
 physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 ics = [
 ]
@@ -51,8 +50,8 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 # ML setup
 ##################
 loss_function = EnergyLoss()
-field = Field(problem, key, seperate_networks=True)
-params = FieldPhysicsPair(field, problem.physics)
+params = Parameters(problem, key, seperate_networks=True)
+print(params)
 
 ##################
 # train network

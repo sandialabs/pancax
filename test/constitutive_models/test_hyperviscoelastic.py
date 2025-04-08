@@ -114,7 +114,7 @@ def test_model(model):
 
   for n in range(3):
     Fvs = jax.vmap(lambda Fv: Fv.at[9 * n:9 * (n + 1)].get().reshape((3, 3)))(states)
-    Fes = jax.vmap(lambda F, Fv: F @ np.linalg.inv(Fv), in_axes=(0, 0))(Fs, Fvs)
+    Fes = jax.vmap(lambda F, Fv: F @ jnp.linalg.inv(Fv), in_axes=(0, 0))(Fs, Fvs)
     grad_uvs = jax.vmap(lambda F: F - jnp.eye(3))(Fvs)
     grad_ues = jax.vmap(lambda F: F - jnp.eye(3))(Fes)
 
@@ -123,7 +123,7 @@ def test_model(model):
 
     # analytic solution
     e_v_11 = (2. / 3.) * strain_rate * times - \
-             (2. / 3.) * strain_rate * taus[n] * (1. - np.exp(-times / taus[n]))
+             (2. / 3.) * strain_rate * taus[n] * (1. - jnp.exp(-times / taus[n]))
 
     e_e_11 = strain_rate * times - e_v_11
     e_e_22 = 0.5 * e_v_11
@@ -145,3 +145,29 @@ def test_model(model):
     assert jnp.isclose(Ees[:, 0, 0], e_e_11, atol=2.5e-3).all()
     assert jnp.isclose(Ees[:, 1, 1], e_e_22, atol=2.5e-3).all()
 
+
+# NOTE this test is dumb... it's just checking vmap capabilities
+def test_with_vmap(model):
+  strain_rate = 1.e-2
+  total_time = 100.0
+  n_steps = 100
+  times = jnp.linspace(0., total_time, n_steps)
+  # F = uniaxial_strain(1.1)
+  Fs = jax.vmap(lambda t: uniaxial_strain(jnp.exp(strain_rate * t)))(times)
+  grad_us = jax.vmap(lambda F: F - jnp.eye(3))(Fs)
+  # grad_u = F - jnp.eye(3)
+  theta = model.shift_factor_model.theta_ref
+  state_old = model.initial_state()
+  states_old = jnp.tile(state_old, (n_steps, 1))
+  dt = total_time / n_steps
+
+  energies = jnp.zeros(n_steps)
+  states = jnp.zeros((n_steps, len(state_old)))
+
+  energy_func = jax.jit(jax.vmap(model.energy, in_axes=(0, None, 0, None)))
+  log_strain_func = jax.jit(model.log_strain)
+
+  psis, states_new = energy_func(grad_us, theta, states_old, dt)
+  print(psis.shape)
+  print(states_new.shape)
+  # assert False

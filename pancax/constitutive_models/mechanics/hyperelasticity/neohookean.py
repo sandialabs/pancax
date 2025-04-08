@@ -4,25 +4,28 @@ import jax.numpy as jnp
 
 
 class NeoHookean(HyperelasticModel):
-  r"""
-	NeoHookean model with the following model form
+    r"""
+    NeoHookean model with the following model form
 
-	$$
-  \psi(\mathbf{F}) = \frac{1}{2}K\left[\frac{1}{2}\left(J^2 - \ln J\right)\right] + \frac{1}{2}G\left(\bar{I}_1 - 3\right)
-  $$
-	"""
-  bulk_modulus: Property
-  shear_modulus: Property
+    $$
+    \psi(\mathbf{F}) = \
+    \frac{1}{2}K\left[\frac{1}{2}\left(J^2 - \ln J\right)\right] + \
+    \frac{1}{2}G\left(\bar{I}_1 - 3\right)
+    $$
+    """
 
-  def energy(self, grad_u: Tensor) -> Scalar:
-    K, G = self.bulk_modulus, self.shear_modulus
+    bulk_modulus: Property
+    shear_modulus: Property
 
-    # kinematics
-    J = self.jacobian(grad_u)
-    I_1_bar = self.I1_bar(grad_u)
+    def energy(self, grad_u: Tensor) -> Scalar:
+        K, G = self.bulk_modulus, self.shear_modulus
 
-    # constitutive
-    W_vol = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J))
-    W_dev = 0.5 * G * (I_1_bar - 3.)
+        # kinematics
+        J = self.jacobian(grad_u)
+        I_1_bar = self.I1_bar(grad_u)
 
-    return W_vol + W_dev
+        # constitutive
+        W_vol = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J))
+        W_dev = 0.5 * G * (I_1_bar - 3.0)
+
+        return W_vol + W_dev
