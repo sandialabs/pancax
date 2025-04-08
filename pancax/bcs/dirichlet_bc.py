@@ -5,6 +5,7 @@ import equinox as eqx
 
 BCFunc = Callable[[Float[Array, "nd"], float], float]
 
+
 class DirichletBC(eqx.Module):
     """
     :param nodeSet: A name for a nodeset in the mesh
@@ -13,6 +14,7 @@ class DirichletBC(eqx.Module):
         to enforce on the (nodeset, component) of a field.
         This defaults to the zero function
     """
+
     nodeSet: str
     component: int
     function: Optional[BCFunc] = lambda x, t: 0.0

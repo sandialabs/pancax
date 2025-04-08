@@ -2,14 +2,16 @@ from .base import ConstitutiveModel
 from .properties import BoundedProperty, FixedProperty, Property
 
 # models
-from .mechanics.hyperelasticity import BlatzKo, \
-                                       Gent, \
-                                       Hencky, \
-                                       NeoHookean, \
-                                       Swanson
-from .mechanics.hyperviscoelasticity import PronySeries, \
-                                            SimpleFeFv, \
-                                            WLF
+from .mechanics.hyperelasticity import \
+    BlatzKo, \
+    Gent, \
+    Hencky, \
+    NeoHookean, \
+    Swanson
+from .mechanics.hyperviscoelasticity import \
+    PronySeries, \
+    SimpleFeFv, \
+    WLF
 
 __all__ = [
     # submodules to include
