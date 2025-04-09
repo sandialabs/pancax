@@ -20,7 +20,7 @@ class LineElement(BaseElement):
         self.interiorNodes = jnp.arange(1, degree, dtype=jnp.int32)
 
     def compute_shapes(self, nodalPoints, evaluationPoints):
-        A,_ = vander1d(nodalPoints, self.degree)
+        A, _ = vander1d(nodalPoints, self.degree)
         nf, nfx = vander1d(evaluationPoints, self.degree)
         shape = np.linalg.solve(A.T, nf.T)
         dshape = np.linalg.solve(A.T, nfx.T)

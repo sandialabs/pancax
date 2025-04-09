@@ -1,10 +1,10 @@
-from .function_space import FunctionSpace
 from jaxtyping import Array, Bool, Float, Int
 from pancax.bcs import DirichletBC
 from pancax.timer import Timer
 from typing import List, Tuple
 import jax.numpy as np
 import numpy as onp
+
 
 # TODO
 # getting some error when making this a child of eqx.Module
@@ -15,13 +15,20 @@ class DofManager:
 
     TODO better document the parameters in this guy
     """
-    def __init__(self, mesh, dim: int, DirichletBCs: List[DirichletBC]) -> None:
+
+    def __init__(
+        self,
+        mesh,
+        dim: int,
+        DirichletBCs: List[DirichletBC]
+    ) -> None:
         """
         :param functionSpace: ``FunctionSpace`` object
-        :param dim: The number of dims (really the number of active dofs for the physics)
+        :param dim: The number of dims \
+            (really the number of active dofs for the physics)
         :param DirichletBCs: A list of of ``DirichletBC`` objects
         """
-        with Timer('DofManager.__init__'):
+        with Timer("DofManager.__init__"):
             self.fieldShape = mesh.num_nodes, dim
             self.isBc = onp.full(self.fieldShape, False, dtype=bool)
             for ebc in DirichletBCs:
@@ -35,25 +42,33 @@ class DofManager:
             self.bcIndices = self.ids[self.isBc]
 
             ones = onp.ones(self.isBc.size, dtype=int) * -1
-            # self.dofToUnknown = ones.at[self.unknownIndices].set(np.arange(self.unknownIndices.size)) 
+            # self.dofToUnknown = ones.at[self.unknownIndices].\
+            #  set(np.arange(self.unknownIndices.size))
             self.dofToUnknown = ones
-            self.dofToUnknown[self.unknownIndices] = onp.arange(self.unknownIndices.size)
+            self.dofToUnknown[self.unknownIndices] = onp.arange(
+                self.unknownIndices.size
+            )
 
-            self.HessRowCoords, self.HessColCoords = self._make_hessian_coordinates(onp.array(mesh.conns))
+            self.HessRowCoords, self.HessColCoords = \
+                self._make_hessian_coordinates(
+                    onp.array(mesh.conns)
+                )
 
-            self.hessian_bc_mask = self._make_hessian_bc_mask(onp.array(mesh.conns))
+            self.hessian_bc_mask = self._make_hessian_bc_mask(
+                onp.array(mesh.conns)
+            )
 
     def get_bc_size(self) -> int:
         """
         :return: the number of fixed dofs
         """
-        return np.sum(self.isBc).item() # item() method casts to Python int
+        return np.sum(self.isBc).item()  # item() method casts to Python int
 
     def get_unknown_size(self) -> int:
         """
         :return: the size of the unkowns vector
         """
-        return np.sum(self.isUnknown).item() # item() method casts to Python int
+        return np.sum(self.isUnknown).item()  # item() casts to int
 
     def create_field(self, Uu, Ubc=0.0) -> Float[Array, "nn nd"]:
         """
@@ -85,22 +100,24 @@ class DofManager:
         j = self.dofToUnknown.reshape(self.fieldShape)[dofIndexSlice]
         return Uu[j[i]]
 
-    def _make_hessian_coordinates(self, conns: Int[Array, "ne nnpe"]) -> Tuple[Int[Array, "nn"], Int[Array, "nn"]]:
+    def _make_hessian_coordinates(
+        self, conns: Int[Array, "ne nnpe"]
+    ) -> Tuple[Int[Array, "nn"], Int[Array, "nn"]]:
         nElUnknowns = onp.zeros(conns.shape[0], dtype=int)
         nHessianEntries = 0
         for e, eNodes in enumerate(conns):
-            elUnknownFlags = self.isUnknown[eNodes,:].ravel()
+            elUnknownFlags = self.isUnknown[eNodes, :].ravel()
             nElUnknowns[e] = onp.sum(elUnknownFlags)
             nHessianEntries += onp.square(nElUnknowns[e])
 
         rowCoords = onp.zeros(nHessianEntries, dtype=int)
         colCoords = rowCoords.copy()
         rangeBegin = 0
-        for e,eNodes in enumerate(conns):
-            elDofs = self.ids[eNodes,:]
-            elUnknownFlags = self.isUnknown[eNodes,:]
+        for e, eNodes in enumerate(conns):
+            elDofs = self.ids[eNodes, :]
+            elUnknownFlags = self.isUnknown[eNodes, :]
             elUnknowns = self.dofToUnknown[elDofs[elUnknownFlags]]
-            elHessCoords = onp.tile(elUnknowns, (nElUnknowns[e],1))
+            elHessCoords = onp.tile(elUnknowns, (nElUnknowns[e], 1))
 
             rangeEnd = rangeBegin + onp.square(nElUnknowns[e])
 
@@ -110,15 +127,18 @@ class DofManager:
             rangeBegin += onp.square(nElUnknowns[e])
         return rowCoords, colCoords
 
-    def _make_hessian_bc_mask(self, conns: Int[Array, "ne nnpe"]) -> Bool[Array, "ne ndpe ndpe"]:
+    def _make_hessian_bc_mask(
+        self, conns: Int[Array, "ne nnpe"]
+    ) -> Bool[Array, "ne ndpe ndpe"]:
         nElements, nNodesPerElement = conns.shape
         nFields = self.ids.shape[1]
-        nDofPerElement = nNodesPerElement*nFields
+        nDofPerElement = nNodesPerElement * nFields
 
-        hessian_bc_mask = onp.full((nElements,nDofPerElement,nDofPerElement),
-                                   True, dtype=bool)
+        hessian_bc_mask = onp.full(
+            (nElements, nDofPerElement, nDofPerElement), True, dtype=bool
+        )
         for e, eNodes in enumerate(conns):
-            eFlag = self.isBc[eNodes,:].ravel()
-            hessian_bc_mask[e,eFlag,:] = False
-            hessian_bc_mask[e,:,eFlag] = False
+            eFlag = self.isBc[eNodes, :].ravel()
+            hessian_bc_mask[e, eFlag, :] = False
+            hessian_bc_mask[e, :, eFlag] = False
         return hessian_bc_mask
