@@ -8,7 +8,8 @@ _DBL_PRECISION_SIGNIFICAND_BITS = 53
 
 # equivalent to ceil(_DBL_PRECISION_SIGNIFICAND_BITS / 2) as an integer
 _SPLIT_S = -(-_DBL_PRECISION_SIGNIFICAND_BITS // 2)
-_SPLIT_FACTOR = 1<<_SPLIT_S + 1
+_SPLIT_FACTOR = 1 << _SPLIT_S + 1
+
 
 @custom_jvp
 def safe_sqrt(x):
@@ -17,13 +18,10 @@ def safe_sqrt(x):
 
 @safe_sqrt.defjvp
 def safe_sqrt_jvp(xt, vt):
-    x, = xt
-    v, = vt
+    (x,) = xt
+    (v,) = vt
     f = safe_sqrt(x)
-    df = v * lax.cond( x <= 0,
-                       lambda x: 0.,
-                       lambda x: 0.5/f,
-                       x )
+    df = v * lax.cond(x <= 0, lambda x: 0.0, lambda x: 0.5 / f, x)
     return f, df
 
 
@@ -41,7 +39,7 @@ def sum2(a):
         The sum of the numbers in the array
 
 
-    This special sum method computes the result as accurate as if 
+    This special sum method computes the result as accurate as if
     computed in quadruple precision.
 
     Reference:
@@ -49,6 +47,7 @@ def sum2(a):
     SIAM J. Sci. Comput., Vol 26, No 6, pp. 1955-1988.
     doi: 10.1137/030601818
     """
+
     def f(carry, ai):
         p, sigma = carry
         p, q = _two_sum(p, ai)
@@ -89,7 +88,7 @@ def dot2(x, y):
     accumulation of floating point cancellation error that can obscure
     whether an objective function has truly decreased.
 
-    The environment variable setting 
+    The environment variable setting
     'XLA_FLAGS = "--xla_cpu_enable_fast_math=false"'
     is critical for this function to work on the CPU. Otherwise, xla
     apparently sets a flag for LLVM that allows unsafe floating point
@@ -101,6 +100,7 @@ def dot2(x, y):
     doi 10.1137/030601818
 
     """
+
     def f(carry, xy):
         p, s = carry
         xi, yi = xy
@@ -111,23 +111,22 @@ def dot2(x, y):
 
     rawTotal = 0.0
     compensation = 0.0
-    X = np.column_stack((x,y))
-    (rawTotal, compensation), partialSums = lax.scan(f,
-                                                     (rawTotal, compensation),
-                                                     X)
+    X = np.column_stack((x, y))
+    (rawTotal, compensation), partialSums = \
+        lax.scan(f, (rawTotal, compensation), X)
     return rawTotal + compensation
 
 
 def _two_product(a, b):
-    x = a*b
+    x = a * b
     a1, a2 = _float_split(a)
     b1, b2 = _float_split(b)
-    y = a2*b2 - (((x - a1*b1) - a2*b1) - a1*b2)
+    y = a2 * b2 - (((x - a1 * b1) - a2 * b1) - a1 * b2)
     return x, y
 
 
 def _float_split(a):
-    c = _SPLIT_FACTOR*a
+    c = _SPLIT_FACTOR * a
     x = c - (c - a)
     y = a - x
     return x, y
