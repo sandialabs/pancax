@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: main
 jobs:
-  test:
+  lint:
     strategy:
       fail-fast: false
       matrix:
