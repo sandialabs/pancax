@@ -1,53 +1,199 @@
-from .bcs import *
-from .bvps import *
-from .constitutive_models import *
-from .data import *
-from .domains import *
-from .fem import *
+# from .bcs import *
+from .bcs import DirichletBC, NeumannBC
+from .bvps import SimpleShearLinearRamp, UniaxialTensionLinearRamp
+from .constitutive_models import \
+    ConstitutiveModel, \
+    BoundedProperty, \
+    FixedProperty, \
+    Property, \
+    BlatzKo, \
+    Gent, \
+    Hencky, \
+    NeoHookean, \
+    Swanson, \
+    PronySeries, \
+    SimpleFeFv, \
+    WLF
+from .data import FullFieldData, GlobalData
+from .domains import CollocationDomain, DeltaPINNDomain, VariationalDomain
+from .fem import \
+    DofManager, \
+    FunctionSpace, \
+    NonAllocatedFunctionSpace, \
+    construct_function_space, \
+    Mesh, \
+    construct_mesh_from_basic_data, \
+    create_edges, \
+    create_higher_order_mesh_from_simplex_mesh, \
+    create_nodesets_from_sidesets, \
+    create_structured_mesh_data, \
+    QuadratureRule, \
+    read_exodus_mesh, \
+    assemble_sparse_stiffness_matrix, \
+    Hex8Element, \
+    LineElement, \
+    Quad4Element, \
+    Quad9Element, \
+    SimplexTriElement, \
+    Tet4Element, \
+    Tet10Element
 from .history_writer import EnsembleHistoryWriter, HistoryWriter
-from .logging import EnsembleLogger, Logger, log_loss
-from .loss_functions import *
-from .networks import *
-from .optimizers import *
-from .physics_kernels import *
+from .logging import EnsembleLogger, Logger
+from .loss_functions import \
+    DirichletBCLoss, \
+    NeumannBCLoss, \
+    FullFieldDataLoss, \
+    ICLossFunction, \
+    StrongFormResidualLoss, \
+    CombineLossFunctions, \
+    EnergyLoss, \
+    EnergyAndResidualLoss, \
+    EnergyResidualAndReactionLoss, \
+    ResidualMSELoss
+from .networks import \
+    Field, \
+    FieldPhysicsPair, \
+    Linear, \
+    MLP, \
+    MLPBasis, \
+    Network, \
+    Parameters
+from .optimizers import Adam
+from .physics_kernels import \
+    BasePhysics, \
+    BaseEnergyFormPhysics, \
+    BaseStrongFormPhysics, \
+    BaseVariationalFormPhysics, \
+    BeerLambertLaw, \
+    BurgersEquation, \
+    HeatEquation, \
+    LaplaceBeltrami, \
+    Poisson, \
+    SolidMechanics, \
+    BaseMechanicsFormulation, \
+    IncompressiblePlaneStress, \
+    PlaneStrain, \
+    ThreeDimensional
 from .post_processor import PostProcessor
-from .problems import *
-from .trainer import Trainer
+from .problems import ForwardProblem, InverseProblem
+# from .trainer import Trainer
 from .utils import find_data_file, find_mesh_file
-from jax import jit
 from jax import numpy as jnp
 from jax import random
-from jax import vmap
 from pathlib import Path
+
 import equinox as eqx
 import jax
 import matplotlib.pyplot as plt
 import optax
 import os
 
-__all__ = \
-  bcs.__all__ + \
-  bvps.__all__ + \
-  constitutive_models.__all__ + \
-  data.__all__ + \
-  domains.__all__ + \
-  fem.__all__ + \
-  loss_functions.__all__ + \
-  networks.__all__ + \
-  optimizers.__all__ + \
-  physics_kernels.__all__ + \
-  problems.__all__ + \
-[
-  # pancax modules
-  # "constitutive_models",
-  # "domains",
-  # pancax classes not handled by above
-  "Logger",
-  "PostProcessor",
-  # pancax helper methods
-  "find_mesh_file",
-  # other helper modules
-  "jax",
-  "jnp",
-  "random"
+__all__ = [
+    # bcs
+    "DirichletBC",
+    "NeumannBC",
+    # bvps
+    "SimpleShearLinearRamp",
+    "UniaxialTensionLinearRamp",
+    # constitutive models
+    "ConstitutiveModel",
+    "BoundedProperty",
+    "FixedProperty",
+    "Property",
+    "BlatzKo",
+    "Gent",
+    "Hencky",
+    "NeoHookean",
+    "Swanson",
+    "PronySeries",
+    "SimpleFeFv",
+    "WLF",
+    # "data",
+    "FullFieldData",
+    "GlobalData",
+    # domains
+    "CollocationDomain",
+    "DeltaPINNDomain",
+    "VariationalDomain",
+    # fem
+    "DofManager",
+    "FunctionSpace",
+    "NonAllocatedFunctionSpace",
+    "construct_function_space",
+    "Mesh",
+    "construct_mesh_from_basic_data",
+    "create_edges",
+    "create_higher_order_mesh_from_simplex_mesh",
+    "create_nodesets_from_sidesets",
+    "create_structured_mesh_data",
+    "QuadratureRule",
+    "read_exodus_mesh",
+    "assemble_sparse_stiffness_matrix",
+    # elements module
+    "Hex8Element",
+    "LineElement",
+    "Quad4Element",
+    "Quad9Element",
+    "SimplexTriElement",
+    "Tet4Element",
+    "Tet10Element",
+    # history writers
+    "EnsembleHistoryWriter",
+    "HistoryWriter",
+    # loggers
+    "EnsembleLogger",
+    "Logger",
+    # loss functions
+    "DirichletBCLoss",
+    "NeumannBCLoss",
+    "FullFieldDataLoss",
+    "ICLossFunction",
+    "StrongFormResidualLoss",
+    "CombineLossFunctions",
+    "EnergyLoss",
+    "EnergyAndResidualLoss",
+    "EnergyResidualAndReactionLoss",
+    "ResidualMSELoss",
+    # networks
+    "Field",
+    "FieldPhysicsPair",
+    "Linear",
+    "MLP",
+    "MLPBasis",
+    "Network",
+    "Parameters",
+    # optimizers
+    "Adam",
+    # physics
+    "BasePhysics",
+    "BaseEnergyFormPhysics",
+    "BaseStrongFormPhysics",
+    "BaseVariationalFormPhysics",
+    "BeerLambertLaw",
+    "BurgersEquation",
+    "HeatEquation",
+    "LaplaceBeltrami",
+    "Poisson",
+    "BaseMechanicsFormulation",
+    "IncompressiblePlaneStress",
+    "PlaneStrain",
+    "ThreeDimensional",
+    "SolidMechanics",
+    # post-processors
+    "PostProcessor",
+    # problems
+    "ForwardProblem",
+    "InverseProblem",
+    # pancax helper methods
+    "find_data_file",
+    "find_mesh_file",
+    # other helper modules
+    "eqx",
+    "jax",
+    "jnp",
+    "optax",
+    "os",
+    "plt",
+    "random",
+    "Path"
 ]

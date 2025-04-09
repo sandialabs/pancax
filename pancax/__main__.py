@@ -18,7 +18,7 @@ parser.add_argument(
     help='Input file for pancax to run'
 )
 parser.add_argument(
-    '-p', '--precision', 
+    '-p', '--precision',
     default='double', help='Floating point precision to use'
 )
 args = parser.parse_args()

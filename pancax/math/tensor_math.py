@@ -694,10 +694,10 @@ def sqrtm_dbp(A):
 
         Y = X
         N = linalg.inv(M)
-        I = np.identity(dim)
-        X = 0.5 * X @ (I + N)
-        M = 0.5 * (I + 0.5 * (M + N))
-        error = np.linalg.norm(M - I, "fro")
+        Iden = np.identity(dim)
+        X = 0.5 * X @ (Iden + N)
+        M = 0.5 * (Iden + 0.5 * (M + N))
+        error = np.linalg.norm(M - Iden, "fro")
         diff = np.linalg.norm(X - Y, "fro") / np.linalg.norm(X, "fro")
         k += 1
         return (X, M, error, k, diff)
@@ -792,13 +792,13 @@ def _logm_iss(A):
 
 def log_pade_pf(A, n):
     """Logarithmic map by Padé approximant and partial fractions"""
-    I = np.identity(A.shape[0])
+    Iden = np.identity(A.shape[0])
     X = np.zeros_like(A)
     quadPrec = 2 * n - 1
     xs, ws = create_padded_quadrature_rule_1D(quadPrec)
 
     def get_log_inc(A, x, w):
-        B = I + x * A
+        B = Iden + x * A
         dXT = w * linalg.solve(B.T, A.T)
         return dXT
 
