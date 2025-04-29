@@ -47,16 +47,20 @@ class Parameters(BasePancaxModel):
             nt = len(problem.domain.times)
             ne = problem.domain.conns.shape[0]
             nq = len(problem.domain.fspace.quadrature_rule)
-            # ns = 0
-            if problem.physics.constitutive_model.num_state_variables > 0:
-                # assert False 'Need to implement this'
-                def _vmap_func(n):
-                    return problem.physics.constitutive_model.initial_state()
 
-                state = vmap(vmap(vmap(_vmap_func)))(jnp.zeros((nt, ne, nq)))
-                print(state.shape)
-            else:
-                state = jnp.zeros((nt, ne, nq, 0))
+            # TODO need a better interface
+            if hasattr(problem.physics, 'constitutive_model'):
+                if problem.physics.constitutive_model.num_state_variables > 0:
+                    def _vmap_func(n):
+                        return problem.physics.constitutive_model.\
+                            initial_state()
+
+                    state = vmap(vmap(vmap(_vmap_func)))(
+                        jnp.zeros((nt, ne, nq))
+                    )
+                    print(state.shape)
+                else:
+                    state = jnp.zeros((nt, ne, nq, 0))
             return state
         else:
             print(

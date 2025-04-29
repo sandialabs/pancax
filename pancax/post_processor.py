@@ -109,7 +109,6 @@ class ExodusPostProcessor(BasePostProcessor):
         self.element_variables = element_variables
 
         with nc.Dataset(self.mesh_file, "r") as src:
-            print(src.data_model)
             with nc.Dataset(output_file, "w", format=src.data_model) as dst:
                 # Copy global attributes from the
                 # source file to the destination file
