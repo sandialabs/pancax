@@ -48,8 +48,10 @@ parser = argparse.ArgumentParser(
     epilog='Reach out to chamel@sandia.gov for help'
 )
 parser.add_argument(
-    '--debug-nans',
-    default='off',
+    '-d', '--debug-nans',
+    # default='off',
+    action='store_true',
+    default=False,
     help='Flag to debug nans. Options are on or off.'
 )
 parser.add_argument(
@@ -66,16 +68,23 @@ parser.add_argument(
     default='double',
     help='Floating point precision to use. Options are single or double.'
 )
+parser.add_argument(
+    '-v', '--verbose',
+    action='store_true',
+    default=False,
+    help='Whether or not to print to console.'
+)
 args = parser.parse_args()
 
+print(code_name)
+
 # switch on debug state
-if args.debug_nans == 'on':
+# if args.debug_nans == 'on':
+if args.debug_nans:
     print('Debugging NaNs')
     jax.config.update('jax_debug_nans', True)
-elif args.debug_nans == 'off':
-    jax.config.update('jax_debug_nans', False)
 else:
-    raise ValueError('debug nans can only be on or off')
+    jax.config.update('jax_debug_nans', False)
 
 # switch on different precision levels
 if args.precision == 'double':
@@ -100,8 +109,9 @@ print(f'Writing output to {log_file}')
 
 with open(log_file, 'w') as log:
     # direct output to log
-    sys.stdout = log
-    sys.stderr = log
+    if not args.verbose:
+        sys.stdout = log
+        sys.stderr = log
     print(code_name, flush=True)
     # read input file and run it
     if input_file.suffix == '.py':
