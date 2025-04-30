@@ -30,13 +30,20 @@ def gent_2():
 
 
 def simple_shear_test(model):
+  theta = 0.
+  state_old = jnp.zeros((100, 0))
+  dt = 1.
   gammas = jnp.linspace(0.0, 1., 100)
   Fs = jax.vmap(simple_shear)(gammas)
   grad_us = jax.vmap(lambda F: F - jnp.eye(3))(Fs)
   Js = jax.vmap(model.jacobian)(grad_us)
   I1_bars = jax.vmap(model.I1_bar)(grad_us)
-  psis = jax.vmap(model.energy, in_axes=(0,))(grad_us)
-  sigmas = jax.vmap(model.cauchy_stress, in_axes=(0,))(grad_us)
+  psis, _ = jax.vmap(model.energy, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
+  sigmas, _ = jax.vmap(model.cauchy_stress, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
 
   for (psi, sigma, gamma, I1_bar, J) in zip(psis, sigmas, gammas, I1_bars, Js):
     psi_an = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J)) + \
@@ -59,14 +66,21 @@ def simple_shear_test(model):
 
 
 def uniaxial_strain_test(model):
+  theta = 0.
+  state_old = jnp.zeros((100, 0))
+  dt = 1.
   lambdas = jnp.linspace(1., 2., 100)
   Fs = jax.vmap(uniaxial_strain)(lambdas)
   grad_us = jax.vmap(lambda F: F - jnp.eye(3))(Fs)
   Js = jax.vmap(model.jacobian)(grad_us)
   I1_bars = jax.vmap(model.I1_bar)(grad_us)
-  psis = jax.vmap(model.energy, in_axes=(0,))(grad_us)
-  sigmas = jax.vmap(model.cauchy_stress, in_axes=(0,))(grad_us)
-
+  psis, _ = jax.vmap(model.energy, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
+  sigmas, _ = jax.vmap(model.cauchy_stress, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
+  
   for (psi, sigma, lambda_, I1_bar, J) in zip(psis, sigmas, lambdas, I1_bars, Js):
     psi_an = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J)) + \
               -0.5 * G * Jm * jnp.log(1. - (I1_bar - 3.) / Jm)

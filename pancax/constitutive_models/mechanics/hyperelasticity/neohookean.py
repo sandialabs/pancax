@@ -17,7 +17,7 @@ class NeoHookean(HyperelasticModel):
     bulk_modulus: Property
     shear_modulus: Property
 
-    def energy(self, grad_u: Tensor) -> Scalar:
+    def energy(self, grad_u: Tensor, theta: Scalar, state_old, dt: Scalar) -> Scalar:
         K, G = self.bulk_modulus, self.shear_modulus
 
         # kinematics
@@ -28,4 +28,4 @@ class NeoHookean(HyperelasticModel):
         W_vol = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J))
         W_dev = 0.5 * G * (I_1_bar - 3.0)
 
-        return W_vol + W_dev
+        return W_vol + W_dev, state_old

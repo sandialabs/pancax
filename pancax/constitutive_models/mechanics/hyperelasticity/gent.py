@@ -19,7 +19,7 @@ class Gent(HyperelasticModel):
     shear_modulus: Property
     Jm_parameter: Property
 
-    def energy(self, grad_u):
+    def energy(self, grad_u, theta, state_old, dt):
         # unpack properties
         K, G, Jm = self.bulk_modulus, self.shear_modulus, self.Jm_parameter
 
@@ -36,4 +36,4 @@ class Gent(HyperelasticModel):
         # constitutive
         W_vol = 0.5 * K * (0.5 * (J**2 - 1) - jnp.log(J))
         W_dev = -0.5 * G * Jm * jnp.log(1.0 - ((I_1_bar - 3.0) / Jm))
-        return W_vol + W_dev
+        return W_vol + W_dev, state_old
