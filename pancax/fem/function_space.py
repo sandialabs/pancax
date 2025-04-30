@@ -68,6 +68,10 @@ class NonAllocatedFunctionSpace(eqx.Module):
             Js, self.quadrature_rule.wgauss
         )
 
+    @property
+    def num_quadrature_points(self):
+        return len(self.quadrature_rule)
+
     def shape_function_values(
         self, X: Float[Array, "nn nd"]
     ) -> Float[Array, "nq nnpe"]:
