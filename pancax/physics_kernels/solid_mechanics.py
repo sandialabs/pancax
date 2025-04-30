@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from .base import BaseEnergyFormPhysics
+from jax import vmap
 from pancax.math.tensor_math import tensor_2D_to_3D
 import equinox as eqx
 import jax.numpy as jnp
@@ -69,6 +70,76 @@ class SolidMechanics(BaseEnergyFormPhysics):
         self.constitutive_model = constitutive_model
         self.formulation = formulation
 
-    def energy(self, params, x, t, u, grad_u, *args):
+    def energy(self, params, x, t, u, grad_u, state_old, dt, *args):
+        theta = 60.
         grad_u = self.formulation.modify_field_gradient(grad_u)
-        return self.constitutive_model.energy(grad_u)
+        return self.constitutive_model.energy(grad_u, theta, state_old, dt)
+
+    def update_var_name_to_method(self):
+        # var_name_to_method = standard_pp(self)
+        # new_pytree = eqx.tree_at(
+        #     lambda x: x.var_name_to_method, self, var_name_to_method
+        # )
+        new_pytree = super().update_var_name_to_method()
+
+        def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
+            coords, conns, fspace = domain.coords, domain.conns, domain.fspace
+            us = us[conns, :]
+            xs = coords[conns, :]
+
+            def _vmap_func(x, u):
+                vs = fspace.shape_function_values(x)
+                grad_vs = fspace.shape_function_gradients(x)
+                JxWs = fspace.JxWs(x)
+                xs = vmap(lambda y: jnp.dot(y, x))(vs)
+                us = vmap(lambda y: jnp.dot(y, u))(vs)
+                grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+                return xs, us, grad_us, JxWs
+
+            xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+            grad_us = vmap(vmap(self.formulation.modify_field_gradient))(grad_us)
+
+            vals = vmap(vmap(func))(grad_us)
+            return vals
+
+        var_name_to_method = new_pytree.var_name_to_method
+        func = lambda p, d, t, u, s, dt, *args: kinematic_method(
+            self.constitutive_model.deformation_gradient, 
+            p, d, t, u, s, dt, *args
+        )
+
+        var_name_to_method["deformation_gradients"] = {
+            "method": func,
+            "names": (
+                "F_xx", "F_xy", "F_xz",
+                "F_yx", "F_yy", "F_yz",
+                "F_zx", "F_zy", "F_zz"
+            )
+        }
+
+        return new_pytree
+
+
+# class SolidMechanicsWithState(PathDependentPhysics):
+#     field_value_names: tuple[str, ...]
+#     constitutive_model: any
+#     formulation: BaseMechanicsFormulation
+
+#     def __init__(self, constitutive_model, formulation) -> None:
+#         field_value_names = ("displ_x", "displ_y")
+#         super().__init__(field_value_names)
+#         if formulation.n_dimensions > 2:
+#             field_value_names = field_value_names + ("displ_z",)
+
+#         self.field_value_names = field_value_names
+#         self.constitutive_model = constitutive_model
+#         self.formulation = formulation
+
+#     def energy(self, params, x, t, dt, u, grad_u, state_old, *args):
+#         theta = 60.0
+#         grad_u = self.formulation.modify_field_gradient(grad_u)
+#         psi, state_new = self.constitutive_model.energy(grad_u, theta, state_old, dt)
+#         return psi, state_new
+#         # psi = self.constitutive_model.energy(grad_u)
+#         # return psi, state_old
+
