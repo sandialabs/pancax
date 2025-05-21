@@ -10,11 +10,11 @@ import numpy as onp
 
 
 def element_pp(
-    func, 
+    func,
     # constitutive_model,
-    # formulation, 
+    # formulation,``
     physics,
-    is_kinematic_method=False, 
+    is_kinematic_method=False,
     is_state_method=False,
     jit=True
 ):
@@ -33,7 +33,9 @@ def element_pp(
             return xs, us, grad_us, JxWs
 
         xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
-        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(grad_us)
+        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
+            grad_us
+        )
 
         vals = vmap(vmap(func))(grad_us)
         return vals
@@ -56,24 +58,26 @@ def element_pp(
         in_axes_1 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
         in_axes_2 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
 
-        # grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(grad_us)
-        _, state_news = vmap(vmap(func, in_axes=in_axes_2), in_axes=in_axes_1)(
-            params, xs, t, us, grad_us, state_old, dt
+        _, state_news = vmap(
+            vmap(func, in_axes=in_axes_2), in_axes=in_axes_1)(
+                params, xs, t, us, grad_us, state_old, dt
         )
         return state_news
         # vals = vmap(vmap(func))(grad_us)
         # return vals
 
     if is_kinematic_method:
-        new_func = lambda p, d, t, u, s, dt, *args: kinematic_method(
-            physics.constitutive_model.deformation_gradient, 
-            p, d, t, u, s, dt, *args
-        )
+        def new_func(p, d, t, u, s, dt, *args):
+            return kinematic_method(
+                physics.constitutive_model.deformation_gradient,
+                p, d, t, u, s, dt, *args
+            )
     elif is_state_method:
-        new_func = lambda p, d, t, u, s, dt, *args: state_method(
-            physics.energy, 
-            p, d, t, u, s, dt, *args
-        )
+        def new_func(p, d, t, u, s, dt, *args):
+            return state_method(
+                physics.energy,
+                p, d, t, u, s, dt, *args
+            )
     else:
         assert False, 'Only kinematic methods are currently supported'
 
@@ -81,6 +85,7 @@ def element_pp(
         new_func = eqx.filter_jit(new_func)
 
     return new_func
+
 
 # TODO clean this up
 def nodal_pp(func, has_props=False, jit=True):
@@ -265,7 +270,10 @@ class BaseEnergyFormPhysics(BasePhysics):
         )
         return jnp.dot(JxWs, pis)
 
-    def element_energy(self, params, xs, t, us, grad_us, JxWs, state_old, dt, *args):
+    def element_energy(
+        self,
+        params, xs, t, us, grad_us, JxWs, state_old, dt, *args
+    ):
         in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
         pis, state_new = vmap(self.energy, in_axes=in_axes)(
             params, xs, t, us, grad_us, state_old, dt, *args
@@ -289,7 +297,10 @@ class BaseEnergyFormPhysics(BasePhysics):
         )
         return jnp.dot(JxWs, pis)
 
-    def element_kinetic_energy(self, params, xs, t, us, grad_us, JxWs, state_old, dt, *args):
+    def element_kinetic_energy(
+        self,
+        params, xs, t, us, grad_us, JxWs, state_old, dt, *args
+    ):
         in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
         pis, state_new = vmap(self.kinetic_energy, in_axes=in_axes)(
             params, xs, t, us, grad_us, state_old, dt, *args
@@ -331,7 +342,8 @@ class BaseEnergyFormPhysics(BasePhysics):
     # TODO only works on a single block
     def potential_energy(self, params, domain, t, us, state_old, dt, *args):
         return self.potential_energy_on_block(
-            params, domain.coords, t, us, domain.fspace, domain.conns, state_old, dt, *args
+            params, domain.coords, t,
+            us, domain.fspace, domain.conns, state_old, dt, *args
         )
 
     def potential_energy_and_internal_force(
@@ -392,12 +404,16 @@ class BaseEnergyFormPhysics(BasePhysics):
             onp.asarray(fs), onp.asarray(domain.conns), dof_manager
         )
 
-    def vmap_element_energy(self, params, xs, t, us, grad_us, JxWs, state_old, dt, *args):
+    def vmap_element_energy(
+        self,
+        params, xs, t, us, grad_us, JxWs, state_old, dt, *args
+    ):
         in_axes = (None, 0, None, 0, 0, 0, 0, None) + len(args) * (None,)
         pis, state_new = vmap(self.element_energy, in_axes=in_axes)(
             params, xs, t, us, grad_us, JxWs, state_old, dt, *args
         )
         return jnp.sum(pis), state_new
+
 
 class BaseStrongFormPhysics(BasePhysics):
     field_value_names: tuple[int, ...]

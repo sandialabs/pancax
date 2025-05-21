@@ -17,7 +17,10 @@ class NeoHookean(HyperelasticModel):
     bulk_modulus: Property
     shear_modulus: Property
 
-    def energy(self, grad_u: Tensor, theta: Scalar, state_old, dt: Scalar) -> Scalar:
+    def energy(
+        self,
+        grad_u: Tensor, theta: Scalar, state_old, dt: Scalar
+    ) -> Scalar:
         K, G = self.bulk_modulus, self.shear_modulus
 
         # kinematics

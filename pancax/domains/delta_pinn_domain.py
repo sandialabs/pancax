@@ -43,8 +43,12 @@ class DeltaPINNDomain(VariationalDomain):
         state_old = jnp.zeros((ne, nq, 0))
         dt = 0.
         # TODO need to define these methods
-        K = self.physics.stiffness_matrix((), self, 0.0, U, state_old, dt, dof_manager)
-        M = self.physics.mass_matrix((), self, 0.0, U, state_old, dt, dof_manager)
+        K = self.physics.stiffness_matrix(
+            (), self, 0.0, U, state_old, dt, dof_manager
+        )
+        M = self.physics.mass_matrix(
+            (), self, 0.0, U, state_old, dt, dof_manager
+        )
 
         with Timer("eigen solve"):
             nModes = self.n_eigen_values

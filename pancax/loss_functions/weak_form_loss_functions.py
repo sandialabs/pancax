@@ -36,11 +36,13 @@ class EnergyLoss(PhysicsLossFunction):
         field, physics, state = params
         # hack for now, need a zero sized state var array
         state_old = jnp.zeros((
-            problem.domain.conns.shape[0], 
+            problem.domain.conns.shape[0],
             problem.domain.fspace.num_quadrature_points, 0
         ))
         us = physics.vmap_field_values(field, problem.coords, t)
-        pi, state_new = physics.potential_energy(physics, problem.domain, t, us, state_old, dt)
+        pi, state_new = physics.potential_energy(
+            physics, problem.domain, t, us, state_old, dt
+        )
         return pi
 
 
@@ -179,7 +181,6 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
             t = problem.times[n]
             pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
 
-
             state_old = state_new
             pi = pi + pi_t
 
@@ -209,13 +210,17 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
             state_old = state_new
             carry = pi, state_old
             return carry
-        
-        pi, state_old = jax.lax.fori_loop(0, len(problem.times), body, (pi, state_old))
+
+        pi, state_old = jax.lax.fori_loop(
+            0, len(problem.times), body, (pi, state_old)
+        )
         loss = pi
         return self.weight * loss, dict(energy=pi)
 
     def load_step(self, params, problem, t, dt, state_old):
         field, physics, state = params
         us = physics.vmap_field_values(field, problem.coords, t)
-        pi, state_new = physics.potential_energy(physics, problem.domain, t, us, state_old, dt)
+        pi, state_new = physics.potential_energy(
+            physics, problem.domain, t, us, state_old, dt
+        )
         return pi, state_new

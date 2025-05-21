@@ -6,7 +6,10 @@ import jax.numpy as jnp
 class BlatzKo(HyperelasticModel):
     shear_modulus: Property
 
-    def energy(self, grad_u: Tensor, theta: Scalar, state_old, dt: Scalar) -> Scalar:
+    def energy(
+        self,
+        grad_u: Tensor, theta: Scalar, state_old, dt: Scalar
+    ) -> Scalar:
         # unpack properties
         G = self.shear_modulus
 

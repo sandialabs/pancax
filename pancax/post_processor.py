@@ -190,7 +190,8 @@ class ExodusPostProcessor(BasePostProcessor):
                                 name = f"{v}_{q + 1}"
                                 name = name.ljust(max_str_len)[:max_str_len]
                                 elem_var_names[n, :] = onp.array(list(name))
-                                # NOTE this will only work for single block meshes
+                                # NOTE this will only work for
+                                # single block meshes
                                 name = f"vals_elem_var{n + 1}eb1"
                                 new_var = dst.createVariable(
                                     name, "double", ("time_step", "num_elem")
@@ -226,7 +227,9 @@ class ExodusPostProcessor(BasePostProcessor):
                 )
                 # calculate something with state update at least once to update
                 # state later
-                _, state_new = physics.potential_energy(params, problem.domain, time, us, state_old, dt)
+                _, state_new = physics.potential_energy(
+                    params, problem.domain, time, us, state_old, dt
+                )
 
                 node_var_num = 0
                 for var in self.node_variables:
@@ -270,24 +273,25 @@ class ExodusPostProcessor(BasePostProcessor):
 
                 elem_var_num = 0
                 for var in self.element_variables:
-                    # us = physics.var_name_to_method["field_values"]["method"](
-                    #     params, problem, time
-                    # )
                     output = physics.var_name_to_method[var]
                     pred = onp.array(
-                        output["method"](params, problem, time, us, state_old, dt)
+                        output["method"](
+                            params, problem, time, us, state_old, dt
+                        )
                     )
 
                     # for q in range(pred.shape[1]):
-                        # for i in range(pred.shape[2])
+                    # for i in range(pred.shape[2])
                     if len(pred.shape) == 2:
-                        assert False, "Need to implement scalar element variable output"
+                        assert False, \
+                            "Need to implement scalar element variable output"
                     elif len(pred.shape) == 3:
                         # this is the state variable case
                         for s in range(pred.shape[2]):
                             for q in range(pred.shape[1]):
                                 elem_var = dataset.variables[
-                                    # NOTE this will only work for single block models
+                                    # NOTE this will only work for
+                                    # single block models
                                     f"vals_elem_var{elem_var_num + 1}eb1"
                                 ]
                                 elem_var[n, :] = pred[:, q, s]
@@ -297,8 +301,8 @@ class ExodusPostProcessor(BasePostProcessor):
                         for i in range(temp.shape[2]):
                             for q in range(pred.shape[1]):
                                 elem_var = dataset.variables[
-                                    # f"vals_elem_var{elem_var_num + 1}_{q + 1}"
-                                    # NOTE this will only work for single block models
+                                    # NOTE this will only work for
+                                    # single block models
                                     f"vals_elem_var{elem_var_num + 1}eb1"
                                 ]
                                 elem_var[n, :] = temp[:, q, i]
@@ -308,6 +312,7 @@ class ExodusPostProcessor(BasePostProcessor):
 
                 # finally update state
                 state_old = state_new
+
 
 class ExodusPostProcessor_old:
     def __init__(self, mesh_file: str) -> None:
