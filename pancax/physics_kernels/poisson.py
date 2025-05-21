@@ -11,10 +11,10 @@ class Poisson(BaseEnergyFormPhysics, BaseStrongFormPhysics):
         super().__init__(("u"))
         self.f = f
 
-    def energy(self, params, x, t, u, grad_u, *args):
+    def energy(self, params, x, t, u, grad_u, state_old, dt, *args):
         f = self.f(x)
         pi = 0.5 * jnp.dot(grad_u, grad_u.T) - f * u
-        return jnp.sum(pi)
+        return jnp.sum(pi), state_old
 
     def strong_form_neumann_bc(self, params, x, t, n, *args):
         grad_u = self.field_gradients(params, x, t, *args)

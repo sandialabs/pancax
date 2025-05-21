@@ -29,5 +29,5 @@ __all__ = [
     "IncompressiblePlaneStress",
     "PlaneStrain",
     "ThreeDimensional",
-    "SolidMechanics",
+    "SolidMechanics"
 ]

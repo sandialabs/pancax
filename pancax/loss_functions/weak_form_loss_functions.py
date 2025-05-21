@@ -1,6 +1,7 @@
 from .base_loss_function import PhysicsLossFunction
 from jax import vmap
 from typing import Optional
+import jax
 import jax.numpy as jnp
 
 
@@ -23,17 +24,25 @@ class EnergyLoss(PhysicsLossFunction):
         self.weight = weight
 
     def __call__(self, params, problem):
-        energies = vmap(self.load_step, in_axes=(None, None, 0))(
-            params, problem, problem.times
+        dt = problem.times[1] - problem.times[0]
+        energies = vmap(self.load_step, in_axes=(None, None, 0, None))(
+            params, problem, problem.times, dt
         )
         energy = jnp.sum(energies)
         loss = energy
         return self.weight * loss, dict(energy=energy)
 
-    def load_step(self, params, problem, t):
+    def load_step(self, params, problem, t, dt):
         field, physics, state = params
+        # hack for now, need a zero sized state var array
+        state_old = jnp.zeros((
+            problem.domain.conns.shape[0],
+            problem.domain.fspace.num_quadrature_points, 0
+        ))
         us = physics.vmap_field_values(field, problem.coords, t)
-        pi = physics.potential_energy(physics, problem.domain, t, us)
+        pi, state_new = physics.potential_energy(
+            physics, problem.domain, t, us, state_old, dt
+        )
         return pi
 
 
@@ -150,14 +159,68 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
     def __init__(self, weight: Optional[float] = 1.0) -> None:
         self.weight = weight
 
-    def __call__(self, params, domain):
-        # TODO for a naive implementation
-        pass
+    def __call__old(self, params, problem):
+        field, physics, state = params
 
-    def load_step(self, field, physics, state_old, t, dt):
-        us = physics.vmap_field_values(field, domain.coords, t)
-        pi, state_new = physics.potential_energy(
-            physics,
+        ne = problem.domain.conns.shape[0]
+        nq = len(problem.domain.fspace.quadrature_rule)
+
+        def _vmap_func(n):
+            return problem.physics.constitutive_model.\
+                initial_state()
+
+        state_old = vmap(vmap(_vmap_func))(
+            jnp.zeros((ne, nq))
         )
-        print(us)
-        assert False, 'Implement this'
+
+        # TODO not adaptive
+        # dumb implementation below
+        dt = problem.times[1] - problem.times[0]
+        pi = 0.0
+        for n in range(problem.times.shape[0]):
+            t = problem.times[n]
+            pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
+
+            state_old = state_new
+            pi = pi + pi_t
+
+        loss = pi
+        return self.weight * loss, dict(energy=pi)
+
+    def __call__(self, params, problem):
+
+        ne = problem.domain.conns.shape[0]
+        nq = len(problem.domain.fspace.quadrature_rule)
+
+        def _vmap_func(n):
+            return problem.physics.constitutive_model.\
+                initial_state()
+
+        dt = problem.times[1] - problem.times[0]
+        pi = 0.0
+        state_old = vmap(vmap(_vmap_func))(
+            jnp.zeros((ne, nq))
+        )
+
+        def body(n, carry):
+            pi, state_old = carry
+            t = problem.times[n]
+            pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
+            pi = pi + pi_t
+            state_old = state_new
+            carry = pi, state_old
+            return carry
+
+        pi, state_old = jax.lax.fori_loop(
+            0, len(problem.times), body, (pi, state_old)
+        )
+        loss = pi
+        return self.weight * loss, dict(energy=pi)
+
+    def load_step(self, params, problem, t, dt, state_old):
+        field, physics, state = params
+        us = physics.vmap_field_values(field, problem.coords, t)
+        pi, state_new = physics.potential_energy(
+            physics, problem.domain, t, us, state_old, dt
+        )
+        return pi, state_new

@@ -38,9 +38,17 @@ class DeltaPINNDomain(VariationalDomain):
         dof_manager = DofManager(self.mesh, 1, [])
         Uu = jnp.zeros(dof_manager.get_unknown_size())
         U = dof_manager.create_field(Uu)
+        ne = self.conns.shape[0]
+        nq = len(self.fspace.quadrature_rule)
+        state_old = jnp.zeros((ne, nq, 0))
+        dt = 0.
         # TODO need to define these methods
-        K = self.physics.stiffness_matrix((), self, 0.0, U, dof_manager)
-        M = self.physics.mass_matrix((), self, 0.0, U, dof_manager)
+        K = self.physics.stiffness_matrix(
+            (), self, 0.0, U, state_old, dt, dof_manager
+        )
+        M = self.physics.mass_matrix(
+            (), self, 0.0, U, state_old, dt, dof_manager
+        )
 
         with Timer("eigen solve"):
             nModes = self.n_eigen_values

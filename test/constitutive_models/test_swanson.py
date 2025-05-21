@@ -44,14 +44,21 @@ def swanson_2():
 
 
 def simple_shear_test(model):
+  theta = 0.
+  state_old = jnp.zeros((100, 0))
+  dt = 1.
   gammas = jnp.linspace(0.05, 1., 100)
   Fs = jax.vmap(simple_shear)(gammas)
   grad_us = jax.vmap(lambda F: F - jnp.eye(3))(Fs)
   B_bars = jax.vmap(lambda F: jnp.power(jnp.linalg.det(F), -2. / 3.) * F @ F.T)(Fs)
   Js = jax.vmap(model.jacobian)(grad_us)
   I1_bars = jax.vmap(model.I1_bar)(grad_us)
-  psis = jax.vmap(model.energy, in_axes=(0,))(grad_us)
-  sigmas = jax.vmap(model.cauchy_stress, in_axes=(0,))(grad_us)
+  psis, _ = jax.vmap(model.energy, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
+  sigmas, _ = jax.vmap(model.cauchy_stress, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
 
   for (psi, sigma, I1_bar, J, B_bar) in zip(psis, sigmas, I1_bars, Js, B_bars):
     psi_an = K * (J * jnp.log(J) - J + 1.) + \
@@ -69,14 +76,21 @@ def simple_shear_test(model):
 
 
 def uniaxial_strain_test(model):
+  theta = 0.
+  state_old = jnp.zeros((100, 0))
+  dt = 1.
   lambdas = jnp.linspace(1.2, 4., 100)
   Fs = jax.vmap(uniaxial_strain)(lambdas)
   grad_us = jax.vmap(lambda F: F - jnp.eye(3))(Fs)
   B_bars = jax.vmap(lambda F: jnp.power(jnp.linalg.det(F), -2. / 3.) * F @ F.T)(Fs)
   Js = jax.vmap(model.jacobian)(grad_us)
   I1_bars = jax.vmap(model.I1_bar)(grad_us)
-  psis = jax.vmap(model.energy, in_axes=(0,))(grad_us)
-  sigmas = jax.vmap(model.cauchy_stress, in_axes=(0,))(grad_us)
+  psis, _ = jax.vmap(model.energy, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
+  sigmas, _ = jax.vmap(model.cauchy_stress, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
 
   for (psi, sigma, I1_bar, J, B_bar) in zip(psis, sigmas, I1_bars, Js, B_bars):
     psi_an = K * (J * jnp.log(J) - J + 1.) + \

@@ -28,6 +28,9 @@ def hencky_2():
 # TODO fix this test
 
 def simple_shear_test(model):
+  theta = 0.
+  state_old = jnp.zeros((100, 0))
+  dt = 1.
   gammas = jnp.linspace(0.0, 1., 100)
   Fs = jax.vmap(simple_shear)(gammas)
   grad_us = jax.vmap(lambda F: F - jnp.eye(3))(Fs)
@@ -39,8 +42,12 @@ def simple_shear_test(model):
   print(trEs)
   # Edevs = jax.vmap(lambda E: E - (1. / 3.) * jnp.trace(E) * jnp.eye(3))(Es)
   Edevs = jax.vmap(tensor_math.dev)(Es)
-  psis = jax.vmap(model.energy)(grad_us)
-  sigmas = jax.vmap(model.cauchy_stress)(grad_us)
+  psis, _ = jax.vmap(model.energy, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
+  sigmas, _ = jax.vmap(model.cauchy_stress, in_axes=(0, None, 0, None))(
+    grad_us, theta, state_old, dt
+  )
   sigmas_an = jax.vmap(
     lambda trE, devE, J: (K * trE * jnp.eye(3) + 2. * G * devE) / J, in_axes=(0, 0, 0)
   )(trEs, Edevs, Js)

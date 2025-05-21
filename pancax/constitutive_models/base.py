@@ -11,3 +11,6 @@ Vector = Float[Array, "3"]
 class ConstitutiveModel(eqx.Module):
     def properties(self):
         return self.__dataclass_fields__
+
+    def num_state_variables(self):
+        return 0

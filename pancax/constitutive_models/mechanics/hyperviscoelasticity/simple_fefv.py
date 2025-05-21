@@ -49,12 +49,15 @@ class SimpleFeFv(HyperViscoElastic):
         Z = Fvs_new.flatten()
 
         # constitutive calculation (energy and dissipation)
-        psi_eq = self.eq_model.energy(F)
+        psi_eq, _ = self.eq_model.energy(grad_u, theta, jnp.zeros(3), dt)
         psi_neq = jnp.sum(vmap(self.neq_strain_energy, in_axes=(0, 0))(
             Ees, Gs
         ))
         d = jnp.sum(vmap(self.dissipation, in_axes=(0, 0, 0))(Dvs, Gs, taus))
+        # psi_neq = 0.
+        # d = 0.
         return psi_eq + psi_neq + d, Z
+        # return psi_eq + psi_neq, Z
 
     def initial_state(self):
         Fvs = vmap(lambda _: jnp.eye(3))(range(self.num_prony_terms()))
@@ -63,7 +66,6 @@ class SimpleFeFv(HyperViscoElastic):
     def neq_strain_energy(self, Ee, G):
         return G * tensor_math.norm_of_deviator_squared(Ee)
 
-    @property
     def num_state_variables(self):
         return self.num_prony_terms() * 9
 

@@ -49,7 +49,8 @@ from .loss_functions import \
     EnergyLoss, \
     EnergyAndResidualLoss, \
     EnergyResidualAndReactionLoss, \
-    ResidualMSELoss
+    ResidualMSELoss, \
+    PathDependentEnergyLoss
 from .networks import \
     Field, \
     FieldPhysicsPair, \
@@ -58,7 +59,7 @@ from .networks import \
     MLPBasis, \
     Network, \
     Parameters
-from .optimizers import Adam
+from .optimizers import Adam, LBFGS
 from .physics_kernels import \
     BasePhysics, \
     BaseEnergyFormPhysics, \
@@ -154,6 +155,7 @@ __all__ = [
     "EnergyAndResidualLoss",
     "EnergyResidualAndReactionLoss",
     "ResidualMSELoss",
+    "PathDependentEnergyLoss",
     # networks
     "Field",
     "FieldPhysicsPair",
@@ -164,6 +166,7 @@ __all__ = [
     "Parameters",
     # optimizers
     "Adam",
+    "LBFGS",
     # physics
     "BasePhysics",
     "BaseEnergyFormPhysics",

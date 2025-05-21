@@ -25,7 +25,7 @@ class Swanson(HyperelasticModel):
     # hack because Swanson is a stupid model
     cutoff_strain: float = eqx.field(static=True)
 
-    def energy(self, grad_u):
+    def energy(self, grad_u, theta, state_old, dt):
         K = self.bulk_modulus
         A1, P1 = self.A1, self.P1
         B1, Q1 = self.B1, self.Q1
@@ -62,4 +62,4 @@ class Swanson(HyperelasticModel):
             )
         )
         W_dev = W_dev_tau - W_dev_cutoff
-        return W_vol + W_dev
+        return W_vol + W_dev, state_old
