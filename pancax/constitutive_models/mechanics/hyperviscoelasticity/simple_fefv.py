@@ -66,7 +66,6 @@ class SimpleFeFv(HyperViscoElastic):
     def neq_strain_energy(self, Ee, G):
         return G * tensor_math.norm_of_deviator_squared(Ee)
 
-    @property
     def num_state_variables(self):
         return self.num_prony_terms() * 9
 

@@ -12,6 +12,7 @@ except ModuleNotFoundError:
     )
 
 import jax
+import jax.numpy as jnp
 import os
 import netCDF4 as nc
 import numpy as onp
@@ -158,6 +159,7 @@ class ExodusPostProcessor(BasePostProcessor):
                         for v in domain.\
                                 physics.var_name_to_method[var]["names"]:
                             name = v.ljust(max_str_len)[:max_str_len]
+                            # print(name)
                             node_var_names[n, :] = onp.array(list(name))
                             name = f"vals_nod_var{n + 1}"
                             new_var = dst.createVariable(
@@ -180,26 +182,51 @@ class ExodusPostProcessor(BasePostProcessor):
                         "name_elem_var", "c", ("num_elem_var", "len_name")
                     )
 
+                    n = 0
                     for var in element_variables:
                         for v in domain.\
                                 physics.var_name_to_method[var]["names"]:
                             for q in range(q_points):
-                                name = var.ljust(max_str_len)[:max_str_len]
+                                name = f"{v}_{q + 1}"
+                                name = name.ljust(max_str_len)[:max_str_len]
                                 elem_var_names[n, :] = onp.array(list(name))
-                                name = f"vals_elem_var{n + 1}_{q + 1}"
+                                # NOTE this will only work for single block meshes
+                                name = f"vals_elem_var{n + 1}eb1"
                                 new_var = dst.createVariable(
                                     name, "double", ("time_step", "num_elem")
                                 )
+                                n = n + 1
 
-    def write_outputs(self, params, domain):
-        physics = domain.physics
-        times = domain.times
+    def write_outputs(self, params, problem):
+        physics = problem.physics
+        times = problem.times
 
         with nc.Dataset(self.output_file, "a") as dataset:
+            ne = problem.domain.conns.shape[0]
+            nq = len(problem.domain.fspace.quadrature_rule)
+
+            def _vmap_func(n):
+                return problem.physics.constitutive_model.\
+                    initial_state()
+
+            # TODO assumes constantly spaced timesteps
+            dt = problem.times[1] - problem.times[0]
+            state_old = jax.vmap(jax.vmap(_vmap_func))(
+                jnp.zeros((ne, nq))
+            )
+
             for n, time in enumerate(times):
                 # write new time value
                 time_var = dataset.variables["time_whole"]
                 time_var[n] = time
+
+                # useful for all methods later on
+                us = physics.var_name_to_method["field_values"]["method"](
+                    params, problem, time
+                )
+                # calculate something with state update at least once to update
+                # state later
+                _, state_new = physics.potential_energy(params, problem.domain, time, us, state_old, dt)
 
                 node_var_num = 0
                 for var in self.node_variables:
@@ -220,7 +247,7 @@ class ExodusPostProcessor(BasePostProcessor):
                     else:
                         output = physics.var_name_to_method[var]
                         pred = onp.array(
-                            output["method"](params, domain, time)
+                            output["method"](params, problem, time)
                         )
                         if len(pred.shape) > 2:
                             for i in range(pred.shape[1]):
@@ -241,6 +268,46 @@ class ExodusPostProcessor(BasePostProcessor):
                                 node_var[n, :] = pred[:, i]
                                 node_var_num = node_var_num + 1
 
+                elem_var_num = 0
+                for var in self.element_variables:
+                    # us = physics.var_name_to_method["field_values"]["method"](
+                    #     params, problem, time
+                    # )
+                    output = physics.var_name_to_method[var]
+                    pred = onp.array(
+                        output["method"](params, problem, time, us, state_old, dt)
+                    )
+
+                    # for q in range(pred.shape[1]):
+                        # for i in range(pred.shape[2])
+                    if len(pred.shape) == 2:
+                        assert False, "Need to implement scalar element variable output"
+                    elif len(pred.shape) == 3:
+                        # this is the state variable case
+                        for s in range(pred.shape[2]):
+                            for q in range(pred.shape[1]):
+                                elem_var = dataset.variables[
+                                    # NOTE this will only work for single block models
+                                    f"vals_elem_var{elem_var_num + 1}eb1"
+                                ]
+                                elem_var[n, :] = pred[:, q, s]
+                                elem_var_num = elem_var_num + 1
+                    elif len(pred.shape) == 4:
+                        temp = pred.reshape((pred.shape[0], pred.shape[1], 9))
+                        for i in range(temp.shape[2]):
+                            for q in range(pred.shape[1]):
+                                elem_var = dataset.variables[
+                                    # f"vals_elem_var{elem_var_num + 1}_{q + 1}"
+                                    # NOTE this will only work for single block models
+                                    f"vals_elem_var{elem_var_num + 1}eb1"
+                                ]
+                                elem_var[n, :] = temp[:, q, i]
+                                elem_var_num = elem_var_num + 1
+                    else:
+                        assert False, f"Shape of output val is {pred.shape}"
+
+                # finally update state
+                state_old = state_new
 
 class ExodusPostProcessor_old:
     def __init__(self, mesh_file: str) -> None:

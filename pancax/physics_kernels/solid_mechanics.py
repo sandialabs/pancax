@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from .base import BaseEnergyFormPhysics
+from .base import BaseEnergyFormPhysics, element_pp
 from jax import vmap
 from pancax.math.tensor_math import tensor_2D_to_3D
 import equinox as eqx
@@ -75,6 +75,9 @@ class SolidMechanics(BaseEnergyFormPhysics):
         grad_u = self.formulation.modify_field_gradient(grad_u)
         return self.constitutive_model.energy(grad_u, theta, state_old, dt)
 
+    def num_state_variables(self):
+        return self.constitutive_model.num_state_variables()
+
     def update_var_name_to_method(self):
         # var_name_to_method = standard_pp(self)
         # new_pytree = eqx.tree_at(
@@ -82,39 +85,53 @@ class SolidMechanics(BaseEnergyFormPhysics):
         # )
         new_pytree = super().update_var_name_to_method()
 
-        def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
-            coords, conns, fspace = domain.coords, domain.conns, domain.fspace
-            us = us[conns, :]
-            xs = coords[conns, :]
+        # def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
+        #     coords, conns, fspace = domain.coords, domain.conns, domain.fspace
+        #     us = us[conns, :]
+        #     xs = coords[conns, :]
 
-            def _vmap_func(x, u):
-                vs = fspace.shape_function_values(x)
-                grad_vs = fspace.shape_function_gradients(x)
-                JxWs = fspace.JxWs(x)
-                xs = vmap(lambda y: jnp.dot(y, x))(vs)
-                us = vmap(lambda y: jnp.dot(y, u))(vs)
-                grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
-                return xs, us, grad_us, JxWs
+        #     def _vmap_func(x, u):
+        #         vs = fspace.shape_function_values(x)
+        #         grad_vs = fspace.shape_function_gradients(x)
+        #         JxWs = fspace.JxWs(x)
+        #         xs = vmap(lambda y: jnp.dot(y, x))(vs)
+        #         us = vmap(lambda y: jnp.dot(y, u))(vs)
+        #         grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+        #         return xs, us, grad_us, JxWs
 
-            xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
-            grad_us = vmap(vmap(self.formulation.modify_field_gradient))(grad_us)
+        #     xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+        #     grad_us = vmap(vmap(self.formulation.modify_field_gradient))(grad_us)
 
-            vals = vmap(vmap(func))(grad_us)
-            return vals
+        #     vals = vmap(vmap(func))(grad_us)
+        #     return vals
 
+        # var_name_to_method = new_pytree.var_name_to_method
+        # func = lambda p, d, t, u, s, dt, *args: kinematic_method(
+        #     self.constitutive_model.deformation_gradient, 
+        #     p, d, t, u, s, dt, *args
+        # )
         var_name_to_method = new_pytree.var_name_to_method
-        func = lambda p, d, t, u, s, dt, *args: kinematic_method(
-            self.constitutive_model.deformation_gradient, 
-            p, d, t, u, s, dt, *args
-        )
-
-        var_name_to_method["deformation_gradients"] = {
-            "method": func,
+        var_name_to_method["deformation_gradient"] = {
+            # "method": func,
+            "method": element_pp(
+                self.constitutive_model.deformation_gradient,
+                self,
+                is_kinematic_method=True
+            ),
             "names": (
                 "F_xx", "F_xy", "F_xz",
                 "F_yx", "F_yy", "F_yz",
                 "F_zx", "F_zy", "F_zz"
             )
+        }
+        # special case handled just so parser doesn't break
+        var_name_to_method["state_variables"] = {
+            "method": element_pp(
+                lambda x: x,
+                self,
+                is_state_method=True
+            ),
+            "names": tuple([f"state_variable_{n + 1}" for n in range(self.num_state_variables())])
         }
 
         return new_pytree

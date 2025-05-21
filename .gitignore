@@ -2,6 +2,7 @@
 *.e
 *.egg-info/
 *.eqx
+*.hb
 *.jou
 *.log
 .*nfs*
@@ -21,3 +22,4 @@ history*.csv
 jax_profile/
 pinn*.log
 venv/
+sierra_batch_script_*

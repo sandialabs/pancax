@@ -9,6 +9,79 @@ import jax.numpy as jnp
 import numpy as onp
 
 
+def element_pp(
+    func, 
+    # constitutive_model,
+    # formulation, 
+    physics,
+    is_kinematic_method=False, 
+    is_state_method=False,
+    jit=True
+):
+    def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
+        coords, conns, fspace = domain.coords, domain.conns, domain.fspace
+        us = us[conns, :]
+        xs = coords[conns, :]
+
+        def _vmap_func(x, u):
+            vs = fspace.shape_function_values(x)
+            grad_vs = fspace.shape_function_gradients(x)
+            JxWs = fspace.JxWs(x)
+            xs = vmap(lambda y: jnp.dot(y, x))(vs)
+            us = vmap(lambda y: jnp.dot(y, u))(vs)
+            grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+            return xs, us, grad_us, JxWs
+
+        xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(grad_us)
+
+        vals = vmap(vmap(func))(grad_us)
+        return vals
+
+    def state_method(func, params, domain, t, us, state_old, dt, *args):
+        coords, conns, fspace = domain.coords, domain.conns, domain.fspace
+        us = us[conns, :]
+        xs = coords[conns, :]
+
+        def _vmap_func(x, u):
+            vs = fspace.shape_function_values(x)
+            grad_vs = fspace.shape_function_gradients(x)
+            JxWs = fspace.JxWs(x)
+            xs = vmap(lambda y: jnp.dot(y, x))(vs)
+            us = vmap(lambda y: jnp.dot(y, u))(vs)
+            grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+            return xs, us, grad_us, JxWs
+
+        xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+        in_axes_1 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+        in_axes_2 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+
+        # grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(grad_us)
+        _, state_news = vmap(vmap(func, in_axes=in_axes_2), in_axes=in_axes_1)(
+            params, xs, t, us, grad_us, state_old, dt
+        )
+        return state_news
+        # vals = vmap(vmap(func))(grad_us)
+        # return vals
+
+    if is_kinematic_method:
+        new_func = lambda p, d, t, u, s, dt, *args: kinematic_method(
+            physics.constitutive_model.deformation_gradient, 
+            p, d, t, u, s, dt, *args
+        )
+    elif is_state_method:
+        new_func = lambda p, d, t, u, s, dt, *args: state_method(
+            physics.energy, 
+            p, d, t, u, s, dt, *args
+        )
+    else:
+        assert False, 'Only kinematic methods are currently supported'
+
+    if jit:
+        new_func = eqx.filter_jit(new_func)
+
+    return new_func
+
 # TODO clean this up
 def nodal_pp(func, has_props=False, jit=True):
     """
@@ -95,6 +168,9 @@ class BasePhysics(eqx.Module):
         return jacfwd(self.field_time_derivatives, argnums=2)(
             field, x, t, *args
         )
+
+    def num_state_variables(self):
+        return 0
 
     def update_dirichlet_bc_func(self, bc_func: Callable):
         # get_fn = lambda x: x.dirichlet_bc_func

@@ -76,7 +76,17 @@ class LBFGS(Optimizer):
 
         # self.loss_and_grads = \
         #   eqx.filter_value_and_grad(self.loss_function, has_aux=self.has_aux)
-        self.loss_and_grads = value_and_grad_from_state(self.loss_function)
+        self.static = None # is define in init
+
+        def loss_func(params):
+            params = eqx.combine(params, self.static)
+            loss, aux = self.loss_function(params, )
+
+        self.loss_and_grads = optax.value_and_grad_from_state(self.loss_function)
+
+    def init(self, params):
+        self.step = self.make_step_method()
+        self.static = eqx.partition(params, eqx.is_inexact_array)
 
     def make_step_method(self):
         def step(params, domain, opt_st):

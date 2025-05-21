@@ -15,7 +15,9 @@ pp = PostProcessor(mesh_file, "exodus")
 # domain setup
 ##################
 # times = jnp.linspace(0.0, 2.0, 21)
-times = jnp.linspace(0., 1., 11)
+times_1 = jnp.linspace(0., 1., 11)
+times_2 = jnp.linspace(1., 11., 11)
+times = jnp.hstack((times_1, times_2[1:]))
 domain = VariationalDomain(mesh_file, times, q_order=2)
 
 ##################
@@ -48,9 +50,9 @@ def dirichlet_bc_func(xs, t, nn):
         ),
         u_out
     )
-    u_out = u_out.at[2].set(
-        y * (y - length) * t * nn[2] / length**2
-    )
+    # u_out = u_out.at[2].set(
+    #     y * (y - length) * t * nn[2] / length**2
+    # )
     return u_out
 
 # model = NeoHookean(bulk_modulus=10., shear_modulus=0.855)
@@ -101,12 +103,16 @@ for epoch in range(100000):
         # print(params.state[0, :, :, :])
         # print(params.physics.constitutive_model)
 
-    if epoch % 1000 == 0:
+    if epoch % 10000 == 0:
         pp.init(
             problem,
             f"output_{str(epoch).zfill(6)}.e",
             node_variables=["field_values"],
-            element_variables=["deformation_gradients"],
+            # element_variables=["deformation_gradients"],
+            element_variables=[
+                'deformation_gradient',
+                'state_variables'
+            ]
         )
         pp.write_outputs(params, problem)
         pp.close()

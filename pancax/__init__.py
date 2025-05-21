@@ -59,7 +59,7 @@ from .networks import \
     MLPBasis, \
     Network, \
     Parameters
-from .optimizers import Adam
+from .optimizers import Adam, LBFGS
 from .physics_kernels import \
     BasePhysics, \
     BaseEnergyFormPhysics, \
@@ -166,6 +166,7 @@ __all__ = [
     "Parameters",
     # optimizers
     "Adam",
+    "LBFGS",
     # physics
     "BasePhysics",
     "BaseEnergyFormPhysics",

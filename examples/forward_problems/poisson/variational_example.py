@@ -3,7 +3,7 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-key = random.key(10)
+key = random.key(100)
 
 ##################
 # file management
@@ -51,24 +51,44 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 ##################
 # ML setup
 ##################
-# n_dims = domain.coords.shape[1]
-# field = MLP(n_dims + 1, physics.n_dofs, 50, 3, jax.nn.tanh, key)
-# params = FieldPropertyPair(field, problem.physics)
 loss_function = EnergyLoss()
 params = Parameters(problem, key)
 
-opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
-opt_st = opt.init(params)
-for epoch in range(5000):
-  params, opt_st, loss = opt.step(params, problem, opt_st)
+# # pre-train with Adam
+# opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
+# opt_st = opt.init(params)
+# for epoch in range(2500):
+#   params, opt_st, loss = opt.step(params, problem, opt_st)
 
-  if epoch % 100 == 0:
-    print(epoch)
-    print(loss)
+#   if epoch % 100 == 0:
+#     print(epoch)
+#     print(loss)
+
+
+
+# switch to LBFGS
+params, static = eqx.partition(params, eqx.is_inexact_array)
+
+def loss_func(params):
+  params = eqx.combine(params, static)
+  loss, aux = loss_function(params, problem)
+  return loss
+
+opt = optax.lbfgs(memory_size=1)
+opt_st = opt.init(params)
+value_and_grad = jax.jit(optax.value_and_grad_from_state(loss_func))
+for _ in range(200):
+  value, grad = value_and_grad(params, state=opt_st)
+  updates, opt_st = opt.update(
+     grad, opt_st, params, value=value, grad=grad, value_fn=loss_func
+  )
+  params = optax.apply_updates(params, updates)
+  print('Objective function: {:.2E}'.format(value))
 
 ##################
 # post-processing
 ##################
+params = eqx.combine(params, static)
 pp.init(problem, 'output.e',
   node_variables=['field_values']        
 )
