@@ -50,7 +50,7 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 # ML setup
 ##################
 loss_function = EnergyLoss()
-params = Parameters(problem, key, seperate_networks=True)
+params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
 print(params)
 
 ##################

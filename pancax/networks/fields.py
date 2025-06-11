@@ -20,6 +20,8 @@ class Field(BasePancaxModel):
         n_layers: Optional[int] = 3,
         n_neurons: Optional[int] = 50,
         activation: Optional[Callable] = jax.nn.tanh,
+        #
+        network_type = MLP
     ):
         n_dims = problem.n_dims
         n_dofs = problem.n_dofs
@@ -28,26 +30,26 @@ class Field(BasePancaxModel):
 
             @eqx.filter_vmap
             def init(k):
-                return MLP(
+                return network_type(
                     n_dims + 1,
                     1,
                     n_neurons,
                     n_layers,
                     activation,
                     k,
-                    ensure_positivity=ensure_positivity,
+                    # ensure_positivity=ensure_positivity,
                 )
 
             self.networks = init(jax.random.split(key, n_dofs))
         else:
-            self.networks = MLP(
+            self.networks = network_type(
                 n_dims + 1,
                 n_dofs,
                 n_neurons,
                 n_layers,
                 activation,
                 key,
-                ensure_positivity=ensure_positivity,
+                # ensure_positivity=ensure_positivity,
             )
 
         self.seperate_networks = seperate_networks

@@ -1,5 +1,6 @@
 from .base import BasePancaxModel
 from .fields import Field
+from .mlp import MLP
 from ..domains import VariationalDomain
 from jax import vmap
 from jaxtyping import Array, Float
@@ -30,9 +31,14 @@ class Parameters(BasePancaxModel):
         self,
         problem,
         key,
+        network_type: Optional[eqx.Module] = MLP,
         seperate_networks: Optional[bool] = False
     ) -> None:
-        fields = Field(problem, key, seperate_networks=seperate_networks)
+        fields = Field(
+            problem, key, 
+            network_type=network_type, 
+            seperate_networks=seperate_networks
+        )
         # state = self._create_state_array(problem)
         state = None
 

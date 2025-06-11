@@ -6,6 +6,7 @@ from .mlp import Linear
 from .mlp import MLP
 from .mlp import MLPBasis
 from .parameters import Parameters
+from .resnet import ResNet
 
 
 def Network(network_type, *args, **kwargs):
@@ -21,5 +22,6 @@ __all__ = [
     "MLPBasis",
     "Network",
     "Parameters",
+    "ResNet",
     "trunc_init"
 ]
