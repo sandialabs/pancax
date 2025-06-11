@@ -1,9 +1,7 @@
-from pancax import FullFieldData
-from pathlib import Path
-import os
-
-
 def test_full_field_data():
+    from pancax import FullFieldData
+    from pathlib import Path
+    import os
     data_file = os.path.join(Path(__file__).parent, 'data_full_field.csv')
     data = FullFieldData(
         data_file, 

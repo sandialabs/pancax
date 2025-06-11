@@ -174,6 +174,7 @@ class BasePhysics(eqx.Module):
             field, x, t, *args
         )
 
+    @property
     def num_state_variables(self):
         return 0
 

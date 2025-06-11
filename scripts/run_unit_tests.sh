@@ -1,1 +1,1 @@
-XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_X64=true pytest test --cov=pancax
+XLA_PYTHON_CLIENT_PREALLOCATE=false JAX_ENABLE_X64=true pytest test --cov=pancax -q --disable-warnings

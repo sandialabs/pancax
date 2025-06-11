@@ -1,10 +1,13 @@
-from pancax import GlobalData
-from pathlib import Path
-import os
+# from pancax import GlobalData
+# from pathlib import Path
+# import os
 import pytest
 
 
 def test_global_data():
+    from pancax import GlobalData
+    from pathlib import Path
+    import os
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     data = GlobalData(
@@ -41,6 +44,9 @@ def test_global_data():
 
 @pytest.mark.skip(reason='Failing on missions with bad tk')
 def test_global_data_with_plotting():
+    from pancax import GlobalData
+    from pathlib import Path
+    import os
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     data = GlobalData(
@@ -57,6 +63,9 @@ def test_global_data_with_plotting():
 
 
 def test_global_data_bad_reaction_dof():
+    from pancax import GlobalData
+    from pathlib import Path
+    import os
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     with pytest.raises(ValueError):

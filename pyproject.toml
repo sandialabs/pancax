@@ -45,6 +45,7 @@ rocm = [
 test = [
   'pytest',
   'pytest-cov',
+  'pytest-xdist'
 ]
 viz = [
   'pyvista'
@@ -82,3 +83,10 @@ exclude_lines = [
   "def __repr__",
   "pass"
 ]
+
+#[tool.pytest.ini_options]
+#minversion = "6.0"
+#addopts = "-ra -q --disable-warnings"
+#testpaths = [
+#    "test"
+#]
