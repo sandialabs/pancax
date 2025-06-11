@@ -1,7 +1,7 @@
-from pancax import BoundedProperty, Swanson
-from .utils import *
-import jax 
-import jax.numpy as jnp
+# from pancax import BoundedProperty, Swanson
+# from .utils import *
+# import jax 
+# import jax.numpy as jnp
 import pytest
 
 
@@ -12,11 +12,11 @@ B1 = 0.0
 Q1 = -0.5
 C1 = 0.10448312
 R1 = 1.71691036
-key = jax.random.key(0)
 
 
 @pytest.fixture
 def swanson_1():
+  from pancax import Swanson
   return Swanson(
     bulk_modulus=K,
     A1=A1,
@@ -31,6 +31,9 @@ def swanson_1():
 
 @pytest.fixture
 def swanson_2():
+  from pancax import BoundedProperty, Swanson
+  import jax
+  key = jax.random.key(0)
   return Swanson(
     bulk_modulus=BoundedProperty(K, K, key),
     A1=BoundedProperty(A1, A1, key),
@@ -44,6 +47,9 @@ def swanson_2():
 
 
 def simple_shear_test(model):
+  from .utils import simple_shear
+  import jax
+  import jax.numpy as jnp
   theta = 0.
   state_old = jnp.zeros((100, 0))
   dt = 1.
@@ -76,6 +82,9 @@ def simple_shear_test(model):
 
 
 def uniaxial_strain_test(model):
+  from .utils import uniaxial_strain
+  import jax
+  import jax.numpy as jnp
   theta = 0.
   state_old = jnp.zeros((100, 0))
   dt = 1.

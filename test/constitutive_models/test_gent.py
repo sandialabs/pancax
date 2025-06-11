@@ -1,18 +1,14 @@
-from pancax import BoundedProperty, Gent
-from .utils import *
-import jax
-import jax.numpy as jnp
 import pytest
 
 
 K = 0.833
 G = 0.3846
 Jm = 3.
-key = jax.random.key(0)
 
 
 @pytest.fixture
 def gent_1():
+  from pancax import Gent
   return Gent(
     bulk_modulus=K, 
     shear_modulus=G,
@@ -22,6 +18,9 @@ def gent_1():
 
 @pytest.fixture
 def gent_2():
+  from pancax import BoundedProperty, Gent
+  import jax
+  key = jax.random.key(0)
   return Gent(
     bulk_modulus=BoundedProperty(K, K, key), 
     shear_modulus=BoundedProperty(G, G, key),
@@ -30,6 +29,9 @@ def gent_2():
 
 
 def simple_shear_test(model):
+  from .utils import simple_shear
+  import jax
+  import jax.numpy as jnp
   theta = 0.
   state_old = jnp.zeros((100, 0))
   dt = 1.
@@ -66,6 +68,9 @@ def simple_shear_test(model):
 
 
 def uniaxial_strain_test(model):
+  from .utils import uniaxial_strain
+  import jax
+  import jax.numpy as jnp
   theta = 0.
   state_old = jnp.zeros((100, 0))
   dt = 1.

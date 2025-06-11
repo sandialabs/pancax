@@ -1,12 +1,10 @@
-from pancax import NeoHookean
-import jax.numpy as jnp
-
-
 K = 0.833
 G = 0.3846
 
 
 def test_jacobian():
+    from pancax import NeoHookean
+    import jax.numpy as jnp
     model = NeoHookean(bulk_modulus=K, shear_modulus=G)
     F = jnp.array([
         [4., 0., 0.],
@@ -24,6 +22,8 @@ def test_jacobian():
 
 
 def test_jacobian_bad_value():
+    from pancax import NeoHookean
+    import jax.numpy as jnp
     model = NeoHookean(bulk_modulus=K, shear_modulus=G)
     F = jnp.array([
         [4., 0., 0.],

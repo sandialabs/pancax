@@ -75,7 +75,7 @@ class SolidMechanics(BaseEnergyFormPhysics):
         return self.constitutive_model.energy(grad_u, theta, state_old, dt)
 
     def num_state_variables(self):
-        return self.constitutive_model.num_state_variables
+        return self.constitutive_model.num_state_variables()
 
     def update_var_name_to_method(self):
         # var_name_to_method = standard_pp(self)

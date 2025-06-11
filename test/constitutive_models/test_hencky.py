@@ -1,17 +1,12 @@
-from pancax import BoundedProperty, Hencky
-from pancax.math import tensor_math
-from .utils import *
-import jax
-import jax.numpy as jnp
 import pytest
 
 
 K = 0.833
 G = 0.3846
-key = jax.random.key(0)
 
 @pytest.fixture
 def hencky_1():
+  from pancax import Hencky
   return Hencky(
     bulk_modulus=K, 
     shear_modulus=G
@@ -19,6 +14,9 @@ def hencky_1():
 
 @pytest.fixture
 def hencky_2():
+  from pancax import BoundedProperty, Hencky
+  import jax
+  key = jax.random.key(0)
   return Hencky(
     bulk_modulus=BoundedProperty(K, K, key), 
     shear_modulus=BoundedProperty(G, G, key)
@@ -28,6 +26,10 @@ def hencky_2():
 # TODO fix this test
 
 def simple_shear_test(model):
+  from pancax.math import tensor_math
+  from .utils import simple_shear
+  import jax
+  import jax.numpy as jnp
   theta = 0.
   state_old = jnp.zeros((100, 0))
   dt = 1.
@@ -39,7 +41,7 @@ def simple_shear_test(model):
   Js = jax.vmap(model.jacobian)(grad_us)
   Es = jax.vmap(model.log_strain)(grad_us)
   trEs = jax.vmap(jnp.trace)(Es)
-  print(trEs)
+
   # Edevs = jax.vmap(lambda E: E - (1. / 3.) * jnp.trace(E) * jnp.eye(3))(Es)
   Edevs = jax.vmap(tensor_math.dev)(Es)
   psis, _ = jax.vmap(model.energy, in_axes=(0, None, 0, None))(
