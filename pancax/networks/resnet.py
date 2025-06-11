@@ -1,7 +1,6 @@
 from typing import Callable, List
 import equinox as eqx
 import jax
-import jax.numpy as jnp
 
 
 class ResNetBlock(eqx.Module):

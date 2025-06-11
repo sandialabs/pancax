@@ -35,8 +35,8 @@ class Parameters(BasePancaxModel):
         seperate_networks: Optional[bool] = False
     ) -> None:
         fields = Field(
-            problem, key, 
-            network_type=network_type, 
+            problem, key,
+            network_type=network_type,
             seperate_networks=seperate_networks
         )
         # state = self._create_state_array(problem)

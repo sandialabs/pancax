@@ -21,7 +21,7 @@ class Field(BasePancaxModel):
         n_neurons: Optional[int] = 50,
         activation: Optional[Callable] = jax.nn.tanh,
         #
-        network_type = MLP
+        network_type: type = MLP
     ):
         n_dims = problem.n_dims
         n_dofs = problem.n_dofs
