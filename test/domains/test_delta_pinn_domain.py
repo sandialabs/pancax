@@ -1,12 +1,8 @@
-# from pancax import EssentialBC, DeltaPINNDomain
-# from pancax import NeoHookean, SolidMechanics, ThreeDimensional
-from pancax import DeltaPINNDomain
-from pathlib import Path
-import jax.numpy as jnp
-import os
-
-
 def test_forward_domain():
+    from pancax import DeltaPINNDomain
+    from pathlib import Path
+    import jax.numpy as jnp
+    import os
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     # essential_bc_func = lambda x, t, z: z
     # essential_bcs = [

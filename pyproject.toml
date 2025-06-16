@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.9'
+version = '0.0.10'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -28,7 +28,11 @@ cuda = [
   'jaxtyping',
   'optax'
 ]
-docs = [
+dev = [
+  'flake8',
+  'pytest',
+  'pytest-cov',
+  'pytest-xdist',
   'sphinx',
   'sphinx-copybutton',
   'sphinx-rtd-theme',
@@ -41,10 +45,6 @@ rocm = [
   'jax[rocm]==0.4.33',
   'jaxtyping',
   'optax'
-]
-test = [
-  'pytest',
-  'pytest-cov',
 ]
 viz = [
   'pyvista'
@@ -82,3 +82,10 @@ exclude_lines = [
   "def __repr__",
   "pass"
 ]
+
+#[tool.pytest.ini_options]
+#minversion = "6.0"
+#addopts = "-ra -q --disable-warnings"
+#testpaths = [
+#    "test"
+#]

@@ -1,15 +1,9 @@
-from pancax import *
-from pancax.constitutive_models.mechanics.hyperviscoelasticity.base import *
-from pancax.constitutive_models.mechanics.hyperviscoelasticity.simple_fefv import SimpleFeFv
-from .utils import *
-import jax
-import jax.numpy as jnp
-import matplotlib.pyplot
 import pytest
 
 
 @pytest.fixture
 def model():
+  from pancax import NeoHookean, PronySeries, SimpleFeFv, WLF
   return SimpleFeFv(
     NeoHookean(bulk_modulus=1000., shear_modulus=0.855),
     PronySeries(
@@ -21,6 +15,7 @@ def model():
 
 
 def test_initial_state(model):
+  import jax.numpy as jnp
   state = model.initial_state()
   print(state)
   assert jnp.allclose(state, jnp.array([
@@ -31,6 +26,7 @@ def test_initial_state(model):
 
 
 def test_extract_tensor(model):
+  import jax.numpy as jnp
   state = jnp.linspace(1., 27., 27)
   Fv_1 = model.extract_tensor(state, 0)
   Fv_2 = model.extract_tensor(state, 9)
@@ -72,6 +68,10 @@ def test_extract_tensor(model):
 
 
 def test_model(model):
+  from .utils import uniaxial_strain
+  import jax
+  import jax.numpy as jnp
+
   strain_rate = 1.e-2
   total_time = 100.0
   n_steps = 100
@@ -148,6 +148,9 @@ def test_model(model):
 
 # NOTE this test is dumb... it's just checking vmap capabilities
 def test_with_vmap(model):
+  from .utils import uniaxial_strain
+  import jax
+  import jax.numpy as jnp
   strain_rate = 1.e-2
   total_time = 100.0
   n_steps = 100
