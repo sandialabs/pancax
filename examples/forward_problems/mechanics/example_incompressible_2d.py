@@ -9,7 +9,6 @@ key = random.key(10)
 # file management
 ##################
 mesh_file = find_mesh_file('mesh_quad4.g')
-# logger = Logger('pinn.log', log_every=250)
 pp = PostProcessor(mesh_file, 'exodus')
 
 ##################
@@ -60,7 +59,6 @@ opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=Fal
 opt_st = opt.init(params)
 for epoch in range(100000):
   params, opt_st, loss = opt.step(params, problem, opt_st)
-  # logger.log_loss(loss, epoch)
   if epoch % 100 == 0:
     print(epoch, flush=True)
     print(loss, flush=True)
