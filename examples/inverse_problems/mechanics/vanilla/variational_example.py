@@ -36,16 +36,16 @@ domain = VariationalDomain(mesh_file, times)
 ##################
 # physics setup
 ##################
-# model = NeoHookean(
-#   bulk_modulus=0.833,
-#   # bulk_modulus=BoundedProperty(0.01, 5., key=key),
-#   shear_modulus=BoundedProperty(0.01, 5., key=key)
-# )
-model = Gent(
+model = NeoHookean(
   bulk_modulus=0.833,
-  shear_modulus=BoundedProperty(0.01, 5., key=key),
-  Jm_parameter=BoundedProperty(1.5, 10., key=key)
+  # bulk_modulus=BoundedProperty(0.01, 5., key=key),
+  shear_modulus=BoundedProperty(0.01, 5., key=key)
 )
+# model = Gent(
+#   bulk_modulus=0.833,
+#   shear_modulus=BoundedProperty(0.01, 5., key=key),
+#   Jm_parameter=BoundedProperty(1.5, 10., key=key)
+# )
 physics = SolidMechanics(model, PlaneStrain())
 
 ##################
@@ -53,32 +53,35 @@ physics = SolidMechanics(model, PlaneStrain())
 ##################
 ics = [
 ]
-essential_bc_func = UniaxialTensionLinearRamp(
+dirichlet_bc_func = UniaxialTensionLinearRamp(
   final_displacement=jnp.max(field_data.outputs[:, 0]), 
   length=1.0, direction='x', n_dimensions=2
 )
-physics = physics.update_dirichlet_bc_func(essential_bc_func)
-essential_bcs = [
-  EssentialBC('nodeset_2', 0), # left edge fixed in x
-  EssentialBC('nodeset_2', 1), # left edge fixed in y
-  EssentialBC('nodeset_4', 0), # right edge prescribed in x
-  EssentialBC('nodeset_4', 1)  # right edge fixed in y
+physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+dirichlet_bcs = [
+  DirichletBC('nodeset_2', 0), # left edge fixed in x
+  DirichletBC('nodeset_2', 1), # left edge fixed in y
+  DirichletBC('nodeset_4', 0), # right edge prescribed in x
+  DirichletBC('nodeset_4', 1)  # right edge fixed in y
 ]
-natural_bcs = [
+neumann_bcs = [
 ]
 
 ##################
 # problem setup
 ##################
-problem = InverseProblem(domain, physics, ics, essential_bcs, natural_bcs, field_data, global_data)
+# problem = InverseProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs, field_data, global_data)
+problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichlet_bcs, neumann_bcs)
+
 # print(problem)
 
 ##################
 # ML setup
 ##################
-n_dims = domain.coords.shape[1]
-field = MLP(n_dims + 1, physics.n_dofs, 50, 5, jax.nn.tanh, key)
-params = FieldPropertyPair(field, problem.physics)
+# n_dims = domain.coords.shape[1]
+# field = MLP(n_dims + 1, physics.n_dofs, 50, 5, jax.nn.tanh, key)
+# params = FieldPropertyPair(field, problem.physics)
+params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
 
 # print(params)
 # loss_function = EnergyResidualAndReactionLoss()
@@ -100,6 +103,6 @@ for epoch in range(100000):
   if epoch % 100 == 0:
     print(epoch)
     print(loss)
-    print(params.properties.constitutive_model.bulk_modulus)
-    print(params.properties.constitutive_model.shear_modulus())
-    print(params.properties.constitutive_model.Jm_parameter())
+    print(params.physics.constitutive_model.bulk_modulus)
+    print(params.physics.constitutive_model.shear_modulus())
+    # print(params.physics.constitutive_model.Jm_parameter())
