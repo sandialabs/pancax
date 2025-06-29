@@ -48,8 +48,10 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 ##################
 # ML setup
 ##################
-loss_function = EnergyLoss()
-params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
+# loss_function = EnergyLoss()
+loss_function = EnergyAndResidualLoss(residual_weight=1.0e9)
+# params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
+params = Parameters(problem, key, seperate_networks=True)
 print(params)
 
 ##################
@@ -57,7 +59,7 @@ print(params)
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt_st = opt.init(params)
-for epoch in range(100000):
+for epoch in range(250000):
   params, opt_st, loss = opt.step(params, problem, opt_st)
   if epoch % 100 == 0:
     print(epoch, flush=True)
@@ -68,16 +70,12 @@ for epoch in range(100000):
 ##################
 pp.init(problem, 'output.e', 
   node_variables=[
-    'field_values'
-    # 'displacement',
+    'field_values',
     # 'internal_force'
   ], 
   element_variables=[
-    # 'element_cauchy_stress',
-    # 'element_displacement_gradient',
-    # 'element_deformation_gradient',
-    # 'element_invariants',
-    # 'element_pk1_stress'
+    # 'deformation_gradient',
+    # 'I1_bar'
   ]
 )
 pp.write_outputs(params, problem)

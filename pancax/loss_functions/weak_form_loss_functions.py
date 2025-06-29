@@ -92,23 +92,27 @@ class EnergyAndResidualLoss(PhysicsLossFunction):
         self.energy_weight = energy_weight
         self.residual_weight = residual_weight
 
-    def __call__(self, params, domain):
-        pis, Rs = vmap(self.load_step, in_axes=(None, None, 0))(
-            params, domain, domain.times
+    def __call__(self, params, problem):
+        dt = problem.times[1] - problem.times[0]
+        (pis, state_new), Rs = vmap(self.load_step, in_axes=(None, None, 0, None))(
+            params, problem, problem.times, dt
         )
-        pi, R = jnp.sum(pis), jnp.sum(Rs)
+        # pi, R = jnp.sum(pis), jnp.sum(Rs)
+        pi, R = jnp.sum(pis), jnp.mean(Rs)
         loss = self.energy_weight * pi + self.residual_weight * R
         return loss, dict(energy=pi, residual=R)
 
-    def load_step(self, params, domain, t):
-        # field_network, props = params
-        # us = domain.field_values(field_network, t)
-        # props = props()
-        # pi, R = potential_energy_and_residual(domain, us, props)
-        # return pi, R
+    def load_step(self, params, problem, t, dt):
         field, physics, state = params
-        us = physics.vmap_field_values(field, domain.coords, t)
-        return physics.potential_energy_and_residual(params, domain, t, us)
+        # hack for now, need a zero sized state var array
+        state_old = jnp.zeros((
+            problem.domain.conns.shape[0],
+            problem.domain.fspace.num_quadrature_points, 0
+        ))
+        us = physics.vmap_field_values(field, problem.coords, t)
+        return physics.potential_energy_and_residual(
+            params, problem.domain, t, us, state_old, dt
+        )
 
 
 class EnergyResidualAndReactionLoss(PhysicsLossFunction):

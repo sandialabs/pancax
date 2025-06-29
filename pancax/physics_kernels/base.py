@@ -11,8 +11,6 @@ import numpy as onp
 
 def element_pp(
     func,
-    # constitutive_model,
-    # formulation,``
     physics,
     is_kinematic_method=False,
     is_state_method=False,
@@ -69,7 +67,8 @@ def element_pp(
     if is_kinematic_method:
         def new_func(p, d, t, u, s, dt, *args):
             return kinematic_method(
-                physics.constitutive_model.deformation_gradient,
+                # physics.constitutive_model.deformation_gradient,
+                func,
                 p, d, t, u, s, dt, *args
             )
     elif is_state_method:
@@ -88,26 +87,24 @@ def element_pp(
 
 
 # TODO clean this up
-def nodal_pp(func, has_props=False, jit=True):
+def nodal_pp(
+    func, 
+    # has_props=False, 
+    physics,
+    is_kinematic_method=False,
+    jit=True
+):
     """
     :param func: Function to use for a nodal property output variable
     :param has_props: Whether or not this function need properties
     :param jit: Whether or not to jit this function
     """
-    if has_props:
-        # new_func = lambda p, d, t: vmap(
-        # 	func, in_axes=(None, 0, None, None)
-        # )(p.fields, d.coords, t, p.properties)
-        # new_func = lambda p, d, t: \
-        #   vmap(func, in_axes=(None, 0, None))(p, d.coords, t)
-        def new_func(p, d, t):
-            return vmap(func, in_axes=(None, 0, None))(p, d.coords, t)
-    else:
-        # new_func = lambda p, d, t: vmap(func, in_axes=(None, 0, None))(
-        #     p.fields, d.coords, t
-        # )
+    if is_kinematic_method:
         def new_func(p, d, t):
             return vmap(func, in_axes=(None, 0, None))(p.fields, d.coords, t)
+    else:
+        def new_func(p, d, t, u, s, dt, *args):
+            return func(p, d, t, u, s, dt, *args)
 
     if jit:
         return eqx.filter_jit(new_func)
@@ -118,7 +115,7 @@ def nodal_pp(func, has_props=False, jit=True):
 def standard_pp(physics):
     d = {
         "field_values": {
-            "method": nodal_pp(physics.field_values),
+            "method": nodal_pp(physics.field_values, physics, is_kinematic_method=True),
             "names": physics.field_value_names,
         }
     }
@@ -342,25 +339,26 @@ class BaseEnergyFormPhysics(BasePhysics):
 
     # TODO only works on a single block
     def potential_energy(self, params, domain, t, us, state_old, dt, *args):
-        return self.potential_energy_on_block(
+        pi, state_new = self.potential_energy_on_block(
             params, domain.coords, t,
             us, domain.fspace, domain.conns, state_old, dt, *args
         )
+        return pi, state_new
 
     def potential_energy_and_internal_force(
-        self, params, domain, t, us, *args
+        self, params, domain, t, us, state_old, dt, *args
     ):
-        return value_and_grad(self.potential_energy, argnums=3)(
-            params, domain, t, us, *args
+        return value_and_grad(self.potential_energy, argnums=3, has_aux=True)(
+            params, domain, t, us, state_old, dt, *args
         )
 
     def potential_energy_and_residual(
-        self, params, domain, t, us, *args
+        self, params, domain, t, us, state_old, dt, *args
     ):
-        pi, f = self.potential_energy_and_internal_force(
-            params, domain, t, us, *args
+        (pi, state_new), f = self.potential_energy_and_internal_force(
+            params, domain, t, us, state_old, dt, *args
         )
-        return pi, jnp.linalg.norm(
+        return (pi, state_new), jnp.linalg.norm(
             f.flatten()[domain.dof_manager.unknownIndices]
         )
 

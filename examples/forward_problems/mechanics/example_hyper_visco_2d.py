@@ -107,7 +107,10 @@ for epoch in range(100000):
         pp.init(
             problem,
             f"output_{str(epoch).zfill(6)}.e",
-            node_variables=["field_values"],
+            node_variables=[
+                "field_values",
+                "internal_force"
+            ],
             # element_variables=["deformation_gradients"],
             element_variables=[
                 'deformation_gradient',

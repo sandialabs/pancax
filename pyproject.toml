@@ -17,14 +17,14 @@ dependencies = [
 cpu = [
   'chex',
   'equinox',
-  'jax==0.4.33',
+  'jax==0.6.1',
   'jaxtyping',
   'optax'
 ]
 cuda = [
   'chex',
   'equinox',
-  'jax[cuda12]==0.4.33',
+  'jax[cuda12]==0.6.1',
   'jaxtyping',
   'optax'
 ]
@@ -42,7 +42,7 @@ dev = [
 rocm = [
   'chex',
   'equinox',
-  'jax[rocm]==0.4.33',
+  'jax[rocm]==0.6.1',
   'jaxtyping',
   'optax'
 ]
@@ -57,21 +57,7 @@ build-backend = "hatchling.build"
 # [tool.setuptools]
 [tool.hatch.build.targets.wheel]
 packages = [
-  'pancax',
-  # 'pancax.bcs',
-  # 'pancax.bvps',
-  # 'pancax.constitutive_models',
-  # 'pancax.constitutive_models.mechanics',
-  # 'pancax.data',
-  # 'pancax.domains',
-  # 'pancax.fem',
-  # 'pancax.fem.elements',
-  # 'pancax.loss_functions',
-  # 'pancax.math',
-  # 'pancax.networks',
-  # 'pancax.optimizers',
-  # 'pancax.physics_kernels',
-  # 'pancax.problems'
+  'pancax'
 ]
 
 [tool.coverage.report]
