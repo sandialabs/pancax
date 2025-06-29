@@ -1,0 +1,28 @@
+# Core dependencies
+matplotlib
+meshio
+netCDF4
+pandas
+scipy
+vtk
+
+# ROCm-specific optional dependencies
+chex
+equinox
+jax[rocm]==0.5.0
+jaxtyping
+optax
+
+# Visualization (optional, include if desired)
+pyvista
+
+# Development tools (optional, include if building docs/testing)
+flake8
+pytest
+pytest-cov
+pytest-xdist
+sphinx
+sphinx-copybutton
+sphinx-rtd-theme
+sphinxcontrib-bibtex
+sphinxcontrib-napoleon
