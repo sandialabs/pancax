@@ -237,10 +237,10 @@ class ExodusPostProcessor(BasePostProcessor):
                         var == "internal_force"
                     ):
                         pred = physics.\
-                                var_name_to_method["internal_force"]["method"](
-                                    params, problem.domain, 
-                                    time, us, state_old, dt   
-                                )
+                            var_name_to_method["internal_force"]["method"](
+                                params, problem.domain,
+                                time, us, state_old, dt
+                            )
                         for i in range(pred.shape[1]):
                             node_var = dataset.variables[
                                 f"vals_nod_var{node_var_num + 1}"

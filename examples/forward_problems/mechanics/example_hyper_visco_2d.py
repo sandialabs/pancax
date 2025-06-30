@@ -57,7 +57,7 @@ def dirichlet_bc_func(xs, t, nn):
 
 # model = NeoHookean(bulk_modulus=10., shear_modulus=0.855)
 model = SimpleFeFv(
-    NeoHookean(bulk_modulus=10.0, shear_modulus=0.855),
+    NeoHookean(bulk_modulus=10.0, shear_modulus=1.0),
     PronySeries(moduli=[1.0], relaxation_times=[10.0]),
     WLF(C1=17.44, C2=51.6, theta_ref=60.0),
 )
@@ -113,8 +113,8 @@ for epoch in range(100000):
             ],
             # element_variables=["deformation_gradients"],
             element_variables=[
-                'deformation_gradient',
-                'state_variables'
+                "deformation_gradient",
+                "state_variables"
             ]
         )
         pp.write_outputs(params, problem)

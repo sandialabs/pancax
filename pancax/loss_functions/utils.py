@@ -25,3 +25,10 @@ class CombineLossFunctions(BaseLossFunction):
             aux.update({"props": props})
 
         return loss, aux
+
+
+class UserDefinedLossFunction(BaseLossFunction):
+    func: any
+
+    def __call__(self, params, problem, *args):
+        return self.func(params, problem, *args)

@@ -88,8 +88,8 @@ def element_pp(
 
 # TODO clean this up
 def nodal_pp(
-    func, 
-    # has_props=False, 
+    func,
+    # has_props=False,
     physics,
     is_kinematic_method=False,
     jit=True
@@ -115,7 +115,10 @@ def nodal_pp(
 def standard_pp(physics):
     d = {
         "field_values": {
-            "method": nodal_pp(physics.field_values, physics, is_kinematic_method=True),
+            "method": nodal_pp(
+                physics.field_values, physics,
+                is_kinematic_method=True
+            ),
             "names": physics.field_value_names,
         }
     }
@@ -363,11 +366,11 @@ class BaseEnergyFormPhysics(BasePhysics):
         )
 
     def potential_energy_residual_and_reaction_force(
-        self, params, domain, t, us, *args
+        self, params, domain, t, us, state_old, dt, *args
     ):
         global_data = args[0]
         pi, f = self.potential_energy_and_internal_force(
-            params, domain, t, us, *args
+            params, domain, t, us, state_old, dt, *args
         )
         R = jnp.linalg.norm(f.flatten()[domain.dof_manager.unknownIndices])
         reaction = jnp.sum(

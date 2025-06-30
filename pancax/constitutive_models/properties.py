@@ -27,6 +27,9 @@ class BoundedProperty(eqx.Module):
             jax.nn.sigmoid(self.prop_val)[0]
         )
 
+    def __repr__(self):
+        return str(self.__call__())
+
     def __add__(self, other):
         self._check_other_type(other, "+")
         return self.__call__() + other

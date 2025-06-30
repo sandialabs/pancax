@@ -48,6 +48,7 @@ class GlobalData(eqx.Module):
         reaction_dof: Union[int, str],
         n_time_steps: int,
         plotting: Optional[bool] = False,
+        interpolate: Optional[bool] = False
     ):
         # read in data
         df = pandas.read_csv(data_file)
@@ -56,7 +57,11 @@ class GlobalData(eqx.Module):
         disps_in = df[disp_key].values
         forces_in = df[force_key].values
         # interpolate data onto times
-        times = np.linspace(np.min(times_in), np.max(times_in), n_time_steps)
+        if interpolate:
+            times = \
+                np.linspace(np.min(times_in), np.max(times_in), n_time_steps)
+        else:
+            times = times_in
         disp_interp = np.interp(times, times_in, disps_in)
         force_interp = np.interp(times, times_in, forces_in)
 
