@@ -1,8 +1,9 @@
-from jaxtyping import Array
+from jaxtyping import Array, Float
 from typing import List
 import equinox as eqx
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas
 
 
@@ -31,6 +32,9 @@ class FullFieldData(eqx.Module):
         self.inputs = jnp.array(df[input_keys].values)
         self.outputs = jnp.array(df[output_keys].values)
         self.n_time_steps = len(jnp.unique(self.inputs[:, -1]))
+
+    def __len__(self):
+        return self.inputs.shape[0]
 
     # TODO still need to test this
     def plot_registration(self, domain):
@@ -76,3 +80,25 @@ class FullFieldData(eqx.Module):
         set_inputs = self.inputs
         set_inputs = set_inputs.at[:, component].set(val)
         return eqx.tree_at(lambda x: x.inputs, self, set_inputs)
+
+
+class FullFieldDataLoader(eqx.Module):
+    data: FullFieldData
+    indices: np.ndarray
+
+    def __init__(self, data: FullFieldData) -> None:
+        self.data = data
+        self.indices = np.arange(len(self.data))
+
+    def __len__(self):
+        return len(self.data)
+
+    def dataloader(self, batch_size: int) -> Float[Array, "bs d"]:
+        perm = np.random.permutation(self.indices)
+        start = 0
+        end = batch_size
+        while end <= len(self):
+            batch_perm = perm[start:end]
+            yield self.data.inputs[batch_perm], self.data.outputs[batch_perm]
+            start = end
+            end = start + batch_size

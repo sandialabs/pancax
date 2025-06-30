@@ -6,6 +6,7 @@
 *.jou
 *.log
 .*nfs*
+*.npz
 *.png
 *.pyc
 *.vtk

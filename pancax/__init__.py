@@ -14,7 +14,7 @@ from .constitutive_models import \
     PronySeries, \
     SimpleFeFv, \
     WLF
-from .data import FullFieldData, GlobalData
+from .data import FullFieldData, FullFieldDataLoader, GlobalData
 from .domains import CollocationDomain, DeltaPINNDomain, VariationalDomain
 from .fem import \
     DofManager, \
@@ -50,7 +50,9 @@ from .loss_functions import \
     EnergyAndResidualLoss, \
     EnergyResidualAndReactionLoss, \
     ResidualMSELoss, \
-    PathDependentEnergyLoss
+    PathDependentEnergyLoss, \
+    PathDependentEnergyResidualAndReactionLoss, \
+    UserDefinedLossFunction
 from .networks import \
     Field, \
     FieldPhysicsPair, \
@@ -112,6 +114,7 @@ __all__ = [
     "WLF",
     # "data",
     "FullFieldData",
+    "FullFieldDataLoader",
     "GlobalData",
     # domains
     "CollocationDomain",
@@ -157,6 +160,8 @@ __all__ = [
     "EnergyResidualAndReactionLoss",
     "ResidualMSELoss",
     "PathDependentEnergyLoss",
+    "PathDependentEnergyResidualAndReactionLoss",
+    "UserDefinedLossFunction",
     # networks
     "Field",
     "FieldPhysicsPair",

@@ -7,10 +7,21 @@
 Physics augmented neural computations in jax
 
 ## Table of Contents
-1. [Installation](#installation)
-2. [Usage](#usage)
+1. [Known Issues](#known_issues)
+2. [Installation](#installation)
+3. [Usage](#usage)
 4. [Contributing](#contributing)
 5. [Citation](#citation)
+
+
+## Known Issues
+[-] If running the dev branch (which is the most up to date) there is a known incompatability
+between jax 0.6.1 and the cuda open blas version that is installed. 
+
+See the following github [issue](https://github.com/jax-ml/jax/issues/29042).
+```
+pip install nvidia-cublas-cu12==12.9.0.13 --upgrade
+```
 
 
 ## Installation

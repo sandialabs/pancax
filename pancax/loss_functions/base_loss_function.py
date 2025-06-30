@@ -8,10 +8,9 @@ class BaseLossFunction(eqx.Module):
     Currently does nothing but helps build a
     type hierarchy.
     """
-
-    def filtered_loss(self, diff_params, static_params, domain):
+    def filtered_loss(self, diff_params, static_params, *args, **kwargs):
         params = eqx.combine(diff_params, static_params)
-        return self.__call__(params, domain)
+        return self.__call__(params, *args, **kwargs)
 
 
 class BCLossFunction(BaseLossFunction):

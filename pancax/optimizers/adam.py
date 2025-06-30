@@ -37,16 +37,6 @@ class Adam(Optimizer):
                 optax.scale(-1.0),
             )
 
-        # if filter_spec is None:
-        #   self.loss_and_grads = \
-        #       eqx.filter_value_and_grad(
-        #           self.loss_function, has_aux=self.has_aux)
-        # else:
-        #   self.loss_and_grads = \
-        #       eqx.filter_value_and_grad(
-        #           self.loss_function.filtered_loss,
-        #           has_aux=self.has_aux)
-        # self.filter_spec = filter_spec
         self.loss_and_grads = eqx.filter_value_and_grad(
             self.loss_function.filtered_loss, has_aux=self.has_aux
         )
@@ -63,7 +53,7 @@ class Adam(Optimizer):
         #     # loss[1].update({'dprops': grads.properties.prop_params})
         #     return params, opt_st, loss
         # else:
-        def step(params, domain, opt_st):
+        def step(params, domain, opt_st, *args):
             if self.filter_spec is None:
                 filter_spec = params.freeze_physics_normalization_filter()
             else:
@@ -71,7 +61,7 @@ class Adam(Optimizer):
 
             diff_params, static_params = eqx.partition(params, filter_spec)
             loss, grads = \
-                self.loss_and_grads(diff_params, static_params, domain)
+                self.loss_and_grads(diff_params, static_params, domain, *args)
             updates, opt_st = self.opt.update(grads, opt_st)
             params = eqx.apply_updates(params, updates)
 

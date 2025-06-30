@@ -79,43 +79,23 @@ class SolidMechanics(BaseEnergyFormPhysics):
         return self.constitutive_model.num_state_variables
 
     def update_var_name_to_method(self):
-        # var_name_to_method = standard_pp(self)
-        # new_pytree = eqx.tree_at(
-        #     lambda x: x.var_name_to_method, self, var_name_to_method
-        # )
         new_pytree = super().update_var_name_to_method()
 
-        # def kinematic_method(func, params, domain, t,
-        #  us, state_old, dt, *args):
-        #     coords, conns, fspace =
-        # domain.coords, domain.conns, domain.fspace
-        #     us = us[conns, :]
-        #     xs = coords[conns, :]
-
-        #     def _vmap_func(x, u):
-        #         vs = fspace.shape_function_values(x)
-        #         grad_vs = fspace.shape_function_gradients(x)
-        #         JxWs = fspace.JxWs(x)
-        #         xs = vmap(lambda y: jnp.dot(y, x))(vs)
-        #         us = vmap(lambda y: jnp.dot(y, u))(vs)
-        #         grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
-        #         return xs, us, grad_us, JxWs
-
-        #     xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
-        #     grad_us = vmap(vmap(self.formulation.modify_field_gradient))(
-        # grad_us)
-
-        #     vals = vmap(vmap(func))(grad_us)
-        #     return vals
-
-        # var_name_to_method = new_pytree.var_name_to_method
-        # func = lambda p, d, t, u, s, dt, *args: kinematic_method(
-        #     self.constitutive_model.deformation_gradient,
-        #     p, d, t, u, s, dt, *args
-        # )
         var_name_to_method = new_pytree.var_name_to_method
+
+        @eqx.filter_jit
+        def _internal_force(p, d, t, u, s, dt, *args):
+            return self.potential_energy_and_internal_force(
+                p, d, t, u, s, dt, *args
+            )[1]
+        names = ("internal_force_x", "internal_force_y")
+        if self.formulation.n_dimensions > 2:
+            names = (names, "internal_force_z")
+        var_name_to_method["internal_force"] = {
+            "method": _internal_force,
+            "names": names
+        }
         var_name_to_method["deformation_gradient"] = {
-            # "method": func,
             "method": element_pp(
                 self.constitutive_model.deformation_gradient,
                 self,
@@ -126,6 +106,14 @@ class SolidMechanics(BaseEnergyFormPhysics):
                 "F_yx", "F_yy", "F_yz",
                 "F_zx", "F_zy", "F_zz"
             )
+        }
+        var_name_to_method["I1_bar"] = {
+            "method": element_pp(
+                self.constitutive_model.I1_bar,
+                self,
+                is_kinematic_method=True
+            ),
+            "names": ("I1_bar",)
         }
         # special case handled just so parser doesn't break
         var_name_to_method["state_variables"] = {

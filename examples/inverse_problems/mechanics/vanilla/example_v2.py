@@ -40,11 +40,6 @@ model = NeoHookean(
   # bulk_modulus=BoundedProperty(0.01, 5., key=key),
   shear_modulus=BoundedProperty(0.01, 5., key=key)
 )
-# model = Gent(
-#   bulk_modulus=0.833,
-#   shear_modulus=BoundedProperty(0.01, 5., key=key),
-#   Jm_parameter=BoundedProperty(1.5, 10., key=key)
-# )
 physics = SolidMechanics(model, PlaneStrain())
 
 ##################
@@ -76,24 +71,38 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 # ML setup
 ##################
-params = Parameters(problem, key)#, seperate_networks=True)#, network_type=ResNet)
-loss_function = CombineLossFunctions(
-  EnergyResidualAndReactionLoss(residual_weight=250.0e9, reaction_weight=250.0e9),
-  FullFieldDataLoss(weight=10.0e9)
+params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
+physics_and_global_loss = EnergyResidualAndReactionLoss(
+  residual_weight=250.e9, reaction_weight=250.e9
 )
-opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, transition_steps=5000)
+full_field_data_loss = FullFieldDataLoss(weight=10.e9)
+
+def loss_function(params, problem, inputs, outputs):
+  loss_1, aux_1 = physics_and_global_loss(params, problem)
+  loss_2, aux_2 = full_field_data_loss(params, problem, inputs, outputs)
+  aux_1.update(aux_2)
+  return loss_1 + loss_2, aux_1
+
+loss_function = UserDefinedLossFunction(loss_function)
+
+opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, transition_steps=50000)
 
 ##################
 # Training
 ##################
 opt_st = opt.init(params)
 
-for epoch in range(100000):
-  params, opt_st, loss = opt.step(params, problem, opt_st)
 
-  if epoch % 100 == 0:
+# testing stuff
+dataloader = FullFieldDataLoader(problem.field_data)
+
+for epoch in range(10000):
+  for inputs, outputs in dataloader.dataloader(1024):
+    params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
+
+  if epoch % 10 == 0:
     print(epoch)
     print(loss)
     print(params.physics.constitutive_model.bulk_modulus)
-    print(params.physics.constitutive_model.shear_modulus())
+    print(params.physics.constitutive_model.shear_modulus)
     # print(params.physics.constitutive_model.Jm_parameter())

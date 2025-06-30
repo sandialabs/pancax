@@ -235,18 +235,18 @@ class ExodusPostProcessor(BasePostProcessor):
                 for var in self.node_variables:
                     if (
                         var == "internal_force"
-                        or var == "incompressible_internal_force"
                     ):
-                        assert False, "implement internal force stuff"
-                        # us = jax.vmap(physics.\
-                        # field_values, in_axes=(None, 0, None))(
-                        #   params.fields, domain.coords, time)
-                        # fs = onp.array(
-                        # internal_force(domain, us, params.properties()))
-                        # for i in range(fs.shape[1]):
-                        #   self.exo.put_node_variable_values(
-                        # f'internal_force_{self.index_to_component(i)}',
-                        # n + 1, fs[:, i])
+                        pred = physics.\
+                            var_name_to_method["internal_force"]["method"](
+                                params, problem.domain,
+                                time, us, state_old, dt
+                            )
+                        for i in range(pred.shape[1]):
+                            node_var = dataset.variables[
+                                f"vals_nod_var{node_var_num + 1}"
+                            ]
+                            node_var[n, :] = pred[:, i]
+                            node_var_num = node_var_num + 1
                     else:
                         output = physics.var_name_to_method[var]
                         pred = onp.array(
@@ -261,10 +261,6 @@ class ExodusPostProcessor(BasePostProcessor):
                                     # output['names'][k], n + 1, pred[:, i, j])
                         else:
                             for i in range(pred.shape[1]):
-                                # self.exo.put_node_variable_values(
-                                # output['names'][i], n + 1, pred[:, i])
-                                # node_var = \
-                                # `dataset.variables[output['names'][i]]
                                 node_var = dataset.variables[
                                     f"vals_nod_var{node_var_num + 1}"
                                 ]
@@ -283,8 +279,14 @@ class ExodusPostProcessor(BasePostProcessor):
                     # for q in range(pred.shape[1]):
                     # for i in range(pred.shape[2])
                     if len(pred.shape) == 2:
-                        assert False, \
-                            "Need to implement scalar element variable output"
+                        for q in range(pred.shape[1]):
+                            elem_var = dataset.variables[
+                                # NOTE this will only work for
+                                # single block models
+                                f"vals_elem_var{elem_var_num + 1}eb1"
+                            ]
+                            elem_var[n, :] = pred[:, q]
+                            elem_var_num = elem_var_num + 1
                     elif len(pred.shape) == 3:
                         # this is the state variable case
                         for s in range(pred.shape[2]):
