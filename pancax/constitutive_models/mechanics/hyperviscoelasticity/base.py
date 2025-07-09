@@ -66,4 +66,4 @@ class HyperViscoElastic(MechanicsModel, PathDependentModel):
     shift_factor_model: ShiftFactorModel
 
     def num_prony_terms(self) -> int:
-        return len(self.prony_series)
+        return len(self.prony_series.moduli)

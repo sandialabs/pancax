@@ -16,14 +16,14 @@ dependencies = [
 [project.optional-dependencies]
 cpu = [
   'chex',
-  'equinox',
+  'equinox==0.12.1',
   'jax==0.5.0',
   'jaxtyping',
   'optax'
 ]
 cuda = [
   'chex',
-  'equinox',
+  'equinox==0.12.1',
   'jax[cuda12]==0.5.0',
   'jaxtyping',
   'optax'
@@ -41,7 +41,7 @@ dev = [
 ]
 rocm = [
   'chex',
-  'equinox',
+  'equinox==0.12.1',
   'jax[rocm]==0.5.0',
   'jaxtyping',
   'optax'

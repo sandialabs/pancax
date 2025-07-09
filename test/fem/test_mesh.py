@@ -12,7 +12,9 @@ targetDispGrad = np.array([[0.1, -0.2],[0.4, -0.1]])
 
 
 def triangle_inradius(tcoords):
-    area = 0.5*onp.cross(tcoords[1]-tcoords[0], tcoords[2]-tcoords[0])
+    tcoords = onp.hstack((tcoords, onp.ones((tcoords.shape[0], 1))))
+
+    area = 0.5*onp.cross(tcoords[1]-tcoords[0], tcoords[2]-tcoords[0])[2]
     peri = (onp.linalg.norm(tcoords[1]-tcoords[0])
             + onp.linalg.norm(tcoords[2]-tcoords[1])
             + onp.linalg.norm(tcoords[0]-tcoords[2]))
