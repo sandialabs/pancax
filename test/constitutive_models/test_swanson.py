@@ -66,7 +66,7 @@ def simple_shear_test(model):
     grad_us, theta, state_old, dt
   )
 
-  for (psi, sigma, I1_bar, J, B_bar) in zip(psis, sigmas, I1_bars, Js, B_bars):
+  def vmap_func(B_bar, I1_bar, J):
     psi_an = K * (J * jnp.log(J) - J + 1.) + \
               1.5 * A1 / (P1 + 1.) * (I1_bar / 3. - 1.)**(P1 + 1.) + \
               1.5 * C1 / (R1 + 1.) * (I1_bar / 3. - 1.)**(R1 + 1.)
@@ -74,11 +74,24 @@ def simple_shear_test(model):
                 0.5 * C1 * (I1_bar / 3. - 1.)**R1
     B_bar_dev = B_bar - (1. / 3.) * jnp.trace(B_bar) * jnp.eye(3)
     sigma_an = (2. / J) * dUdI1_bar * B_bar_dev + K * jnp.log(J) * jnp.eye(3)
+    return psi_an, sigma_an[0, 0], sigma_an[1, 1], sigma_an[0, 1]
 
-    assert jnp.allclose(psi, psi_an, atol=1e-3)
-    for i in range(3):
-      for j in range(3):
-        assert jnp.allclose(sigma[i, j], sigma_an[i, j], atol=1e-3)
+  psi_ans, sigma_11_ans, sigma_22_ans, sigma_12_ans = jax.vmap(
+    vmap_func, in_axes=(0, 0, 0)
+  )(B_bars, I1_bars, Js)
+
+  assert jnp.allclose(psis, psi_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 0, 0], sigma_11_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 1, 1], sigma_22_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 2, 2], sigma_22_ans, atol=1e-3)
+  #
+  assert jnp.allclose(sigmas[:, 0, 1], sigma_12_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 1, 2], 0.0)
+  assert jnp.allclose(sigmas[:, 2, 0], 0.0)
+  # #
+  assert jnp.allclose(sigmas[:, 1, 0], sigma_12_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 2, 1], 0.0)
+  assert jnp.allclose(sigmas[:, 0, 2], 0.0)
 
 
 def uniaxial_strain_test(model):
@@ -101,7 +114,8 @@ def uniaxial_strain_test(model):
     grad_us, theta, state_old, dt
   )
 
-  for (psi, sigma, I1_bar, J, B_bar) in zip(psis, sigmas, I1_bars, Js, B_bars):
+  # for (psi, sigma, I1_bar, J, B_bar) in zip(psis, sigmas, I1_bars, Js, B_bars):
+  def vmap_func(B_bar, I1_bar, J):
     psi_an = K * (J * jnp.log(J) - J + 1.) + \
               1.5 * A1 / (P1 + 1.) * (I1_bar / 3. - 1.)**(P1 + 1.) + \
               1.5 * C1 / (R1 + 1.) * (I1_bar / 3. - 1.)**(R1 + 1.)
@@ -109,11 +123,24 @@ def uniaxial_strain_test(model):
                 0.5 * C1 * (I1_bar / 3. - 1.)**R1
     B_bar_dev = B_bar - (1. / 3.) * jnp.trace(B_bar) * jnp.eye(3)
     sigma_an = (2. / J) * dUdI1_bar * B_bar_dev + K * jnp.log(J) * jnp.eye(3)
+    return psi_an, sigma_an[0, 0], sigma_an[1, 1]
 
-    assert jnp.allclose(psi, psi_an, atol=1e-3)
-    for i in range(3):
-      for j in range(3):
-        assert jnp.allclose(sigma[i, j], sigma_an[i, j], atol=1e-3)
+  psi_ans, sigma_11_ans, sigma_22_ans = jax.vmap(
+    vmap_func, in_axes=(0, 0, 0)
+  )(B_bars, I1_bars, Js)
+
+  assert jnp.allclose(psis, psi_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 0, 0], sigma_11_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 1, 1], sigma_22_ans, atol=1e-3)
+  assert jnp.allclose(sigmas[:, 2, 2], sigma_22_ans, atol=1e-3)
+  #
+  assert jnp.allclose(sigmas[:, 0, 1], 0.0)
+  assert jnp.allclose(sigmas[:, 1, 2], 0.0)
+  assert jnp.allclose(sigmas[:, 2, 0], 0.0)
+  #
+  assert jnp.allclose(sigmas[:, 1, 0], 0.0)
+  assert jnp.allclose(sigmas[:, 2, 1], 0.0)
+  assert jnp.allclose(sigmas[:, 0, 2], 0.0)
 
 
 def test_simple_shear(swanson_1, swanson_2):
