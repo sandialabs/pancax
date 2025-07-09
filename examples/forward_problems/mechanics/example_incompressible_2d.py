@@ -48,8 +48,8 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 ##################
 # ML setup
 ##################
-# loss_function = EnergyLoss()
-loss_function = EnergyAndResidualLoss(residual_weight=1.0e9)
+loss_function = EnergyLoss()
+# loss_function = EnergyAndResidualLoss(residual_weight=1.0e9)
 # params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
 params = Parameters(problem, key, seperate_networks=True)
 print(params)
@@ -59,7 +59,7 @@ print(params)
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt_st = opt.init(params)
-for epoch in range(250000):
+for epoch in range(25000):
   params, opt_st, loss = opt.step(params, problem, opt_st)
   if epoch % 100 == 0:
     print(epoch, flush=True)
