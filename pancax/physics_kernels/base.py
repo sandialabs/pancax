@@ -252,71 +252,43 @@ class BaseVariationalFormPhysics(BasePhysics):
 class BaseEnergyFormPhysics(BasePhysics):
     field_value_names: tuple[str, ...]
 
-    # only used for delta pinn LBFO generation
-    # TODO figure out how to reconcile this
-    def element_energy_old(self, params, x, t, u, fspace, *args):
+    # general stuff for element integrals
+    def element_integral(self, func):
+        def integral(params, fspace, xs, t, us, state_old, dt, *args):
+            xs, us, grad_us, JxWs = self.element_interpolants(fspace, xs, us)
+
+            in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+            fs, state_new = vmap(func, in_axes=in_axes)(
+                params, xs, t, us, grad_us, state_old, dt, *args
+            )
+            results = jnp.sum(JxWs * fs, axis=0)
+            return results, state_new
+        return integral
+
+    # def element_interpolants(self, fspace, xs, us):
+    def element_interpolants(self, fspace, x, u):
+        """
+        Returns everything necessary for calculations at the element level
+
+        return (ne, nq, ...) shaped arrays
+
+        TODO type me/re-document me
+        """
+        # def _vmap_func(x, u):
         vs = fspace.shape_function_values(x)
         grad_vs = fspace.shape_function_gradients(x)
         JxWs = fspace.JxWs(x)
         xs = vmap(lambda y: jnp.dot(y, x))(vs)
         us = vmap(lambda y: jnp.dot(y, u))(vs)
         grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
-        in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+        return xs, us, grad_us, JxWs
 
-        # hack for now
-        state = jnp.zeros((us.shape[0], 0))
-        dt = 0.
-        pis, _ = vmap(self.energy, in_axes=in_axes)(
-            params, xs, t, us, grad_us, state, dt, *args
-        )
-        return jnp.dot(JxWs, pis)
-
-    def element_energy(
-        self,
-        params, xs, t, us, grad_us, JxWs, state_old, dt, *args
-    ):
-        in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
-        pis, state_new = vmap(self.energy, in_axes=in_axes)(
-            params, xs, t, us, grad_us, state_old, dt, *args
-        )
-        return jnp.dot(JxWs, pis), state_new
-
-    # only used for delta pinn LBFO generation
-    # TODO figure out how to reconcile this
-    def element_kinetic_energy_old(self, params, x, t, u, fspace, *args):
-        vs = fspace.shape_function_values(x)
-        grad_vs = fspace.shape_function_gradients(x)
-        JxWs = fspace.JxWs(x)
-        xs = vmap(lambda y: jnp.dot(y, x))(vs)
-        us = vmap(lambda y: jnp.dot(y, u))(vs)
-        grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
-        in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
-        state_old = jnp.zeros((us.shape[0], 0))
-        dt = 0.
-        pis, state_new = vmap(self.kinetic_energy, in_axes=in_axes)(
-            params, xs, t, us, grad_us, state_old, dt, *args
-        )
-        return jnp.dot(JxWs, pis)
-
-    def element_kinetic_energy(
-        self,
-        params, xs, t, us, grad_us, JxWs, state_old, dt, *args
-    ):
-        in_axes = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
-        pis, state_new = vmap(self.kinetic_energy, in_axes=in_axes)(
-            params, xs, t, us, grad_us, state_old, dt, *args
-        )
-        return jnp.dot(JxWs, pis), state_new
+        # xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+        # return xs, us, grad_us, JxWs
 
     @abstractmethod
     def energy(self, params, x, t, u, grad_u, *args):
         pass
-
-    # def internal_force(self, params, domain, t, us, *args):
-    #   return grad(self.potential_energy, argnums=3)(
-    #       params, domain, t, us, *args
-    #   )
-    #   # def inner_func(params, domain, t):
 
     # TODO currently only valid for one block
     def potential_energy_on_block(
@@ -325,20 +297,12 @@ class BaseEnergyFormPhysics(BasePhysics):
         us = us[conns, :]
         xs = x[conns, :]
 
-        def _vmap_func(x, u):
-            vs = fspace.shape_function_values(x)
-            grad_vs = fspace.shape_function_gradients(x)
-            JxWs = fspace.JxWs(x)
-            xs = vmap(lambda y: jnp.dot(y, x))(vs)
-            us = vmap(lambda y: jnp.dot(y, u))(vs)
-            grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
-            return xs, us, grad_us, JxWs
-
-        xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
-
-        return self.vmap_element_energy(
-            params, xs, t, us, grad_us, JxWs, state_old, dt, *args
+        integral = self.element_integral(self.energy)
+        pis, state_new = self.vmap_element_integral(
+            integral,
+            params, fspace, xs, t, us, state_old, dt, *args
         )
+        return jnp.sum(pis), state_new
 
     # TODO only works on a single block
     def potential_energy(self, params, domain, t, us, state_old, dt, *args):
@@ -379,42 +343,46 @@ class BaseEnergyFormPhysics(BasePhysics):
         return pi, R, reaction
 
     def mass_matrix(self, params, domain, t, us, state_old, dt, *args):
-        # us = self.vmap_field_values(params, domain.coords, t, *args)
         dof_manager = args[0]
         us = us[domain.conns, :]
         xs = domain.coords[domain.conns, :]
-        func = jax.hessian(self.element_kinetic_energy_old, argnums=3)
-        in_axes = (None, 0, None, 0, None, 0) + len(args) * (None,)
-        fs = vmap(func, in_axes=in_axes)(
-            params, xs, t, us, domain.fspace, domain.conns, *args
+
+        integral = self.element_integral(self.kinetic_energy)
+        ddintegral = jax.hessian(integral, argnums=4, has_aux=True)
+        fs, _ = self.vmap_element_integral(
+            ddintegral,
+            params, domain.fspace, xs, t, us, state_old, dt, *args
         )
         return assemble_sparse_stiffness_matrix(
             onp.asarray(fs), onp.asarray(domain.conns), dof_manager
         )
 
     def stiffness_matrix(self, params, domain, t, us, state_old, dt, *args):
-        # us = self.vmap_field_values(params, domain.coords, t, *args)
         dof_manager = args[0]
         us = us[domain.conns, :]
         xs = domain.coords[domain.conns, :]
-        func = jax.hessian(self.element_energy_old, argnums=3)
-        in_axes = (None, 0, None, 0, None, 0) + len(args) * (None,)
-        fs = vmap(func, in_axes=in_axes)(
-            params, xs, t, us, domain.fspace, domain.conns, *args
+
+        integral = self.element_integral(self.energy)
+        ddintegral = jax.hessian(integral, argnums=4, has_aux=True)
+
+        fs, _ = self.vmap_element_integral(
+            ddintegral,
+            params, domain.fspace, xs, t, us, state_old, dt, *args
         )
         return assemble_sparse_stiffness_matrix(
             onp.asarray(fs), onp.asarray(domain.conns), dof_manager
         )
 
-    def vmap_element_energy(
+    def vmap_element_integral(
         self,
-        params, xs, t, us, grad_us, JxWs, state_old, dt, *args
+        func,
+        params, fspace, xs, t, us, state_old, dt, *args
     ):
-        in_axes = (None, 0, None, 0, 0, 0, 0, None) + len(args) * (None,)
-        pis, state_new = vmap(self.element_energy, in_axes=in_axes)(
-            params, xs, t, us, grad_us, JxWs, state_old, dt, *args
+        in_axes = (None, None, 0, None, 0, 0, None) + len(args) * (None,)
+        fs, state_new = vmap(func, in_axes=in_axes)(
+            params, fspace, xs, t, us, state_old, dt, *args
         )
-        return jnp.sum(pis), state_new
+        return fs, state_new
 
 
 class BaseStrongFormPhysics(BasePhysics):
