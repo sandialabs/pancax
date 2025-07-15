@@ -58,7 +58,7 @@ def dirichlet_bc_func(xs, t, nn):
 # model = NeoHookean(bulk_modulus=10., shear_modulus=0.855)
 model = SimpleFeFv(
     NeoHookean(bulk_modulus=10.0, shear_modulus=1.0),
-    PronySeries(moduli=[1.0], relaxation_times=[10.0]),
+    PronySeries(moduli=[1.0, 2.0], relaxation_times=[10.0, 20.0]),
     WLF(C1=17.44, C2=51.6, theta_ref=60.0),
 )
 physics = SolidMechanics(model, PlaneStrain())

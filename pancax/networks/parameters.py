@@ -91,6 +91,12 @@ class Parameters(BasePancaxModel):
         filter_spec = eqx.tree_at(
             lambda tree: tree.physics.x_maxs, filter_spec, replace=False
         )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.physics.t_min, filter_spec, replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.physics.t_max, filter_spec, replace=False
+        )
         return filter_spec
 
     # Move some of below to actually network implementation
@@ -113,5 +119,11 @@ class Parameters(BasePancaxModel):
         )
         filter_spec = eqx.tree_at(
             lambda tree: tree.physics.x_maxs, filter_spec, replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.physics.t_min, filter_spec, replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.physics.t_max, filter_spec, replace=False
         )
         return filter_spec
