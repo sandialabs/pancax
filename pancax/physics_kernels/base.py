@@ -136,6 +136,8 @@ class BasePhysics(eqx.Module):
     # maybe loop in the mechanics formulation here and rename it?
     x_mins: Float[Array, "nd"]  # = jnp.zeros(3)
     x_maxs: Float[Array, "nd"]  # = jnp.zeros(3)
+    t_min: Float[Array, "1"]
+    t_max: Float[Array, "1"]
 
     def __init__(self, field_value_names: tuple[str, ...]) -> None:
         self.field_value_names = field_value_names
@@ -144,13 +146,16 @@ class BasePhysics(eqx.Module):
         # TODO improve this error handling
         self.x_mins = jnp.zeros(3)
         self.x_maxs = jnp.zeros(3)
+        self.t_min = jnp.zeros(1)
+        self.t_max = jnp.ones(1)
 
     # TODO need to modify for delta pinn
     def field_values(self, field, x, t, *args):
         # x = (x - stop_gradient(self.x_mins)) /
         #   (stop_gradient(self.x_maxs) - stop_gradient(self.x_mins))
-        x = (x - self.x_mins) / (self.x_maxs - self.x_mins)
-        inputs = jnp.hstack((x, t))
+        x_norm = (x - self.x_mins) / (self.x_maxs - self.x_mins)
+        t_norm = (t - self.t_min) / (self.t_max - self.t_min)
+        inputs = jnp.hstack((x_norm, t_norm))
         z = field(inputs)
         u = self.dirichlet_bc_func(x, t, z)
         return u
@@ -188,12 +193,15 @@ class BasePhysics(eqx.Module):
     def update_normalization(self, domain):
         x_mins = jnp.min(domain.coords, axis=0)
         x_maxs = jnp.max(domain.coords, axis=0)
-
+        t_min = jnp.min(domain.times, axis=0)
+        t_max = jnp.max(domain.times, axis=0)
         # x_mins = jnp.append(x_mins, jnp.min(domain.times))
         # x_maxs = jnp.append(x_maxs, jnp.max(domain.times))
 
         new_pytree = eqx.tree_at(lambda x: x.x_mins, self, x_mins)
         new_pytree = eqx.tree_at(lambda x: x.x_maxs, new_pytree, x_maxs)
+        new_pytree = eqx.tree_at(lambda x: x.t_min, new_pytree, t_min)
+        new_pytree = eqx.tree_at(lambda x: x.t_max, new_pytree, t_max)
         return new_pytree
 
     def update_var_name_to_method(self):
