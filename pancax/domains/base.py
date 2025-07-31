@@ -8,6 +8,14 @@ import equinox as eqx
 import jax.numpy as jnp
 
 
+class SimulationTimesNotUniqueException(Exception):
+    pass
+
+
+class SimulationTimesNotStrictlyIncreasingException(Exception):
+    pass
+
+
 class BaseDomain(eqx.Module):
     mesh_file: str
     mesh: Mesh
@@ -31,6 +39,15 @@ class BaseDomain(eqx.Module):
                     "WARNING: Ignoring polynomial \
                     order flag for non tri mesh"
                 )
+
+            # checking provided simulation times are unique
+            if len(times) != len(set(times.tolist())):
+                raise SimulationTimesNotUniqueException()
+
+            # checking provided times are strictly increasing
+            for i in range(len(times) - 1):
+                if times[i] >= times[i + 1]:
+                    raise SimulationTimesNotStrictlyIncreasingException()
 
             if len(times) > 1:
                 dt = times[1] - times[0]
