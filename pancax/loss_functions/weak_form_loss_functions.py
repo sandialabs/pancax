@@ -173,34 +173,6 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
     def __init__(self, weight: Optional[float] = 1.0) -> None:
         self.weight = weight
 
-    def __call__old(self, params, problem):
-        field, physics, state = params
-
-        ne = problem.domain.conns.shape[0]
-        nq = len(problem.domain.fspace.quadrature_rule)
-
-        def _vmap_func(n):
-            return problem.physics.constitutive_model.\
-                initial_state()
-
-        state_old = vmap(vmap(_vmap_func))(
-            jnp.zeros((ne, nq))
-        )
-
-        # TODO not adaptive
-        # dumb implementation below
-        dt = problem.times[1] - problem.times[0]
-        pi = 0.0
-        for n in range(problem.times.shape[0]):
-            t = problem.times[n]
-            pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
-
-            state_old = state_new
-            pi = pi + pi_t
-
-        loss = pi
-        return self.weight * loss, dict(energy=pi)
-
     def __call__(self, params, problem):
 
         ne = problem.domain.conns.shape[0]
