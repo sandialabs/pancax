@@ -283,7 +283,7 @@ class PathDependentEnergyResidualAndReactionLoss(PhysicsLossFunction):
             pi = pi + pi_t
             R = R + R_t
             reaction = reaction + \
-                jnp.square(reaction - problem.global_data.outputs[n])
+                jnp.square(reaction_t - problem.global_data.outputs[n])
             state_old = state_new
             dt = problem.times[n] - problem.times[n - 1]
             carry = pi, state_old, dt, R, reaction
