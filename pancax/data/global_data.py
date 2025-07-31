@@ -8,6 +8,14 @@ import numpy as np
 import pandas
 
 
+class GlobalDataTimesNotUniqueException(Exception):
+    pass
+
+
+class GlobalDataTimesNotStrictlyIncreasingException(Exception):
+    pass
+
+
 # TODO currently hardcoded to force which may be limiting
 # for others interested in doing other physics
 class GlobalData(eqx.Module):
@@ -62,6 +70,18 @@ class GlobalData(eqx.Module):
                 np.linspace(np.min(times_in), np.max(times_in), n_time_steps)
         else:
             times = times_in
+
+        # checking to make sure time values are unique
+        if len(times) != len(set(times)):
+            raise GlobalDataTimesNotUniqueException()
+
+        # checking provided times are strictly increasing
+        for i in range(len(times) - 1):
+            if times[i] >= times[i + 1]:
+                raise GlobalDataTimesNotStrictlyIncreasingException()
+
+        # interpolating disp/force
+        # TODO make this not so mechanics centric
         disp_interp = np.interp(times, times_in, disps_in)
         force_interp = np.interp(times, times_in, forces_in)
 
