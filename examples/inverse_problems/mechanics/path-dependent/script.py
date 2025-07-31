@@ -11,7 +11,7 @@ key = random.key(10)
 full_field_data_file = find_data_file('full_field_data.csv')
 global_data_file = find_data_file('global_data.csv')
 mesh_file = find_mesh_file('mesh_quad4.g')
-logger = Logger('pinn.log', log_every=250)
+# logger = Logger('pinn.log', log_every=250)
 history = HistoryWriter('history.csv', log_every=250, write_every=250)
 pp = PostProcessor(mesh_file)
 
@@ -29,7 +29,7 @@ global_data = GlobalData(
 )
 # print(global_data.times)
 times = global_data.times
-
+print(times)
 ##################
 # domain setup
 ##################
@@ -107,7 +107,7 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 # ML setup
 ##################
-params = Parameters(problem, key, seperate_networks=True, network_type=MLP)
+params = Parameters(problem, key, seperate_networks=False, network_type=MLP)
 physics_and_global_loss = PathDependentEnergyResidualAndReactionLoss(
   residual_weight=250.e9, reaction_weight=250.e9
 )
@@ -132,21 +132,25 @@ opt = Adam(
 ##################
 # Training
 ##################
+print(params)
 opt_st = opt.init(params)
 
 
 # testing stuff
 dataloader = FullFieldDataLoader(problem.field_data)
 
-for epoch in range(10000):
-  for inputs, outputs in dataloader.dataloader(1024):
+for epoch in range(1000000):
+  for inputs, outputs in dataloader.dataloader(8 * 1024):
     params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
     # params, opt_st, loss = opt.step(params, problem, opt_st)
 
-  if epoch % 10 == 0:
-    print(epoch)
-    print(loss)
-    # print(params.physics.constitutive_model.bulk_modulus)
-    # print(params.physics.constitutive_model.shear_modulus)
-    print(params.physics.constitutive_model)
+  # if epoch % 10 == 0:
+  print(epoch)
+  print(loss)
+  print(params.physics.constitutive_model.eq_model.bulk_modulus)
+  print(params.physics.constitutive_model.eq_model.shear_modulus)
+  print(params.physics.constitutive_model.prony_series.moduli)
+  print(params.physics.constitutive_model.prony_series.relaxation_times)
+  print(params.physics.constitutive_model.shift_factor_model)
+    # print(params.physics.constitutive_model)
     # print(params.physics.constitutive_model.Jm_parameter())
