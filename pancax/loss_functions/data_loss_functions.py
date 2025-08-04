@@ -12,7 +12,6 @@ class FullFieldDataLoss(BaseLossFunction):
 
     def __call__(self, params, problem, inputs, outputs):
         field_network, _, _ = params
-        # n_dims = inputs.shape[-1]
         n_dims = problem.coords.shape[1]
         xs = inputs[:, 0:n_dims]
         ts = inputs[:, n_dims]
@@ -21,21 +20,5 @@ class FullFieldDataLoss(BaseLossFunction):
         )
         # TODO add output normalization
         loss = jnp.square(u_pred - outputs).mean()
-        aux = {"field_data_loss": loss}
-        return self.weight * loss, aux
-
-    def __call__old(self, params, domain):
-        field_network, _, _ = params
-        n_dims = domain.coords.shape[1]
-        xs = domain.field_data.inputs[:, 0:n_dims]
-        # TODO need time normalization
-        ts = domain.field_data.inputs[:, n_dims]
-        # TODO below is currenlty the odd ball for the field_value API
-        u_pred = vmap(domain.physics.field_values, in_axes=(None, 0, 0))(
-            field_network, xs, ts
-        )
-
-        # TODO add output normalization
-        loss = jnp.square(u_pred - domain.field_data.outputs).mean()
         aux = {"field_data_loss": loss}
         return self.weight * loss, aux

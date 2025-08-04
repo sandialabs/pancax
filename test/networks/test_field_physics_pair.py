@@ -19,7 +19,7 @@
 #     y = network(x)
 #     props = props()
 #     assert y.shape == (2,)
-#     assert props[0] >= 1. and props[0] <= 2.    
+#     assert props[0] >= 1. and props[0] <= 2.
 #     assert props[1] >= 2. and props[1] <= 3.
 
 
@@ -40,7 +40,7 @@
 #     model.serialise(os.path.join(Path(__file__).parent, 'checkpoint'), 0)
 
 #     model_loaded = eqx.tree_deserialise_leaves(
-#         os.path.join(Path(__file__).parent, 'checkpoint_0000000.eqx'), 
+#         os.path.join(Path(__file__).parent, 'checkpoint_0000000.eqx'),
 #         model
 #     )
 #     network, props = model_loaded
