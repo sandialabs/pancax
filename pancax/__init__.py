@@ -56,6 +56,7 @@ from .loss_functions import \
 from .networks import \
     Field, \
     FieldPhysicsPair, \
+    InputPolyconvexNN, \
     Linear, \
     MLP, \
     MLPBasis, \
@@ -165,6 +166,7 @@ __all__ = [
     # networks
     "Field",
     "FieldPhysicsPair",
+    "InputPolyconvexNN",
     "Linear",
     "MLP",
     "MLPBasis",
