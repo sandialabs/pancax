@@ -12,7 +12,7 @@ full_field_data_file = find_data_file('full_field_data.csv')
 global_data_file = find_data_file('global_data.csv')
 mesh_file = find_mesh_file('mesh_quad4.g')
 # logger = Logger('pinn.log', log_every=250)
-history = HistoryWriter('history.csv', log_every=250, write_every=250)
+history = HistoryWriter('history_pd.csv', log_every=250, write_every=250)
 pp = PostProcessor(mesh_file)
 
 ##################
@@ -27,15 +27,11 @@ global_data = GlobalData(
   plotting=True,
   interpolate=False
 )
-# print(global_data.times)
 times = global_data.times
-print(times)
+
 ##################
 # domain setup
 ##################
-# times_1 = jnp.linspace(0., 1., 11)
-# times_2 = jnp.linspace(1., 11., 11)
-# times = jnp.hstack((times_1, times_2[1:]))
 domain = VariationalDomain(mesh_file, times, q_order=2)
 
 ##################
@@ -144,13 +140,23 @@ for epoch in range(1000000):
     params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
     # params, opt_st, loss = opt.step(params, problem, opt_st)
 
-  # if epoch % 10 == 0:
+
+  history.write_data("epoch", epoch)
+  history.write_loss(loss)
+  history.write_data("shear_modulus", params.physics.constitutive_model.eq_model.shear_modulus)
+
   print(epoch)
   print(loss)
-  print(params.physics.constitutive_model.eq_model.bulk_modulus)
-  print(params.physics.constitutive_model.eq_model.shear_modulus)
-  print(params.physics.constitutive_model.prony_series.moduli)
-  print(params.physics.constitutive_model.prony_series.relaxation_times)
-  print(params.physics.constitutive_model.shift_factor_model)
+
+  if epoch % 1000 == 0:
+    history.to_csv()
+  # if epoch % 10 == 0:
+  # print(epoch)
+  # print(loss)
+  # print(params.physics.constitutive_model.eq_model.bulk_modulus)
+  # print(params.physics.constitutive_model.eq_model.shear_modulus)
+  # print(params.physics.constitutive_model.prony_series.moduli)
+  # print(params.physics.constitutive_model.prony_series.relaxation_times)
+  # print(params.physics.constitutive_model.shift_factor_model)
     # print(params.physics.constitutive_model)
     # print(params.physics.constitutive_model.Jm_parameter())
