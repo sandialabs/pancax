@@ -5,15 +5,15 @@ import jax.numpy as jnp
 
 def test_safe_sqrt():
     f = math.safe_sqrt(4.0)
-    assert jnp.allclose(f, 2.)
+    assert jnp.allclose(f, 2.0)
 
-    df = jax.grad(math.safe_sqrt)(4.)
+    df = jax.grad(math.safe_sqrt)(4.0)
     assert jnp.allclose(df, 0.25)
 
     f = math.safe_sqrt(-4.0)
     assert jnp.isnan(f)
 
-    df = jax.grad(math.safe_sqrt)(-4.)
+    df = jax.grad(math.safe_sqrt)(-4.0)
     assert jnp.allclose(df, 0.0)
 
 
