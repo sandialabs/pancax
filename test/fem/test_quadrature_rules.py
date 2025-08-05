@@ -8,32 +8,32 @@ import pytest
 # integrate x^n y^m on unit triangle
 def integrate_2D_monomial_on_triangle(n, m):
     p = n + m
-    return 1.0/((p + 2)*(p + 1)*binom(p, n))
+    return 1.0 / ((p + 2) * (p + 1) * binom(p, n))
 
 
 def is_inside_hex(point):
-    x_condition = (point[0] >= -1.) and (point[0] <= 1.)
-    y_condition = (point[1] >= -1.) and (point[1] <= 1.)
-    z_condition = (point[2] >= -1.) and (point[2] <= 1.)
+    x_condition = (point[0] >= -1.0) and (point[0] <= 1.0)
+    y_condition = (point[1] >= -1.0) and (point[1] <= 1.0)
+    z_condition = (point[2] >= -1.0) and (point[2] <= 1.0)
     return x_condition and y_condition and z_condition
 
 
 def is_inside_quad(point):
-    x_condition = (point[0] >= -1.) and (point[0] <= 1.)
-    y_condition = (point[1] >= -1.) and (point[1] <= 1.)
+    x_condition = (point[0] >= -1.0) and (point[0] <= 1.0)
+    y_condition = (point[1] >= -1.0) and (point[1] <= 1.0)
     return x_condition and y_condition
 
 
 def is_inside_tet(point):
-    x_condition = (point[0] >= 0.) and (point[0] <= 1.)
-    y_condition = (point[1] >= 0.) and (point[1] <= 1. - point[0])
-    z_condition = (point[2] >= 0.) and (point[2] <= 1. - point[0] - point[1])
+    x_condition = (point[0] >= 0.0) and (point[0] <= 1.0)
+    y_condition = (point[1] >= 0.0) and (point[1] <= 1.0 - point[0])
+    z_condition = (point[2] >= 0.0) and (point[2] <= 1.0 - point[0] - point[1])
     return x_condition and y_condition and z_condition
 
 
 def is_inside_triangle(point):
-    x_condition = (point[0] >= 0.) and (point[0] <= 1.)
-    y_condition = (point[1] >= 0.) and (point[1] <= 1. - point[0])
+    x_condition = (point[0] >= 0.0) and (point[0] <= 1.0)
+    y_condition = (point[1] >= 0.0) and (point[1] <= 1.0 - point[0])
     return x_condition and y_condition
 
 
@@ -79,18 +79,20 @@ for q in range(1, 2 + 1):
     in_domain_methods.append(is_inside_tet)
 
 
-@pytest.mark.parametrize('el, q', zip(elements_to_test, q_degrees))
+@pytest.mark.parametrize("el, q", zip(elements_to_test, q_degrees))
 def test_are_postive_weights(el, q):
     if type(el) == Tet4Element and q == 2:
-        pytest.skip('Not relevant for Tet4Element and q_degree = 2')
+        pytest.skip("Not relevant for Tet4Element and q_degree = 2")
     if type(el) == Tet10Element and q == 2:
-        pytest.skip('Not relevant for Tet10Element and q_degree = 2')
+        pytest.skip("Not relevant for Tet10Element and q_degree = 2")
     qr = QuadratureRule(el, q)
     _, w = qr
-    assert jnp.all(w > 0.)
+    assert jnp.all(w > 0.0)
 
 
-@pytest.mark.parametrize('el, q, is_inside', zip(elements_to_test, q_degrees, in_domain_methods))
+@pytest.mark.parametrize(
+    "el, q, is_inside", zip(elements_to_test, q_degrees, in_domain_methods)
+)
 def test_are_inside_domain(el, q, is_inside):
     qr = QuadratureRule(el, q)
     for point in qr.xigauss:
@@ -104,11 +106,10 @@ def test_triangle_quadrature_exactness():
         qr = QuadratureRule(SimplexTriElement(1), degree)
         for i in range(degree + 1):
             for j in range(degree + 1 - i):
-                monomial = qr.xigauss[:,0]**i * qr.xigauss[:,1]**j
+                monomial = qr.xigauss[:, 0] ** i * qr.xigauss[:, 1] ** j
                 quadratureAnswer = jnp.sum(monomial * qr.wgauss)
                 exactAnswer = integrate_2D_monomial_on_triangle(i, j)
                 assert jnp.abs(quadratureAnswer - exactAnswer) < 1e-14
-
 
 
 def test_len_method():
