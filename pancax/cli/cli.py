@@ -1,7 +1,7 @@
 from importlib import import_module
 from pathlib import Path
 import argparse
-import jax
+# import jax
 import os
 import sys
 
@@ -43,8 +43,8 @@ SOFTWARE.
 
 def pancax_main():
     parser = argparse.ArgumentParser(
-        # prog='pancax',
-        prog=code_name,
+        prog='pancax',
+        # prog=code_name,
         description='Physics Informed Neural Network library written in jax',
         epilog='Reach out to chamel@sandia.gov for help'
     )
@@ -78,6 +78,9 @@ def pancax_main():
     args = parser.parse_args()
 
     print(code_name)
+
+    # import jax here to speed up --help
+    import jax
 
     # switch on debug state
     # if args.debug_nans == 'on':

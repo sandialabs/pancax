@@ -17,14 +17,14 @@ dependencies = [
 cpu = [
   'chex',
   'equinox==0.13',
-  'jax==0.7',
+  'jax==0.6.2',
   'jaxtyping',
   'optax'
 ]
 cuda = [
   'chex',
   'equinox==0.13',
-  'jax[cuda12]==0.7',
+  'jax[cuda12]==0.6.2',
   'jaxtyping',
   'optax'
 ]
