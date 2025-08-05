@@ -1,12 +1,3 @@
-# from jax import random
-# from pancax import DirichletBC,
-# VariationalDomain, NeoHookean, ThreeDimensional, SolidMechanics
-# from pancax import FieldPhysicsPair, MLP
-# from pancax import PostProcessor, ForwardProblem
-# from pathlib import Path
-# import jax
-# import jax.numpy as jnp
-# import os
 import pytest
 
 
@@ -47,11 +38,9 @@ def problem():
 @pytest.fixture
 def params(problem):
     from jax import random
-    from pancax import FieldPhysicsPair, MLP
-    import jax
+    from pancax import Parameters
     key = random.key(10)
-    field_network = MLP(4, 3, 20, 3, jax.nn.tanh, key)
-    return FieldPhysicsPair(field_network, problem.physics)
+    return Parameters(problem, key)
 
 
 def test_post_processor(params, problem):

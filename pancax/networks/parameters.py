@@ -1,12 +1,9 @@
 from .base import AbstractPancaxModel
 from .fields import Field
 from .mlp import MLP
-from ..domains import VariationalDomain
-from jax import vmap
 from jaxtyping import Array, Float
 from typing import Optional, Union
 import equinox as eqx
-import jax.numpy as jnp
 import jax.tree_util as jtu
 
 
@@ -49,67 +46,38 @@ class Parameters(AbstractPancaxModel):
     def __iter__(self):
         return iter((self.fields, self.physics, self.state))
 
-    def _create_state_array(self, problem) -> State:
-        if type(problem.domain) is VariationalDomain:
-            nt = len(problem.domain.times)
-            ne = problem.domain.conns.shape[0]
-            nq = len(problem.domain.fspace.quadrature_rule)
-
-            # TODO need a better interface
-            if hasattr(problem.physics, 'constitutive_model'):
-                if problem.physics.constitutive_model.num_state_variables > 0:
-                    def _vmap_func(n):
-                        return problem.physics.constitutive_model.\
-                            initial_state()
-
-                    state = vmap(vmap(vmap(_vmap_func)))(
-                        jnp.zeros((nt, ne, nq))
-                    )
-                    print(state.shape)
-                else:
-                    state = jnp.zeros((nt, ne, nq, 0))
-            return state
-        else:
-            print(
-                "WARNING: Setting state to None since this is "
-                "not a VariationalDomain"
-            )
-            return None
-
     # TODO
     # make helper filter methods so there's
     # less code duplication
     def freeze_fields_filter(self):
-        filter_spec = jtu.tree_map(lambda _: False, self)
+        filter_spec = jtu.tree_map(lambda _: True, self)
+        fields_filter = jtu.tree_map(lambda _: False, self.fields)
         filter_spec = eqx.tree_at(
-            lambda tree: tree.physics, filter_spec, replace=True
+            lambda x: x.fields, filter_spec, fields_filter
         )
+
         # freeze normalization
         filter_spec = eqx.tree_at(
-            lambda tree: tree.physics.x_mins, filter_spec, replace=False
+            lambda x: x.physics.x_mins, filter_spec, replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda tree: tree.physics.x_maxs, filter_spec, replace=False
+            lambda x: x.physics.x_maxs, filter_spec, replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda tree: tree.physics.t_min, filter_spec, replace=False
+            lambda x: x.physics.t_min, filter_spec, replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda tree: tree.physics.t_max, filter_spec, replace=False
+            lambda x: x.physics.t_max, filter_spec, replace=False
         )
         return filter_spec
 
     # Move some of below to actually network implementation
     def freeze_physics_filter(self):
-        filter_spec = jtu.tree_map(lambda _: False, self)
-        for n in range(len(self.fields.layers)):
-            filter_spec = eqx.tree_at(
-                lambda tree: (
-                    tree.fields.layers[n].weight, tree.fields.layers[n].bias
-                ),
-                filter_spec,
-                replace=(True, True),
-            )
+        filter_spec = jtu.tree_map(lambda _: True, self)
+        physics_filter = jtu.tree_map(lambda _: False, self.physics)
+        filter_spec = eqx.tree_at(
+            lambda x: x.physics, filter_spec, physics_filter
+        )
         return filter_spec
 
     def freeze_physics_normalization_filter(self):

@@ -56,7 +56,6 @@ from .loss_functions import \
     UserDefinedLossFunction
 from .networks import \
     Field, \
-    FieldPhysicsPair, \
     InputPolyconvexNN, \
     Linear, \
     MLP, \
@@ -167,7 +166,6 @@ __all__ = [
     "UserDefinedLossFunction",
     # networks
     "Field",
-    "FieldPhysicsPair",
     "InputPolyconvexNN",
     "Linear",
     "MLP",

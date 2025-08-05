@@ -56,7 +56,6 @@ class Field(AbstractPancaxModel):
 
     def __call__(self, x):
         if self.seperate_networks:
-
             @eqx.filter_vmap(in_axes=(eqx.if_array(0), None))
             def func(params, x):
                 return params(x)

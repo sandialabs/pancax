@@ -13,16 +13,27 @@ class RBFBasis(eqx.Module):
         n_neurons: int,
         key: jax.random.PRNGKey
     ) -> None:
-        ckey, skey = jax.random.split(key)
-        self.center = jax.random.normal(ckey, (n_neurons, n_inputs))
-        self.sigma = 1.0 * jnp.ones((n_neurons,), dtype=jnp.float64)
+        self.center = jax.random.normal(key, (n_neurons, n_inputs))
+        self.sigma = 1.0 * jnp.ones((n_neurons,))
+
+    # make an input for different rbf funcs
+    def rbf_func(self, x, center, sigma):
+        return jnp.exp(-jnp.linalg.norm(x - center)**2 / sigma)
 
     def __call__(self, x):
-        out = self.center - x
-        out = jax.vmap(lambda a: jnp.dot(a, a))(out)
-        out = jnp.exp(-out / jnp.square(self.sigma))
-        return out
+        rbfs = jax.vmap(
+            self.rbf_func, in_axes=(None, 0, 0)
+        )(x, self.center, self.sigma)
+        return rbfs
+
+    # def __call__(self, x):
+    #     out = self.center - x
+    #     out = jax.vmap(lambda a: jnp.dot(a, a))(out)
+    #     out = jnp.exp(-out / jnp.square(self.sigma))
+    #     # return rbf_normalization(out)
+    #     return out
 
 
-def rbf_normalization(hidden):
-    return hidden / jnp.sum(hidden, axis=1)[:, None]
+# def rbf_normalization(hidden):
+#     # return hidden / jnp.sum(hidden, axis=1)[:, None]
+#     return hidden / jnp.sum(hidden)[:, None]
