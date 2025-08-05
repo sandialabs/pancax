@@ -1,6 +1,7 @@
 # from .bcs import *
 from .bcs import DirichletBC, NeumannBC
 from .bvps import SimpleShearLinearRamp, UniaxialTensionLinearRamp
+from .cli import pancax_main
 from .constitutive_models import \
     ConstitutiveModel, \
     BoundedProperty, \
@@ -112,6 +113,8 @@ __all__ = [
     "PronySeries",
     "SimpleFeFv",
     "WLF",
+    # cli
+    "pancax_main",
     # "data",
     "FullFieldData",
     "FullFieldDataLoader",

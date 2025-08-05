@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.12'
+version = '0.0.13'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -16,15 +16,15 @@ dependencies = [
 [project.optional-dependencies]
 cpu = [
   'chex',
-  'equinox==0.12.1',
-  'jax==0.5.0',
+  'equinox==0.13',
+  'jax==0.7',
   'jaxtyping',
   'optax'
 ]
 cuda = [
   'chex',
-  'equinox==0.12.1',
-  'jax[cuda12]==0.5.0',
+  'equinox==0.13',
+  'jax[cuda12]==0.7',
   'jaxtyping',
   'optax'
 ]
@@ -53,6 +53,9 @@ viz = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[project.scripts]
+pancax = "pancax.cli:pancax_main"
 
 # [tool.setuptools]
 [tool.hatch.build.targets.wheel]
