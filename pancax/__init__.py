@@ -60,7 +60,6 @@ from .networks import \
     Linear, \
     MLP, \
     MLPBasis, \
-    Network, \
     Parameters, \
     ResNet
 from .optimizers import Adam, LBFGS
@@ -170,7 +169,6 @@ __all__ = [
     "Linear",
     "MLP",
     "MLPBasis",
-    "Network",
     "Parameters",
     "ResNet",
     # optimizers

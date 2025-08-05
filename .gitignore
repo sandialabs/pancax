@@ -23,5 +23,6 @@ docs/build
 history*.csv
 jax_profile/
 pinn*.log
-venv/
 sierra_batch_script_*
+rocm_venv/
+venv/

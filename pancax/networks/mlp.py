@@ -1,4 +1,4 @@
-from .initialization import trunc_init
+from .base import AbstractPancaxModel
 from typing import Callable
 from typing import Optional
 import equinox as eqx
@@ -31,8 +31,8 @@ def MLPBasis(
     n_neurons: int,
     n_layers: int,
     activation: Callable,
-    key: jax.random.PRNGKey,
-    init_func: Optional[Callable] = trunc_init,
+    key: jax.random.PRNGKey
+    # init_func: Optional[Callable] = trunc_init,
 ):
     return MLP(
         n_inputs,
@@ -41,12 +41,12 @@ def MLPBasis(
         n_layers,
         activation=activation,
         use_final_bias=True,
-        key=key,
-        init_func=init_func,
+        key=key
+        # init_func=init_func,
     )
 
 
-class MLP(eqx.Module):
+class MLP(AbstractPancaxModel):
     mlp: eqx.Module
 
     def __init__(
@@ -58,7 +58,7 @@ class MLP(eqx.Module):
         activation: Callable,
         key: jax.random.PRNGKey,
         use_final_bias: Optional[bool] = False,
-        init_func: Optional[Callable] = trunc_init,
+        # init_func: Optional[Callable] = trunc_init,
         ensure_positivity: Optional[bool] = False,
     ):
         if ensure_positivity:

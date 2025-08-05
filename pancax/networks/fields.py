@@ -1,11 +1,11 @@
-from .base import BasePancaxModel
+from .base import AbstractPancaxModel
 from .mlp import MLP
 from typing import Callable, List, Optional, Union
 import equinox as eqx
 import jax
 
 
-class Field(BasePancaxModel):
+class Field(AbstractPancaxModel):
     networks: Union[eqx.Module, List[eqx.Module]]
     seperate_networks: bool
 
