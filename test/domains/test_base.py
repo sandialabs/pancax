@@ -8,7 +8,7 @@ def test_simulation_times_unique_exception():
     import pytest
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     times = jnp.array([0., 0.])
-    
+
     with pytest.raises(SimulationTimesNotUniqueException):
         BaseDomain(mesh_file, times)
 
