@@ -5,7 +5,7 @@ def test_forward_domain():
     import os
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     times = jnp.linspace(0., 1.0, 2)
-    domain = VariationalDomain(mesh_file, times)
+    VariationalDomain(mesh_file, times)
 
 
 def test_forward_domain_tri3_p_order():
@@ -15,4 +15,4 @@ def test_forward_domain_tri3_p_order():
     import os
     mesh_file = os.path.join(Path(__file__).parent, 'mesh_10x.g')
     times = jnp.linspace(0., 1.0, 2)
-    domain = VariationalDomain(mesh_file, times, p_order=2)
+    VariationalDomain(mesh_file, times, p_order=2)

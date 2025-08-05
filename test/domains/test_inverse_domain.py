@@ -7,7 +7,8 @@
 
 
 # def test_inverse_domain():
-#     field_data_file = os.path.join(Path(__file__).parent, 'data_full_field.csv')
+#     field_data_file = os.path.join(
+# Path(__file__).parent, 'data_full_field.csv')
 #     global_data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
 #     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
 #     essential_bc_func = lambda x, t, z: z
@@ -22,16 +23,16 @@
 #     natural_bcs = [
 #     ]
 #     physics = SolidMechanics(
-#         mesh_file, essential_bc_func, 
+#         mesh_file, essential_bc_func,
 #         NeoHookean(), ThreeDimensional()
 #     )
 #     full_field_data = FullFieldData(
-#         field_data_file, 
+#         field_data_file,
 #         input_keys=['x', 'y', 'z', 't'],
 #         output_keys=['u_x', 'u_y', 'u_z']
 #     )
 #     global_data = GlobalData(
-#         global_data_file, 
+#         global_data_file,
 #         times_key='t',
 #         disp_key='u_x',
 #         force_key='f_x',

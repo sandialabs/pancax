@@ -16,10 +16,11 @@ def test_forward_domain():
     # natural_bcs = [
     # ]
     # physics = SolidMechanics(
-    #     mesh_file, essential_bc_func, 
+    #     mesh_file, essential_bc_func,
     #     NeoHookean(), ThreeDimensional(),
     #     use_delta_pinn=True
     # )
     times = jnp.linspace(0., 1.0, 2)
-    # domain = DeltaPINNDomain(physics, essential_bcs, natural_bcs, mesh_file, times, 20)
-    domain = DeltaPINNDomain(mesh_file, times, n_eigen_values=100)
+    # domain = DeltaPINNDomain(
+    # physics, essential_bcs, natural_bcs, mesh_file, times, 20)
+    DeltaPINNDomain(mesh_file, times, n_eigen_values=100)

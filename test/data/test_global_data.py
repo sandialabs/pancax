@@ -10,8 +10,8 @@ def test_global_data():
     import os
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
-    data = GlobalData(
-        data_file, 
+    GlobalData(
+        data_file,
         times_key='t',
         disp_key='u_x',
         force_key='f_x',
@@ -20,8 +20,8 @@ def test_global_data():
         reaction_dof='x',
         n_time_steps=11
     )
-    data = GlobalData(
-        data_file, 
+    GlobalData(
+        data_file,
         times_key='t',
         disp_key='u_x',
         force_key='f_x',
@@ -30,8 +30,8 @@ def test_global_data():
         reaction_dof='y',
         n_time_steps=11
     )
-    data = GlobalData(
-        data_file, 
+    GlobalData(
+        data_file,
         times_key='t',
         disp_key='u_x',
         force_key='f_x',
@@ -49,8 +49,8 @@ def test_global_data_with_plotting():
     import os
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
-    data = GlobalData(
-        data_file, 
+    GlobalData(
+        data_file,
         times_key='t',
         disp_key='u_x',
         force_key='f_x',
@@ -69,8 +69,8 @@ def test_global_data_bad_reaction_dof():
     data_file = os.path.join(Path(__file__).parent, 'data_global.csv')
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     with pytest.raises(ValueError):
-        data = GlobalData(
-            data_file, 
+        GlobalData(
+            data_file,
             times_key='t',
             disp_key='u_x',
             force_key='f_x',
@@ -87,11 +87,13 @@ def test_global_data_times_not_unique_exception():
         GlobalDataTimesNotUniqueException
     from pathlib import Path
     import os
-    data_file = os.path.join(Path(__file__).parent, 'data_global_not_unique.csv')
+    data_file = os.path.join(
+        Path(__file__).parent, 'data_global_not_unique.csv'
+    )
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     with pytest.raises(GlobalDataTimesNotUniqueException):
-        data = GlobalData(
-            data_file, 
+        GlobalData(
+            data_file,
             times_key='t',
             disp_key='u_x',
             force_key='f_x',
@@ -108,11 +110,13 @@ def test_global_data_times_not_strictly_increasing():
         GlobalDataTimesNotStrictlyIncreasingException
     from pathlib import Path
     import os
-    data_file = os.path.join(Path(__file__).parent, 'data_global_not_strictly_increasing.csv')
+    data_file = os.path.join(
+        Path(__file__).parent, 'data_global_not_strictly_increasing.csv'
+    )
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     with pytest.raises(GlobalDataTimesNotStrictlyIncreasingException):
-        data = GlobalData(
-            data_file, 
+        GlobalData(
+            data_file,
             times_key='t',
             disp_key='u_x',
             force_key='f_x',
