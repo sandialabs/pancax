@@ -150,13 +150,3 @@ for epoch in range(1000000):
 
   if epoch % 1000 == 0:
     history.to_csv()
-  # if epoch % 10 == 0:
-  # print(epoch)
-  # print(loss)
-  # print(params.physics.constitutive_model.eq_model.bulk_modulus)
-  # print(params.physics.constitutive_model.eq_model.shear_modulus)
-  # print(params.physics.constitutive_model.prony_series.moduli)
-  # print(params.physics.constitutive_model.prony_series.relaxation_times)
-  # print(params.physics.constitutive_model.shift_factor_model)
-    # print(params.physics.constitutive_model)
-    # print(params.physics.constitutive_model.Jm_parameter())

@@ -1,9 +1,9 @@
-from .base import BasePancaxModel
+from .base import AbstractPancaxModel
 import equinox as eqx
 import jax.tree_util as jtu
 
 
-class FieldPhysicsPair(BasePancaxModel):
+class FieldPhysicsPair(AbstractPancaxModel):
     """
     Data structure for storing a set of field network
     parameters and a physics object

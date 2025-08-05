@@ -1,4 +1,4 @@
-from .base import BasePancaxModel
+from .base import AbstractPancaxModel
 from .fields import Field
 from .mlp import MLP
 from ..domains import VariationalDomain
@@ -13,7 +13,7 @@ import jax.tree_util as jtu
 State = Union[Float[Array, "nt ne nq ns"], eqx.Module, None]
 
 
-class Parameters(BasePancaxModel):
+class Parameters(AbstractPancaxModel):
     """
     Data structure for storing all parameters
     needed for a model
