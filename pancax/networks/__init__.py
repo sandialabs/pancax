@@ -1,5 +1,4 @@
 from .fields import Field
-from .field_physics_pair import FieldPhysicsPair
 from .input_polyconvex_nn import InputPolyconvexNN
 from .ml_dirichlet_field import MLDirichletField
 from .mlp import Linear
@@ -11,7 +10,6 @@ from .resnet import ResNet
 
 __all__ = [
     "Field",
-    "FieldPhysicsPair",
     "InputPolyconvexNN",
     "Linear",
     "MLDirichletField",
