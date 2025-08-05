@@ -62,4 +62,4 @@ def test_uniform_init(models, init_funcs):
 
     for model in models:
         for init_func in init_funcs:
-            new_model = model.init(init_func, key=key)
+            model.init(init_func, key=key)
