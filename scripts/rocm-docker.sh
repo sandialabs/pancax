@@ -9,7 +9,3 @@ docker run -it \
     seccomp=unconfined \
     -v $(pwd):/home/temp_user/pancax \
 pancax /bin/bash
-# --name rocm_jax rocm/jax-community:rocm6.2.3-jax0.4.33-py3.12.6 /bin/bash
-
-#docker attach rocm_jax
-
