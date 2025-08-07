@@ -17,7 +17,7 @@ def hencky_2():
     from pancax import BoundedProperty, Hencky
     import jax
 
-    key = jax.random.key(0)
+    key = jax.random.PRNGKey(0)
     return Hencky(
         bulk_modulus=BoundedProperty(K, K, key),
         shear_modulus=BoundedProperty(G, G, key),

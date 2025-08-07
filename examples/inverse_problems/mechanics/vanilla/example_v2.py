@@ -3,7 +3,9 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-key = random.key(10)
+# key = random.key(10)
+key = random.PRNGKey(10)
+key = random.split(key, 8)
 
 ##################
 # file management
@@ -35,11 +37,15 @@ domain = VariationalDomain(mesh_file, times)
 ##################
 # physics setup
 ##################
+# @eqx.filter_vmap
+# def models(key):
 model = NeoHookean(
   bulk_modulus=0.833,
   # bulk_modulus=BoundedProperty(0.01, 5., key=key),
   shear_modulus=BoundedProperty(0.01, 5., key=key)
 )
+  # return model
+
 physics = SolidMechanics(model, PlaneStrain())
 
 ##################
@@ -71,7 +77,9 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 # ML setup
 ##################
-params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
+params = Parameters(problem, key)#, seperate_networks=True, network_type=ResNet)
+print(params)
+# assert False
 physics_and_global_loss = EnergyResidualAndReactionLoss(
   residual_weight=250.e9, reaction_weight=250.e9
 )
@@ -90,19 +98,15 @@ opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, transition_steps=5
 ##################
 # Training
 ##################
-opt_st = opt.init(params)
+opt, opt_st = opt.init(params)
 
-
-# testing stuff
 dataloader = FullFieldDataLoader(problem.field_data)
-
 for epoch in range(10000):
   for inputs, outputs in dataloader.dataloader(1024):
-    params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
+    params, opt_st, loss = opt.step(params, opt_st, problem, inputs, outputs)
 
   if epoch % 10 == 0:
     print(epoch)
     print(loss)
-    print(params.physics.constitutive_model.bulk_modulus)
-    print(params.physics.constitutive_model.shear_modulus)
-    # print(params.physics.constitutive_model.Jm_parameter())
+    print(params.physics.constitutive_model)
+    # print(params.physics.constitutive_model.shear_modulus)

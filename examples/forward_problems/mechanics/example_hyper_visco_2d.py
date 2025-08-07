@@ -3,7 +3,7 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-key = random.key(10)
+key = random.PRNGKey(10)
 
 ##################
 # file management
@@ -93,9 +93,9 @@ print(params)
 # train network
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
-opt_st = opt.init(params)
+opt, opt_st = opt.init(params)
 for epoch in range(100000):
-    params, opt_st, loss = opt.step(params, problem, opt_st)
+    params, opt_st, loss = opt.step(params, opt_st, problem)
     # logger.log_loss(loss, epoch)
     if epoch % 100 == 0:
         print(epoch, flush=True)
@@ -105,6 +105,7 @@ for epoch in range(100000):
 
     if epoch % 10000 == 0:
         pp.init(
+            params,
             problem,
             f"output_{str(epoch).zfill(6)}.e",
             node_variables=[

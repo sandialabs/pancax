@@ -1,101 +1,87 @@
-from abc import ABC
 from abc import abstractmethod
-from typing import Callable
-from typing import Optional
+from typing import Callable, Optional, Union
 import equinox as eqx
 
 
-class Optimizer(ABC):
+class AbstractOptimizer(eqx.Module):
+    epoch: int
+    has_aux: bool
+    jit: bool
+    loss_function: Callable  # TODO further type me
+    loss_and_grads: Callable  # TODO not sure if this type is right?
+    step: Union[None, Callable]
+
     def __init__(
         self,
         loss_function: Callable,
+        *,
         has_aux: Optional[bool] = False,
-        jit: Optional[bool] = True,
+        jit: Optional[bool] = True
     ) -> None:
-        self.loss_function = loss_function
+        self.epoch = 0
         self.has_aux = has_aux
         self.jit = jit
+        self.loss_function = loss_function
+        self.loss_and_grads = eqx.filter_value_and_grad(
+            self.loss_function.filtered_loss, has_aux=has_aux
+        )
         self.step = None
-        self.epoch = 0
 
     @abstractmethod
-    def make_step_method(self, params):
+    def make_step_method(self, filter_spec: Callable):
         pass
 
-    def ensemble_init(self, params):
-        self.step = self.make_step_method()
-        # if self.jit:
-        #   self.step = eqx.filter_jit(self.step)
+    def _ensemble_init(self, params, filter_spec):
+        filter_spec = self._init_filter(params, filter_spec=filter_spec)
+        step = self.make_step_method(filter_spec)
 
-        # need to now make an ensemble wrapper our self.step
-        # but make sure not to jit it until after the vmap
-        def ensemble_step(params, domain, opt_st):
-            params, opt_st, loss = eqx.filter_vmap(
-                self.step, in_axes=(eqx.if_array(0), None, eqx.if_array(0))
-            )(params, domain, opt_st)
-            return params, opt_st, loss
+        def ensemble_step(params, opt_st, *args):
+            in_axes = (eqx.if_array(0), eqx.if_array(0))
+            in_axes = in_axes + len(args) * (None,)
+
+            @eqx.filter_vmap(in_axes=in_axes)
+            def vmap_func(params, opt_st, *args):
+                return step(params, opt_st, *args)
+
+            return vmap_func(params, opt_st, *args)
 
         if self.jit:
-            self.ensemble_step = eqx.filter_jit(ensemble_step)
+            ensemble_step = eqx.filter_jit(ensemble_step)
 
+        self = eqx.tree_at(
+            lambda x: x.step, self, ensemble_step,
+            is_leaf=lambda x: x is None
+        )
+
+        @eqx.filter_vmap(in_axes=(eqx.if_array(0),))
         def vmap_func(p):
             return self.opt.init(eqx.filter(p, eqx.is_array))
 
-        opt_st = eqx.filter_vmap(vmap_func, in_axes=(eqx.if_array(0),))(params)
-        return opt_st
+        opt_st = vmap_func(params)
 
-    def ensemble_step_old(self, params, domain, opt_st):
-        params, opt_st, loss = eqx.filter_vmap(
-            self.step, in_axes=(eqx.if_array(0), None, eqx.if_array(0))
-        )(params, domain, opt_st)
-        return params, opt_st, loss
+        return self, opt_st
 
-    def init(self, params):
-        self.step = self.make_step_method()
+    def _init(self, params, filter_spec):
+        filter_spec = self._init_filter(params, filter_spec=filter_spec)
+        step = self.make_step_method(filter_spec)
         if self.jit:
-            self.step = eqx.filter_jit(self.step)
+            step = eqx.filter_jit(step)
 
+        self = eqx.tree_at(
+            lambda x: x.step, self, step,
+            is_leaf=lambda x: x is None
+        )
         opt_st = self.opt.init(eqx.filter(params, eqx.is_array))
-        # opt_st = self.opt.init(eqx.filter(params, filter_spec))
-        return opt_st
+        return self, opt_st
 
-    # def train(self, params, opt_st, domain, n_epochs, log_every):
-    #   for n in range(n_epochs):
-    #     params, opt_st, loss = self.step(params, domain, opt_st)
-    #     log_loss(loss, self.epoch, log_every)
-    #     self.epoch = self.epoch + 1
-    #   return params, opt_st
-    def train(
-        self,
-        params,
-        domain,
-        times,
-        opt,
-        logger,
-        history,
-        pp,
-        n_epochs,
-        log_every: Optional[int] = 100,
-        serialise_every: Optional[int] = 10000,
-        postprocess_every: Optional[int] = 10000,
-    ):
-        opt_st = opt.init(params)
-        for epoch in range(int(n_epochs)):
-            params, opt_st, loss = opt.step(params, domain, opt_st)
-            logger.log_loss(loss, epoch, log_every)
-            history.write_loss(loss, epoch)
+    def init(self, params, filter_spec: Optional[Callable] = None):
+        if params.is_ensemble:
+            return self._ensemble_init(params, filter_spec)
+        else:
+            return self._init(params, filter_spec)
 
-            if epoch % serialise_every == 0:
-                params.serialise("checkpoint", epoch)
+    def _init_filter(self, params, filter_spec):
+        if filter_spec is None:
+            filter_spec = params.freeze_physics_normalization_filter()
 
-            if epoch % postprocess_every == 0:
-                pp.init(params, domain, f"output_{str(epoch).zfill(6)}.e")
-                pp.write_outputs(
-                    params,
-                    domain,
-                    times,
-                    [
-                        "displacement",
-                    ],
-                )
-                pp.close()
+        return filter_spec

@@ -138,8 +138,13 @@ class BasePhysics(eqx.Module):
     x_maxs: Float[Array, "nd"]  # = jnp.zeros(3)
     t_min: Float[Array, "1"]
     t_max: Float[Array, "1"]
+    #
+    is_delta_pinn: bool
 
-    def __init__(self, field_value_names: tuple[str, ...]) -> None:
+    def __init__(
+        self,
+        field_value_names: tuple[str, ...]
+    ) -> None:
         self.field_value_names = field_value_names
         self.var_name_to_method = {}
         self.dirichlet_bc_func = lambda x, t, z: z
@@ -148,6 +153,8 @@ class BasePhysics(eqx.Module):
         self.x_maxs = jnp.zeros(3)
         self.t_min = jnp.zeros(1)
         self.t_max = jnp.ones(1)
+
+        self.is_delta_pinn = False
 
     # TODO need to modify for delta pinn
     def field_values(self, field, x, t, *args):

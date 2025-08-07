@@ -1,7 +1,8 @@
-from jaxtyping import Array
+from jaxtyping import Array, Float
 from typing import Union
 import equinox as eqx
 import jax
+import jax.numpy as jnp
 
 
 # TODO patch up error check in a good way
@@ -9,7 +10,7 @@ import jax
 class BoundedProperty(eqx.Module):
     prop_min: float = eqx.field(static=True)
     prop_max: float = eqx.field(static=True)
-    prop_val: float
+    prop_val: Float[Array, "n"]
     # TODO
     # activation: Callable
 
@@ -18,7 +19,16 @@ class BoundedProperty(eqx.Module):
     ) -> None:
         self.prop_min = prop_min
         self.prop_max = prop_max
-        self.prop_val = jax.random.uniform(key, 1)
+
+        if len(key.shape) == 1:
+            self.prop_val = self._sample(key, prop_min, prop_max)
+        elif len(key.shape) == 2:
+            @eqx.filter_vmap
+            def vmap_func(key):
+                return self._sample(key, prop_min, prop_max)
+            self.prop_val = vmap_func(key)
+        else:
+            assert False, f"This shouldn't happen key = {key}"
 
     def __call__(self):
         return (
@@ -28,7 +38,12 @@ class BoundedProperty(eqx.Module):
         )
 
     def __repr__(self):
-        return str(self.__call__())
+        # return str(self.__call__())
+        return str((
+            self.prop_min +
+            (self.prop_max - self.prop_min) *
+            jax.nn.sigmoid(self.prop_val)
+        ))
 
     def __add__(self, other):
         self._check_other_type(other, "+")
@@ -78,6 +93,14 @@ class BoundedProperty(eqx.Module):
                 f"Unsupported type {type(other)} when doing \
                 {op_str} with BoundingProperty"
             )
+
+    def _sample(self, key, lb, ub):
+        if lb == ub:
+            return jnp.zeros(1)
+
+        p_actual = jax.random.uniform(key, 1, minval=lb, maxval=ub)
+        y = (p_actual - lb) / (ub - lb)
+        return jnp.log(y / (1. - y))
 
 
 FixedProperty = float

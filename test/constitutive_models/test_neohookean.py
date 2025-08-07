@@ -17,7 +17,7 @@ def neohookean_2():
     from pancax import BoundedProperty, NeoHookean
     import jax
 
-    key = jax.random.key(0)
+    key = jax.random.PRNGKey(0)
     return NeoHookean(
         bulk_modulus=BoundedProperty(K, K, key),
         shear_modulus=BoundedProperty(G, G, key),
