@@ -1,5 +1,10 @@
 from ..bcs import DirichletBC, NeumannBC
-from ..domains import BaseDomain, CollocationDomain, VariationalDomain
+from ..domains import (
+    BaseDomain,
+    CollocationDomain,
+    DeltaPINNDomain,
+    VariationalDomain
+)
 from ..physics_kernels import (
     BasePhysics,
     BaseStrongFormPhysics,
@@ -8,6 +13,7 @@ from ..physics_kernels import (
 )
 from typing import Callable, List, Optional
 import equinox as eqx
+import jax.numpy as jnp
 
 
 class DomainPhysicsCompatabilityError(Exception):
@@ -22,6 +28,7 @@ class ForwardProblem(eqx.Module):
     ics: List[Callable]
     dirichlet_bcs: List[DirichletBC]
     neumann_bcs: List[NeumannBC]
+    is_delta_pinn: bool
 
     def __init__(
         self,
@@ -40,7 +47,8 @@ class ForwardProblem(eqx.Module):
                     f"Got domain of type = {type(domain)}\n"
                     f"Got physics of type = {type(physics)}"
                 )
-        elif type(domain) is VariationalDomain:
+        elif type(domain) is VariationalDomain \
+                or type(domain) is DeltaPINNDomain:
             # TODO also need a weak form catch here
             # TODO or just maybe make a base variational physics class
             if not issubclass(
@@ -56,15 +64,35 @@ class ForwardProblem(eqx.Module):
         else:
             assert False, "wtf is this domain"
 
-        if type(domain) is VariationalDomain:
+        if type(domain) is VariationalDomain or \
+                type(domain) is DeltaPINNDomain:
             domain = domain.update_dof_manager(dirichlet_bcs, physics.n_dofs)
 
-        self.domain = domain
+        # setup physics
         physics = physics.update_normalization(domain)
-        self.physics = physics.update_var_name_to_method()
+        physics = physics.update_var_name_to_method()
+
+        if type(domain) is DeltaPINNDomain:
+            is_delta_pinn = True
+            physics = eqx.tree_at(
+                lambda x: x.x_mins, physics,
+                jnp.min(domain.eigen_modes, axis=0)
+            )
+            physics = eqx.tree_at(
+                lambda x: x.x_maxs, physics,
+                jnp.max(domain.eigen_modes, axis=0)
+            )
+        else:
+            is_delta_pinn = False
+
+        self.domain = domain
+        # physics = physics.update_normalization(domain)
+        # self.physics = physics.update_var_name_to_method()
+        self.physics = physics
         self.ics = ics
         self.dirichlet_bcs = dirichlet_bcs
         self.neumann_bcs = neumann_bcs
+        self.is_delta_pinn = is_delta_pinn
 
     # TODO a lot of these below are for some backwards
     # compatability during a transition period to

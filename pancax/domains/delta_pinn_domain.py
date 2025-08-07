@@ -31,8 +31,6 @@ class DeltaPINNDomain(VariationalDomain):
         self.physics = physics.update_var_name_to_method()
         self.eigen_modes = self.solve_eigen_problem()
 
-    # def __pos
-
     def solve_eigen_problem(self):
         # physics = LaplaceBeltrami()
         dof_manager = DofManager(self.mesh, 1, [])
@@ -58,9 +56,18 @@ class DeltaPINNDomain(VariationalDomain):
             for n in range(len(lambdas)):
                 print(f"  Eigen mode {n} = {1. / lambdas[n]}")
 
+        # dummy params
+        class DummyParams:
+            is_ensemble = False
+            n_ensemble = 1
+
+        params = DummyParams()
+
         with Timer("post-processing"):
             pp = PostProcessor(self.mesh_file)
-            pp.init(self, "output-eigen.e", node_variables=["field_values"])
+            pp.init(
+                params, self, "output-eigen.e", node_variables=["field_values"]
+            )
 
             with nc.Dataset(pp.pp.output_file, "a") as out:
                 for n in range(len(lambdas)):

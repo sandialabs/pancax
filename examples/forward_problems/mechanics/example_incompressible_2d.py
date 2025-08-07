@@ -3,7 +3,8 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-key = random.key(10)
+key = random.PRNGKey(10)
+key = random.split(key, 8) # comment this to not use an ensemble
 
 ##################
 # file management
@@ -16,6 +17,7 @@ pp = PostProcessor(mesh_file, 'exodus')
 ##################
 times = jnp.linspace(0.0, 1.0, 11)
 domain = VariationalDomain(mesh_file, times, q_order=2)
+# domain = DeltaPINNDomain(mesh_file, times, n_eigen_values=20, q_order=2)
 
 ##################
 # physics setup
@@ -49,18 +51,17 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 # ML setup
 ##################
 loss_function = EnergyLoss()
-# loss_function = EnergyAndResidualLoss(residual_weight=1.0e9)
-# params = Parameters(problem, key, seperate_networks=True, network_type=ResNet)
-params = Parameters(problem, key, seperate_networks=True)
+params = Parameters(problem, key, seperate_networks=False)
 print(params)
 
 ##################
 # train network
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
-opt_st = opt.init(params)
+opt, opt_st = opt.init(params)
+
 for epoch in range(25000):
-  params, opt_st, loss = opt.step(params, problem, opt_st)
+  params, opt_st, loss = opt.step(params, opt_st, problem)
   if epoch % 100 == 0:
     print(epoch, flush=True)
     print(loss, flush=True)
@@ -68,7 +69,7 @@ for epoch in range(25000):
 ##################
 # post-processing
 ##################
-pp.init(problem, 'output.e', 
+pp.init(params, problem, 'output.e', 
   node_variables=[
     'field_values',
     # 'internal_force'

@@ -29,7 +29,7 @@ def swanson_2():
     from pancax import BoundedProperty, Swanson
     import jax
 
-    key = jax.random.key(0)
+    key = jax.random.PRNGKey(0)
     return Swanson(
         bulk_modulus=BoundedProperty(K, K, key),
         A1=BoundedProperty(A1, A1, key),

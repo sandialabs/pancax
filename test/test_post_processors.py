@@ -1,6 +1,11 @@
 import pytest
 
 
+class DummyParams:
+    is_ensemble = False
+    n_ensemble = 1
+
+
 @pytest.fixture
 def problem():
     from pancax import (
@@ -39,7 +44,7 @@ def problem():
 def params(problem):
     from jax import random
     from pancax import Parameters
-    key = random.key(10)
+    key = random.PRNGKey(10)
     return Parameters(problem, key)
 
 
@@ -49,7 +54,9 @@ def test_post_processor(params, problem):
     import os
     mesh_file = os.path.join(Path(__file__).parent, 'mesh.g')
     pp = PostProcessor(mesh_file)
+
     pp.init(
+        DummyParams(),
         problem,
         'output.e',
         node_variables=[
@@ -71,6 +78,7 @@ def test_post_processor_bad_var_name(problem):
     pp = PostProcessor(mesh_file)
     with pytest.raises(ValueError):
         pp.init(
+            DummyParams(),
             problem,
             'output.e',
             node_variables=[

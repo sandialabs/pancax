@@ -1,7 +1,10 @@
 from abc import abstractmethod
-
-# from pancax.physics import incompressible_internal_force, internal_force
 from typing import List
+import equinox as eqx
+import jax
+import jax.numpy as jnp
+import netCDF4 as nc
+import numpy as onp
 
 try:
     import vtk
@@ -11,60 +14,43 @@ except ModuleNotFoundError:
         "You'll need to use another form of output"
     )
 
-import jax
-import jax.numpy as jnp
-import os
-import netCDF4 as nc
-import numpy as onp
-
-# import vtk
-
 
 class BasePostProcessor:
     mesh_file: str = None
     node_variables: List[str] = None
     element_variables: List[str] = None
+    output_file: str = None
 
-    # def __init__(
-    #   self,
-    #   mesh_file: str,
-    #   node_variables: List[str],
-    #   element_variables: List[str]
-    # ) -> None:
-    #   self.mesh_file = mesh_file
-    #   self.node_variables = node_variables
-    #   self.element_variables = element_variables
-
-    def check_variable_names(self, domain, variables) -> None:
+    def check_variable_names(self, problem, variables) -> None:
         for var in variables:
             if var == "internal_force" or \
                var == "incompressible_internal_force":
                 continue
 
-            if var not in domain.physics.var_name_to_method.keys():
+            if var not in problem.physics.var_name_to_method.keys():
                 str = f"Unsupported variable requested for output {var}.\n"
                 str += "Supported variables include:\n"
-                for v in domain.physics.var_name_to_method.keys():
+                for v in problem.physics.var_name_to_method.keys():
                     str += f"  {v}\n"
                 raise ValueError(str)
 
-    def get_node_variable_number(self, domain, variables) -> int:
+    def get_node_variable_number(self, problem, variables) -> int:
         n = 0
         for var in variables:
             if var == "internal_force" or \
                var == "incompressible_internal_force":
-                n = n + len(domain.physics.field_value_names)
+                n = n + len(problem.physics.field_value_names)
             else:
-                n = n + len(domain.physics.var_name_to_method[var]["names"])
+                n = n + len(problem.physics.var_name_to_method[var]["names"])
 
         return n
 
-    def get_element_variable_number(self, domain, variables) -> int:
+    def get_element_variable_number(self, problem, variables) -> int:
         n = 0
         for var in variables:
-            n = n + len(domain.physics.var_name_to_method[var]["names"])
+            n = n + len(problem.physics.var_name_to_method[var]["names"])
         if n > 0:
-            q_points = len(domain.fspace.quadrature_rule)
+            q_points = len(problem.fspace.quadrature_rule)
             return n * q_points
         else:
             return 0
@@ -74,9 +60,10 @@ class BasePostProcessor:
         pass
 
     @abstractmethod
-    def init(
+    def _init(
         self,
-        domain,
+        params,
+        problem,
         output_file: str,
         node_variables: List[str],
         element_variables: List[str],
@@ -84,8 +71,63 @@ class BasePostProcessor:
         pass
 
     @abstractmethod
-    def write_outputs(self, params, domain):
+    def _write_outputs(self, params, problem):
         pass
+
+    def init(
+        self,
+        params,
+        problem,
+        output_file: str,
+        node_variables: List[str],
+        element_variables: List[str],
+    ) -> None:
+        self.output_file = output_file
+
+        if params.is_ensemble:
+            # parts = self.output_file.split('.')
+            # base_name = parts[0]
+            # ext = parts[1]
+            # # n_ensemble = jnp.arange(params.n_ensemble)
+            # fnames = []
+            # for n in range(params.n_ensemble):
+            #     fnames.append(f"{base_name}_{n}.{ext}")
+            # fnames = jnp.array(fnames)
+
+            # @eqx.filter_vmap
+            # def vmap_func(params, fname):
+            #     # output_file = f"{base_name}_{n}.{ext}"
+            #     self._init(
+            #         params, problem,
+            #         fname, node_variables, element_variables
+            #     )
+            # # print(n_ensemble)
+            # vmap_func(params, fnames)
+            print(
+                "WARNING: post-processing is "
+                "currently unsupported for ensembles"
+            )
+        else:
+            self._init(
+                params, problem,
+                output_file, node_variables, element_variables
+            )
+
+    def write_outputs(self, params, problem):
+        if params.is_ensemble:
+            parts = self.output_file.split('.')
+            base_name = parts[0]
+            ext = parts[1]
+            n_ensemble = jnp.arange(params.n_ensemble)
+
+            @eqx.filter_vmap
+            def vmap_func(params, n):
+                output_file = f"{base_name}_{n}.{ext}"
+                self._write_outputs(params, problem, output_file)
+
+            vmap_func(params, n_ensemble)
+        else:
+            self._write_outputs(params, problem, self.output_file)
 
 
 class ExodusPostProcessor(BasePostProcessor):
@@ -96,16 +138,18 @@ class ExodusPostProcessor(BasePostProcessor):
     def close(self) -> None:
         pass
 
-    def init(
+    def _init(
         self,
-        domain,
+        # domain,
+        params,
+        problem,
         output_file: str,
         node_variables: List[str],
         element_variables: List[str],
     ) -> None:
         self.output_file = output_file
-        self.check_variable_names(domain, node_variables)
-        self.check_variable_names(domain, element_variables)
+        self.check_variable_names(problem, node_variables)
+        self.check_variable_names(problem, element_variables)
         self.node_variables = node_variables
         self.element_variables = element_variables
 
@@ -145,7 +189,7 @@ class ExodusPostProcessor(BasePostProcessor):
                     # get total number of node variables
                     num_node_vars = 0
                     for var in node_variables:
-                        for v in domain.physics.\
+                        for v in problem.physics.\
                                 var_name_to_method[var]["names"]:
                             num_node_vars = num_node_vars + 1
 
@@ -156,7 +200,7 @@ class ExodusPostProcessor(BasePostProcessor):
 
                     n = 0
                     for var in node_variables:
-                        for v in domain.\
+                        for v in problem.\
                                 physics.var_name_to_method[var]["names"]:
                             name = v.ljust(max_str_len)[:max_str_len]
                             # print(name)
@@ -168,11 +212,11 @@ class ExodusPostProcessor(BasePostProcessor):
                             n = n + 1
 
                 if len(element_variables) > 0:
-                    q_points = len(domain.fspace.quadrature_rule)
+                    q_points = len(problem.fspace.quadrature_rule)
                     # get total number of node variables
                     num_elem_vars = 0
                     for var in element_variables:
-                        for v in domain.\
+                        for v in problem.\
                                 physics.var_name_to_method[var]["names"]:
                             for _ in range(q_points):
                                 num_elem_vars = num_elem_vars + 1
@@ -184,7 +228,7 @@ class ExodusPostProcessor(BasePostProcessor):
 
                     n = 0
                     for var in element_variables:
-                        for v in domain.\
+                        for v in problem.\
                                 physics.var_name_to_method[var]["names"]:
                             for q in range(q_points):
                                 name = f"{v}_{q + 1}"
@@ -198,11 +242,25 @@ class ExodusPostProcessor(BasePostProcessor):
                                 )
                                 n = n + 1
 
-    def write_outputs(self, params, problem):
+    # def write_outputs(self, params, problem):
+    #     if params.is_ensemble:
+    #         parts = self.output_file.split('.')
+    #         base_name = parts[0]
+    #         ext = parts[1]
+    #         n_emsemble = jnp.arange(params.n_ensemble)
+
+    #         @eqx.filter_vmap()
+    #         def vmap_func(params, n):
+    #             output_file = f"{base_name}_{n}.e"
+    #         assert False, "Need to implement for ensemble"
+    #     else:
+    #         self._write_outputs(params, problem, self.output_file)
+
+    def _write_outputs(self, params, problem, output_file):
         physics = problem.physics
         times = problem.times
 
-        with nc.Dataset(self.output_file, "a") as dataset:
+        with nc.Dataset(output_file, "a") as dataset:
             ne = problem.domain.conns.shape[0]
             nq = len(problem.domain.fspace.quadrature_rule)
 
@@ -316,161 +374,7 @@ class ExodusPostProcessor(BasePostProcessor):
                 state_old = state_new
 
 
-class ExodusPostProcessor_old:
-    def __init__(self, mesh_file: str) -> None:
-        self.mesh_file = mesh_file
-        self.exo = None
-        self.node_variables = None
-        self.element_variables = None
-
-    def check_variable_names(self, domain, variables) -> None:
-        for var in variables:
-            if var == "internal_force" or \
-               var == "incompressible_internal_force":
-                continue
-
-            if var not in domain.physics.var_name_to_method.keys():
-                str = f"Unsupported variable requested for output {var}.\n"
-                str += "Supported variables include:\n"
-                for v in domain.physics.var_name_to_method.keys():
-                    str += f"  {v}\n"
-                raise ValueError(str)
-
-    def close(self) -> None:
-        self.exo.close()
-
-    def copy_mesh(self, output_file: str) -> None:
-        if os.path.isfile(output_file):
-            os.remove(output_file)
-
-        exo_temp = exodus.copy_mesh(self.mesh_file, output_file)
-        exo_temp.close()
-        self.exo = exodus.exodus(output_file, mode="a", array_type="numpy")
-
-    def get_node_variable_number(self, domain, variables) -> int:
-        n = 0
-        for var in variables:
-            if var == "internal_force" or \
-               var == "incompressible_internal_force":
-                n = n + len(domain.physics.field_value_names)
-            else:
-                n = n + len(domain.physics.var_name_to_method[var]["names"])
-
-        return n
-
-    def get_element_variable_number(self, domain, variables) -> int:
-        n = 0
-        for var in variables:
-            n = n + len(domain.physics.var_name_to_method[var]["names"])
-        if n > 0:
-            q_points = len(domain.fspace.quadrature_rule)
-            return n * q_points
-        else:
-            return 0
-
-    def init(
-        self,
-        domain,
-        output_file: str,
-        node_variables: List[str],
-        element_variables: List[str],
-    ) -> None:
-        self.copy_mesh(output_file)
-        self.check_variable_names(domain, node_variables)
-        self.check_variable_names(domain, element_variables)
-        self.node_variables = node_variables
-        self.element_variables = element_variables
-        self.exo.set_node_variable_number(
-            self.get_node_variable_number(domain, node_variables)
-        )
-        self.exo.set_element_variable_number(
-            self.get_element_variable_number(domain, element_variables)
-        )
-        n = 1
-        for var in self.node_variables:
-            if var == "internal_force" or \
-               var == "incompressible_internal_force":
-                self.exo.put_node_variable_name("internal_force_x", n)
-                self.exo.put_node_variable_name("internal_force_y", n + 1)
-                self.exo.put_node_variable_name("internal_force_z", n + 2)
-                n = n + 3
-            else:
-                for v in domain.physics.var_name_to_method[var]["names"]:
-                    self.exo.put_node_variable_name(v, n)
-                    n = n + 1
-
-        if len(element_variables) > 0:
-            q_points = len(domain.fspace.quadrature_rule)
-            n = 1
-            for var in self.element_variables:
-                for v in domain.physics.var_name_to_method[var]["names"]:
-                    for q in range(q_points):
-                        name = f"{v}_{q + 1}"
-                        self.exo.put_element_variable_name(name, n)
-                        n = n + 1
-
-    def index_to_component(self, index):
-        if index == 0:
-            string = "x"
-        elif index == 1:
-            string = "y"
-        elif index == 2:
-            string = "z"
-        else:
-            raise ValueError("Should be 0, 1, or 2")
-        return string
-
-    def write_outputs(self, params, domain) -> None:
-        physics = domain.physics
-        times = domain.times
-        for n, time in enumerate(times):
-            self.exo.put_time(n + 1, time)
-
-            for var in self.node_variables:
-                if var == "internal_force" or \
-                   var == "incompressible_internal_force":
-                    us = jax.vmap(
-                        physics.field_values, in_axes=(None, 0, None)
-                    )(params.fields, domain.coords, time)
-                    fs = onp.array(
-                        internal_force(domain, us, params.properties())
-                    )
-                    for i in range(fs.shape[1]):
-                        self.exo.put_node_variable_values(
-                            f"internal_force_{self.index_to_component(i)}",
-                            n + 1,
-                            fs[:, i],
-                        )
-                else:
-                    output = physics.var_name_to_method[var]
-                    pred = onp.array(output["method"](params, domain, time))
-                    if len(pred.shape) > 2:
-                        for i in range(pred.shape[1]):
-                            for j in range(pred.shape[2]):
-                                k = pred.shape[1] * i + j
-                                self.exo.put_node_variable_values(
-                                    output["names"][k], n + 1, pred[:, i, j]
-                                )
-                    else:
-                        for i in range(pred.shape[1]):
-                            self.exo.put_node_variable_values(
-                                output["names"][i], n + 1, pred[:, i]
-                            )
-
-            if len(self.element_variables) > 0:
-                n_q_points = len(domain.fspace.quadrature_rule)
-                for var in self.element_variables:
-                    output = physics.var_name_to_method[var]
-                    pred = onp.array(output["method"](params, domain, time))
-                    for q in range(n_q_points):
-                        for i in range(pred.shape[2]):
-                            name = f'{output["names"][i]}_{q + 1}'
-                            # NOTE this will only work on a single block
-                            self.exo.put_element_variable_values(
-                                1, name, n + 1, pred[:, q, i]
-                            )
-
-
+# TODO fix this
 class VtkPostProcessor:
     def __init__(self, mesh_file: str) -> None:
         self.mesh_file = mesh_file
@@ -520,7 +424,7 @@ class VtkPostProcessor:
         # writer.SetInputData(poly_data)
         # writer.Write()
 
-    def write_outputs(self, params, domain) -> None:
+    def _write_outputs(self, params, domain, output_file) -> None:
         physics = domain.physics
         times = domain.times
 
@@ -689,8 +593,14 @@ class PostProcessor:
     def close(self):
         self.pp.close()
 
-    def init(self, domain, output_file, node_variables, element_variables=[]):
-        self.pp.init(domain, output_file, node_variables, element_variables)
+    def init(
+        self, params, problem, output_file, node_variables,
+        element_variables=[]
+    ):
+        self.pp.init(
+            params, problem, output_file,
+            node_variables, element_variables
+        )
 
-    def write_outputs(self, params, domain):
-        self.pp.write_outputs(params, domain)
+    def write_outputs(self, params, problem):
+        self.pp.write_outputs(params, problem)

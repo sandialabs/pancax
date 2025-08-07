@@ -1,28 +1,43 @@
-from .base import Optimizer
-from typing import Callable
-from typing import Optional
+from .base import AbstractOptimizer
+from typing import Callable, Optional, Union
 import equinox as eqx
 import optax
 
 
-class Adam(Optimizer):
+class Adam(AbstractOptimizer):
+    epoch: int
+    has_aux: bool
+    jit: bool
+    loss_function: Callable  # TODO further type me
+    loss_and_grads: Callable
+    step: Union[None, Callable]
+    #
+    opt: any
+
     def __init__(
         self,
         loss_function: Callable,
+        learning_rate: float,
+        # TODO this option should probably be on the base class
+        clip_gradients: Optional[bool] = False,
+        decay_rate: Optional[float] = 0.99,
         has_aux: Optional[bool] = False,
         jit: Optional[bool] = True,
-        learning_rate: Optional[float] = 1.0e-3,
-        transition_steps: Optional[int] = 500,
-        decay_rate: Optional[float] = 0.99,
-        clip_gradients: Optional[bool] = False,
-        filter_spec: Optional[Callable] = None,
+        transition_steps: Optional[int] = 500
     ) -> None:
-        super().__init__(loss_function, has_aux, jit)
+        super().__init__(
+            loss_function,
+            has_aux=has_aux,
+            jit=jit
+        )
+
+        # TODO figure out how best to handle scheduler
         scheduler = optax.exponential_decay(
             init_value=learning_rate,
             transition_steps=transition_steps,
             decay_rate=decay_rate,
         )
+
         if clip_gradients:
             self.opt = optax.chain(
                 optax.clip_by_global_norm(1.0),
@@ -37,36 +52,13 @@ class Adam(Optimizer):
                 optax.scale(-1.0),
             )
 
-        self.loss_and_grads = eqx.filter_value_and_grad(
-            self.loss_function.filtered_loss, has_aux=self.has_aux
-        )
-        self.filter_spec = filter_spec
-
-    def make_step_method(self):
-        # if self.filter_spec is None:
-        #   def step(params, domain, opt_st):
-        #     loss, grads = self.loss_and_grads(params, domain)
-        #     updates, opt_st = self.opt.update(grads, opt_st)
-        #     params = eqx.apply_updates(params, updates)
-        #     # add grad props to output
-        #     # TODO what to do about below?
-        #     # loss[1].update({'dprops': grads.properties.prop_params})
-        #     return params, opt_st, loss
-        # else:
-        def step(params, domain, opt_st, *args):
-            if self.filter_spec is None:
-                filter_spec = params.freeze_physics_normalization_filter()
-            else:
-                filter_spec = self.filter_spec
-
-            diff_params, static_params = eqx.partition(params, filter_spec)
+    def make_step_method(self, filter_spec: Callable) -> Callable:
+        def step(params, opt_st, *args):
+            diff_params, static_params = \
+                eqx.partition(params, filter_spec)
             loss, grads = \
-                self.loss_and_grads(diff_params, static_params, domain, *args)
+                self.loss_and_grads(diff_params, static_params, *args)
             updates, opt_st = self.opt.update(grads, opt_st)
             params = eqx.apply_updates(params, updates)
-
-            # add grad props to output
-            # loss[1].update({'dprops': grads.properties()})
             return params, opt_st, loss
-
         return step
