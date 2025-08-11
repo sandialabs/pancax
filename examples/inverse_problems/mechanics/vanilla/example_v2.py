@@ -13,7 +13,7 @@ key = random.split(key, 8)
 full_field_data_file = find_data_file('data_full_field.csv')
 global_data_file = find_data_file('data_global_data.csv')
 mesh_file = find_mesh_file('mesh.g')
-logger = Logger('pinn.log', log_every=250)
+# logger = Logger('pinn.log', log_every=250)
 history = HistoryWriter('history.csv', log_every=250, write_every=250)
 pp = PostProcessor(mesh_file)
 
@@ -79,7 +79,6 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 params = Parameters(problem, key)#, seperate_networks=True, network_type=ResNet)
 print(params)
-# assert False
 physics_and_global_loss = EnergyResidualAndReactionLoss(
   residual_weight=250.e9, reaction_weight=250.e9
 )
@@ -109,4 +108,7 @@ for epoch in range(10000):
     print(epoch)
     print(loss)
     print(params.physics.constitutive_model)
+    print(params.physics.constitutive_model.shear_modulus.prop_min)
+    print(params.physics.constitutive_model.shear_modulus.prop_max)
+
     # print(params.physics.constitutive_model.shear_modulus)

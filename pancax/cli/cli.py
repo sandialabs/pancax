@@ -2,7 +2,6 @@ from importlib import import_module
 from pathlib import Path
 import argparse
 # import jax
-import os
 import sys
 
 
@@ -61,7 +60,8 @@ def pancax_main():
     )
     parser.add_argument(
         '-l', '--log-file',
-        default=os.path.join(os.getcwd(), 'pancax.log'),
+        # default=os.path.join(os.getcwd(), 'pancax.log'),
+        default=None,
         help='Log file for pancax to write stdout and stderr to.'
     )
     parser.add_argument(
@@ -104,7 +104,10 @@ def pancax_main():
     if not input_file.is_file():
         raise FileNotFoundError(f'Input file {input_file} does not exist.')
 
-    log_file = Path(args.log_file)
+    if args.log_file is None:
+        log_file = args.input_file.split(".py")[0] + ".log"
+    else:
+        log_file = args.log_file
 
     # switch over file types, e.g. python or yaml in the future
     print(f'Running {input_file}')

@@ -8,8 +8,8 @@ import jax.numpy as jnp
 # TODO patch up error check in a good way
 # probably just make a method to check type on other
 class BoundedProperty(eqx.Module):
-    prop_min: float = eqx.field(static=True)
-    prop_max: float = eqx.field(static=True)
+    prop_min: float
+    prop_max: float
     prop_val: Float[Array, "n"]
     # TODO
     # activation: Callable

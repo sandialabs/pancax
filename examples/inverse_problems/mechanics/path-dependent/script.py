@@ -3,7 +3,7 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-key = random.key(10)
+key = random.PRNGKey(10)
 
 ##################
 # file management
@@ -129,24 +129,26 @@ opt = Adam(
 # Training
 ##################
 print(params)
-opt_st = opt.init(params)
+opt, opt_st = opt.init(params)
 
 
 # testing stuff
 dataloader = FullFieldDataLoader(problem.field_data)
 
-for epoch in range(1000000):
+for epoch in range(250000):
   for inputs, outputs in dataloader.dataloader(8 * 1024):
-    params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
+    params, opt_st, loss = opt.step(params, opt_st, problem, inputs, outputs)
+    # params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
     # params, opt_st, loss = opt.step(params, problem, opt_st)
 
 
   history.write_data("epoch", epoch)
   history.write_loss(loss)
-  history.write_data("shear_modulus", params.physics.constitutive_model.eq_model.shear_modulus)
+  history.write_data("shear_modulus", params.physics.constitutive_model.eq_model.shear_modulus())
 
   print(epoch)
   print(loss)
+  print(params.physics.constitutive_model.eq_model.shear_modulus())
 
   if epoch % 1000 == 0:
     history.to_csv()
