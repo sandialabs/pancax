@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.14'
+version = '0.0.15'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -15,16 +15,14 @@ dependencies = [
 
 [project.optional-dependencies]
 cpu = [
-  'chex',
-  'equinox==0.13',
-  'jax==0.6.2',
+  'equinox~=0.13',
+  'jax~=0.6.2',
   'jaxtyping',
   'optax'
 ]
 cuda = [
-  'chex',
-  'equinox==0.13',
-  'jax[cuda12]==0.6.2',
+  'equinox~=0.13',
+  'jax[cuda12]~=0.6.2',
   'jaxtyping',
   'optax'
 ]
@@ -41,8 +39,8 @@ dev = [
 ]
 rocm = [
   'chex',
-  'equinox==0.12.1',
-  'jax[rocm]==0.5.0',
+  'equinox~=0.13',
+  'jax[rocm]~=0.5',
   'jaxtyping',
   'optax'
 ]
@@ -57,7 +55,6 @@ build-backend = "hatchling.build"
 [project.scripts]
 pancax = "pancax.cli:pancax_main"
 
-# [tool.setuptools]
 [tool.hatch.build.targets.wheel]
 packages = [
   'pancax'
@@ -71,10 +68,3 @@ exclude_lines = [
   "def __repr__",
   "pass"
 ]
-
-#[tool.pytest.ini_options]
-#minversion = "6.0"
-#addopts = "-ra -q --disable-warnings"
-#testpaths = [
-#    "test"
-#]
