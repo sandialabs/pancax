@@ -39,7 +39,6 @@ from .fem import \
     Tet4Element, \
     Tet10Element
 from .history_writer import EnsembleHistoryWriter, HistoryWriter
-from .logging import EnsembleLogger, Logger
 from .loss_functions import \
     DirichletBCLoss, \
     NeumannBCLoss, \
@@ -147,9 +146,6 @@ __all__ = [
     # history writers
     "EnsembleHistoryWriter",
     "HistoryWriter",
-    # loggers
-    "EnsembleLogger",
-    "Logger",
     # loss functions
     "DirichletBCLoss",
     "NeumannBCLoss",
