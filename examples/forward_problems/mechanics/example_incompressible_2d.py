@@ -4,7 +4,7 @@ from pancax import *
 # for reproducibility
 ##################
 key = random.PRNGKey(10)
-key = random.split(key, 8) # comment this to not use an ensemble
+# key = random.split(key, 8) # comment this to not use an ensemble
 
 ##################
 # file management
@@ -72,7 +72,7 @@ for epoch in range(25000):
 pp.init(params, problem, 'output.e', 
   node_variables=[
     'field_values',
-    # 'internal_force'
+    'internal_force'
   ], 
   element_variables=[
     # 'deformation_gradient',

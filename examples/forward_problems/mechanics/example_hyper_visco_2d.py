@@ -94,7 +94,7 @@ print(params)
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt, opt_st = opt.init(params)
-for epoch in range(100000):
+for epoch in range(1000):
     params, opt_st, loss = opt.step(params, opt_st, problem)
     # logger.log_loss(loss, epoch)
     if epoch % 100 == 0:
