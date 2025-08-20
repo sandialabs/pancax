@@ -90,7 +90,8 @@ class SolidMechanics(BaseEnergyFormPhysics):
             )[1]
         names = ("internal_force_x", "internal_force_y")
         if self.formulation.n_dimensions > 2:
-            names = (names, "internal_force_z")
+            # names = (names, "internal_force_z")
+            names = names + ("internal_force_z",)
         var_name_to_method["internal_force"] = {
             "method": _internal_force,
             "names": names
