@@ -43,7 +43,7 @@ def find_mesh_file(mesh_file_in: str):
         print(f"Found {mesh_file_in} in {mesh_file.parent}")
         return mesh_file
 
-    mesh_file = Path(os.path.join(call_file, "mesh", mesh_file_in))
+    mesh_file = Path(os.path.join(call_file_dir, "mesh", mesh_file_in))
 
     if mesh_file.is_file():
         print(f"Found {mesh_file_in} in {mesh_file.parent}")
