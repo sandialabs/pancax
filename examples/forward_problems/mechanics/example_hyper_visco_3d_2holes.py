@@ -47,7 +47,6 @@ domain = VariationalDomain(mesh_file, times, q_order=2)
 # ramp followed by stress relaxation
 def dirichlet_bc_func(xs, t, nn):
     length = sample_length
-    thickness = sample_thickness
     final_displacement = applied_displ
     # x, y, z = xs[0], xs[1], xs[2]
     y = xs[1]
@@ -69,7 +68,6 @@ def dirichlet_bc_func(xs, t, nn):
         u_out
     )
     u_out = u_out.at[2].set(
-        # y * (y - length) * t * nn[2] / thickness**2
         y * (y - length) * t * nn[2] / length**2
     )
     return u_out
