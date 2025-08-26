@@ -3,7 +3,6 @@ from pancax import *
 ##################
 # user define parameters
 ##################
-# mesh_geo_path = "/u/rdsnfs2/a376413/MyHPC/visco-pinn-08182025/bing_test/mesh"
 mesh_geo = "2holes.g"
 
 nset_prescribed = "nodeset_5"
@@ -70,7 +69,8 @@ def dirichlet_bc_func(xs, t, nn):
         u_out
     )
     u_out = u_out.at[2].set(
-        y * (y - length) * t * nn[2] / thickness**2
+        # y * (y - length) * t * nn[2] / thickness**2
+        y * (y - length) * t * nn[2] / length**2
     )
     return u_out
 
@@ -128,12 +128,10 @@ for epoch in range(epoch_num):
             params,
             problem,
             f"output_{str(epoch).zfill(6)}.e",
-						node_variables=["field_values","internal_force"],
-						#node_variables=["internal_force"],
-            # element_variables=["deformation_gradients"],
+            node_variables=["field_values","internal_force"],
             element_variables=[
-                'deformation_gradient',
-                'state_variables'
+                # 'deformation_gradient',
+                # 'state_variables'
             ]
         )
         pp.write_outputs(params, problem)
