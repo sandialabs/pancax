@@ -9,13 +9,55 @@ import jax.numpy as jnp
 import numpy as onp
 
 
+def _output_names(var_name: str, var_type: str):
+    if var_type == "full_tensor":
+        return (
+            f"{var_name}_xx", f"{var_name}_xy", f"{var_name}_xz",
+            f"{var_name}_yx", f"{var_name}_yy", f"{var_name}_yz",
+            f"{var_name}_zx", f"{var_name}_zy", f"{var_name}_zz",
+        )
+    elif var_type == "scalar":
+        return (var_name,)
+    else:
+        raise ValueError(f"Unsupported variable type {var_type}")
+
 def element_pp(
     func,
     physics,
+    is_constitutive_method=False,
     is_kinematic_method=False,
     is_state_method=False,
     jit=True
 ):
+    def constitutive_method(func, params, domain, t, us, state_old, dt, *args):
+        coords, conns, fspace = domain.coords, domain.conns, domain.fspace
+        us = us[conns, :]
+        xs = coords[conns, :]
+
+        def _vmap_func(x, u):
+            vs = fspace.shape_function_values(x)
+            grad_vs = fspace.shape_function_gradients(x)
+            JxWs = fspace.JxWs(x)
+            xs = vmap(lambda y: jnp.dot(y, x))(vs)
+            us = vmap(lambda y: jnp.dot(y, u))(vs)
+            grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+            return xs, us, grad_us, JxWs
+
+        xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+        in_axes_1 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+        in_axes_2 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+
+        # outs, _ = vmap(
+        #     vmap(func, in_axes=in_axes_2), in_axes=in_axes_1)(
+        #         params, xs, t, us, grad_us, state_old, dt
+        # )
+        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
+            grad_us
+        )
+        theta = 60.
+        vals, _ = vmap(vmap(func, in_axes=(0, None, 0, None)), in_axes=(0, None, 0, None))(grad_us, theta, state_old, dt)
+        return vals
+
     def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
         coords, conns, fspace = domain.coords, domain.conns, domain.fspace
         us = us[conns, :]
@@ -61,10 +103,15 @@ def element_pp(
                 params, xs, t, us, grad_us, state_old, dt
         )
         return state_news
-        # vals = vmap(vmap(func))(grad_us)
-        # return vals
 
-    if is_kinematic_method:
+    if is_constitutive_method:
+        def new_func(p, d, t, u, s, dt, *args):
+            return constitutive_method(
+                # physics.constitutive_model.deformation_gradient,
+                func,
+                p, d, t, u, s, dt, *args
+            )
+    elif is_kinematic_method:
         def new_func(p, d, t, u, s, dt, *args):
             return kinematic_method(
                 # physics.constitutive_model.deformation_gradient,
@@ -341,7 +388,7 @@ class BaseEnergyFormPhysics(BasePhysics):
             params, domain, t, us, state_old, dt, *args
         )
         return (pi, state_new), jnp.linalg.norm(
-            f.flatten()[domain.dof_manager.unknownIndices]
+            f.ravel()[domain.dof_manager.unknownIndices]
         )
 
     def potential_energy_residual_and_reaction_force(
@@ -351,7 +398,7 @@ class BaseEnergyFormPhysics(BasePhysics):
         pi, f = self.potential_energy_and_internal_force(
             params, domain, t, us, state_old, dt, *args
         )
-        R = jnp.linalg.norm(f.flatten()[domain.dof_manager.unknownIndices])
+        R = jnp.linalg.norm(f.ravel()[domain.dof_manager.unknownIndices])
         reaction = jnp.sum(
             f[global_data.reaction_nodes, global_data.reaction_dof]
         )

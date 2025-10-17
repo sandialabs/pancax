@@ -15,14 +15,14 @@ parser.add_argument(
     "--force-variable",
     help="name of the internal force variable"
 )
-parser.add_argument(
-    "--pinn-exodus-file",
-    help="The name of the PINN exodus file"
-)
-parser.add_argument(
-    "--pinn-nodeset",
-    help="name of the Sierra node set to read data from"
-)
+# parser.add_argument(
+#     "--pinn-exodus-file",
+#     help="The name of the PINN exodus file"
+# )
+# parser.add_argument(
+#     "--pinn-nodeset",
+#     help="name of the Sierra node set to read data from"
+# )
 parser.add_argument(
     "--sierra-exodus-file", 
     help="The name of the Sierra exodus file."
@@ -36,8 +36,8 @@ args = parser.parse_args()
 
 disp_var_name = args.displacement_variable
 force_var_name = args.force_variable
-pinn_exo_file = args.pinn_exodus_file
-pinn_nset_name = args.pinn_nodeset
+# pinn_exo_file = args.pinn_exodus_file
+# pinn_nset_name = args.pinn_nodeset
 sierra_exo_file = args.sierra_exodus_file
 sierra_nset_name = args.sierra_nodeset
 
@@ -80,36 +80,33 @@ def extract_data(exo_file, nset_name, disp_var_name, force_var_name):
 
     return times, displacements, forces
 
-p_times, p_displacements, p_forces = extract_data(pinn_exo_file, pinn_nset_name, disp_var_name, force_var_name)
+# p_times, p_displacements, p_forces = extract_data(pinn_exo_file, pinn_nset_name, disp_var_name, force_var_name)
 s_times, s_displacements, s_forces = extract_data(sierra_exo_file, sierra_nset_name, disp_var_name, force_var_name)
 
 # save sierra exo file to csv file
-df_data = np.array([p_times, p_displacements, p_forces]).T
+df_data = np.array([s_times, s_displacements, s_forces]).T
 df_columns = ["times", "disps", "forces"]
 df = pandas.DataFrame(df_data, columns=df_columns)
 df.to_csv("global_data.csv", index=False)
 
 
 plt.figure(1)
-plt.plot(p_times, p_displacements, label="PINN", linestyle="None", marker="o")
-plt.plot(s_times, s_displacements, label="FEM")
-plt.legend(loc="best")
+# plt.plot(p_times, p_displacements, linestyle="None", marker="o")
+plt.plot(s_times, s_displacements)
 plt.xlabel("Time")
 plt.ylabel("Displacement")
 plt.savefig("time_disp.png")
 
 plt.figure(2)
-plt.plot(p_times, p_forces, label="PINN", linestyle="None", marker="o")
-plt.plot(s_times, s_forces, label="FEM")
-plt.legend(loc="best")
+# plt.plot(p_times, p_forces, linestyle="None", marker="o")
+plt.plot(s_times, s_forces)
 plt.xlabel("Time")
 plt.ylabel("Force")
 plt.savefig("time_force.png")
 
 plt.figure(3)
-plt.plot(p_displacements, p_forces, label="PINN", linestyle="None", marker="o")
-plt.plot(s_displacements, s_forces, label="FEM")
-plt.legend(loc="best")
+# plt.plot(p_displacements, p_forces, linestyle="None", marker="o")
+plt.plot(s_displacements, s_forces)
 plt.xlabel("Displacement")
 plt.ylabel("Force")
 plt.savefig("disp_force.png")

@@ -8,20 +8,23 @@ key = random.PRNGKey(10)
 ##################
 # file management
 ##################
-full_field_data_file = find_data_file('full_field_data.csv')
-global_data_file = find_data_file('global_data.csv')
-mesh_file = find_mesh_file('mesh_quad4.g')
-history = HistoryWriter('history_pd.csv', log_every=250, write_every=250)
+# full_field_data_file = find_data_file('full_field_data.csv')
+# global_data_file = find_data_file('global_data.csv')
+# mesh_file = find_mesh_file('mesh_quad4.g')
+full_field_data_file = "2hole_data/2holes_full_field_data.csv"
+global_data_file = "2hole_data/global_data.csv"
+mesh_file = "2hole_data/2holes.g"
+history = HistoryWriter('history_pd_2holes.csv', log_every=250, write_every=250)
 pp = PostProcessor(mesh_file)
 
 ##################
 # data setup
 ##################
-field_data = FullFieldData(full_field_data_file, ['x', 'y', 't'], ['u_x', 'u_y'])
+field_data = FullFieldData(full_field_data_file, ['x', 'y', 'z', 't'], ['u_x', 'u_y', 'u_z'])
 # the 4 below is for the nodeset id
 global_data = GlobalData(
   global_data_file, 'times', 'disps', 'forces',
-  mesh_file, 1, 'y', # these inputs specify where to measure reactions
+  mesh_file, 5, 'y', # these inputs specify where to measure reactions
   n_time_steps=21, # the number of time steps for inverse problems is specified here
   plotting=True,
   interpolate=False
@@ -44,10 +47,10 @@ model = NeoHookean(
 model = SimpleFeFv(
     # NeoHookean(bulk_modulus=10.0, shear_modulus=1.0),
     model,
-    PronySeries(moduli=[1.0], relaxation_times=[10.0]),
+    PronySeries(moduli=[1.0], relaxation_times=[0.25]),
     WLF(C1=17.44, C2=51.6, theta_ref=60.0),
 )
-physics = SolidMechanics(model, PlaneStrain())
+physics = SolidMechanics(model, ThreeDimensional())
 
 ##################
 # ics/bcs
@@ -85,10 +88,12 @@ def dirichlet_bc_func(xs, t, nn):
 # model = NeoHookean(bulk_modulus=10., shear_modulus=0.855)
 physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 dirichlet_bcs = [
-  DirichletBC('nset_1', 0), # left edge fixed in x
-  DirichletBC('nset_1', 1), # left edge fixed in y
-  DirichletBC('nset_3', 0), # right edge prescribed in x
-  DirichletBC('nset_3', 1)  # right edge fixed in y
+  DirichletBC('nodeset_3', 0),
+  DirichletBC('nodeset_3', 1),
+  DirichletBC('nodeset_3', 2),
+  DirichletBC('nodeset_5', 0),
+  DirichletBC('nodeset_5', 1),
+  DirichletBC('nodeset_5', 2)
 ]
 neumann_bcs = [
 ]
@@ -105,9 +110,11 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 params = Parameters(problem, key, seperate_networks=False, network_type=MLP)
 physics_and_global_loss = PathDependentEnergyResidualAndReactionLoss(
-  residual_weight=250.e6, reaction_weight=250.e6
+  energy_weight=0.,
+  # residual_weight=250.e9, reaction_weight=250.e9
+  residual_weight=250., reaction_weight=250.
 )
-full_field_data_loss = FullFieldDataLoss(weight=10.e6)
+full_field_data_loss = FullFieldDataLoss(weight=100.)
 
 def loss_function(params, problem, inputs, outputs):
   loss_1, aux_1 = physics_and_global_loss(params, problem)
@@ -138,9 +145,6 @@ dataloader = FullFieldDataLoader(problem.field_data)
 for epoch in range(250000):
   for inputs, outputs in dataloader.dataloader(8 * 1024):
     params, opt_st, loss = opt.step(params, opt_st, problem, inputs, outputs)
-    # params, opt_st, loss = opt.step(params, problem, opt_st, inputs, outputs)
-    # params, opt_st, loss = opt.step(params, problem, opt_st)
-
 
   history.write_data("epoch", epoch)
   history.write_loss(loss)

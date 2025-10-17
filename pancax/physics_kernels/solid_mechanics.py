@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from .base import BaseEnergyFormPhysics, element_pp
+from .base import BaseEnergyFormPhysics, element_pp, _output_names
 from pancax.math.tensor_math import tensor_2D_to_3D
 import equinox as eqx
 import jax.numpy as jnp
@@ -102,11 +102,7 @@ class SolidMechanics(BaseEnergyFormPhysics):
                 self,
                 is_kinematic_method=True
             ),
-            "names": (
-                "F_xx", "F_xy", "F_xz",
-                "F_yx", "F_yy", "F_yz",
-                "F_zx", "F_zy", "F_zz"
-            )
+            "names": _output_names("F", "full_tensor")
         }
         var_name_to_method["I1_bar"] = {
             "method": element_pp(
@@ -114,7 +110,15 @@ class SolidMechanics(BaseEnergyFormPhysics):
                 self,
                 is_kinematic_method=True
             ),
-            "names": ("I1_bar",)
+            "names": _output_names("I1_bar", "scalar")
+        }
+        var_name_to_method["pk1_stress"] = {
+            "method": element_pp(
+                self.constitutive_model.pk1_stress,
+                self,
+                is_constitutive_method=True
+            ),
+            "names": _output_names("P", "full_tensor")
         }
         # special case handled just so parser doesn't break
         var_name_to_method["state_variables"] = {

@@ -22,7 +22,8 @@ class SimpleFeFv(HyperViscoElastic):
         grad_u: Tensor, theta: Scalar, Z: State, dt: Scalar
     ) -> Scalar:
         # setup properties
-        a_T = self.shift_factor_model(grad_u, theta, Z, dt)
+        # a_T = self.shift_factor_model(grad_u, theta, Z, dt)
+        a_T = 1.
         Gs = self.prony_series.moduli
         taus = a_T * self.prony_series.relaxation_times
 
@@ -30,41 +31,69 @@ class SimpleFeFv(HyperViscoElastic):
         n_prony = self.num_prony_terms()
         Fvs_old = Z.reshape((n_prony, 3, 3))
 
-        # kinematics
-        F = self.deformation_gradient(grad_u)
-        Fe_trials = vmap(lambda Fv_old: F @ jnp.linalg.inv(Fv_old))(Fvs_old)
-        Ce_trials = vmap(lambda Fe: Fe.T @ Fe)(Fe_trials)
-        Ee_trials = vmap(tensor_math.mtk_log_sqrt)(Ce_trials)
+        # new approach vmapinng over all branches
+        psi_eq = self.equilibirum_branch(grad_u, theta)
+        psi_neq, Fv_news = vmap(
+            self.non_equilibrium_branch, 
+            in_axes=(None, 0, None, 0, 0, None)
+        )(grad_u, Fvs_old, dt, Gs, taus, a_T)
+        Z = Fv_news.ravel()
+        return psi_eq + jnp.sum(psi_neq), Z
 
-        # update state
-        delta_Evs = vmap(self.state_increment, in_axes=(0, 0, 0, None))(
-            Ee_trials, Gs, taus, dt
-        )
-        Ees = Ee_trials - delta_Evs
-        Dvs = delta_Evs / dt
-        Fvs_new = vmap(
-            lambda Fv_old, delta_Ev: jax.scipy.linalg.expm(delta_Ev) @ Fv_old,
-            in_axes=(0, 0),
-        )(Fvs_old, delta_Evs)
-        Z = Fvs_new.flatten()
+        # # kinematics
+        # F = self.deformation_gradient(grad_u)
+        # Fe_trials = vmap(lambda Fv_old: F @ jnp.linalg.inv(Fv_old))(Fvs_old)
+        # Ce_trials = vmap(lambda Fe: Fe.T @ Fe)(Fe_trials)
+        # Ee_trials = vmap(tensor_math.mtk_log_sqrt)(Ce_trials)
 
-        # constitutive calculation (energy and dissipation)
-        psi_eq, _ = self.eq_model.energy(grad_u, theta, jnp.zeros(3), dt)
-        psi_neq = jnp.sum(vmap(self.neq_strain_energy, in_axes=(0, 0))(
-            Ees, Gs
-        ))
-        d = jnp.sum(vmap(self.dissipation, in_axes=(0, 0, 0))(Dvs, Gs, taus))
-        # psi_neq = 0.
-        # d = 0.
-        return psi_eq + psi_neq + d, Z
-        # return psi_eq + psi_neq, Z
+        # # update state
+        # delta_Evs = vmap(self.state_increment, in_axes=(0, 0, 0, None))(
+        #     Ee_trials, Gs, taus, dt
+        # )
+        # Ees = Ee_trials - delta_Evs
+        # Dvs = delta_Evs / dt
+        # Fvs_new = vmap(
+        #     lambda Fv_old, delta_Ev: jax.scipy.linalg.expm(delta_Ev) @ Fv_old,
+        #     in_axes=(0, 0),
+        # )(Fvs_old, delta_Evs)
+        # Z = Fvs_new.ravel()
+
+        # # constitutive calculation (energy and dissipation)
+        # psi_eq, _ = self.equilibirum_branch(grad_u, theta)
+        # psi_neq = jnp.sum(vmap(self.neq_strain_energy, in_axes=(0, 0))(
+        #     Ees, Gs
+        # ))
+        # d = jnp.sum(vmap(self.dissipation, in_axes=(0, 0, 0))(Dvs, Gs, taus))
+        # # psi_neq = 0.
+        # # d = 0.
+        # return psi_eq + psi_neq + d, Z
+        # # return psi_eq + psi_neq, Z
+
+    def equilibirum_branch(self, grad_u, theta):
+        Z = jnp.zeros(0)
+        dt = 0.
+        return self.eq_model.energy(grad_u, theta, Z, dt)[0]
 
     def initial_state(self):
         Fvs = vmap(lambda _: jnp.eye(3))(range(self.num_prony_terms()))
-        return Fvs.flatten()
+        return Fvs.ravel()
 
     def neq_strain_energy(self, Ee, G):
         return G * tensor_math.norm_of_deviator_squared(Ee)
+
+    def non_equilibrium_branch(self, grad_u, Fv_old, dt, G, tau, a_T):
+        tau = a_T * tau
+        F = self.deformation_gradient(grad_u)
+        Fe_trial = F @ jnp.linalg.inv(Fv_old)
+        Ee_trial = tensor_math.mtk_log_sqrt(Fe_trial.T @ Fe_trial)
+        delta_Ev = self.state_increment(Ee_trial, G, tau, dt)
+        Ee = Ee_trial - delta_Ev
+        Dv = delta_Ev / dt
+        Fv_new = jax.scipy.linalg.expm(delta_Ev) @ Fv_old
+        psi_neq = G * tensor_math.norm_of_deviator_squared(Ee)
+        d = self.dissipation(Dv, G, tau)
+        # return psi_neq + d, Fv_new
+        return psi_neq, Fv_new
 
     @property
     def num_state_variables(self):
