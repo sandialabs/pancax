@@ -29,7 +29,9 @@ def element_pp(
     is_state_method=False,
     jit=True
 ):
-    def constitutive_method(func, params, domain, t, us, state_old, dt, *args):
+    def constitutive_method(
+        func, params, domain, t, us, theta, state_old, dt, *args
+    ):
         coords, conns, fspace = domain.coords, domain.conns, domain.fspace
         us = us[conns, :]
         xs = coords[conns, :]
@@ -56,8 +58,12 @@ def element_pp(
         else:
             constitutive_model = None
 
-        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
-            constitutive_model, grad_us
+        grad_us = vmap(vmap(
+            physics.formulation.modify_field_gradient,
+            in_axes=(None, 0, None, 0, None)),
+            in_axes=(None, 0, None, 0, None)
+        )(
+            constitutive_model, grad_us, theta, state_old, dt
         )
         theta = 60.
         vals, _ = vmap(
@@ -65,7 +71,9 @@ def element_pp(
         )(grad_us, theta, state_old, dt)
         return vals
 
-    def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
+    def kinematic_method(
+        func, params, domain, t, us, theta, state_old, dt, *args
+    ):
         coords, conns, fspace = domain.coords, domain.conns, domain.fspace
         us = us[conns, :]
         xs = coords[conns, :]
@@ -86,14 +94,18 @@ def element_pp(
         else:
             constitutive_model = None
 
-        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
-            constitutive_model, grad_us
+        grad_us = vmap(vmap(
+            physics.formulation.modify_field_gradient,
+            in_axes=(None, 0, None, 0, None)),
+            in_axes=(None, 0, None, 0, None)
+        )(
+            constitutive_model, grad_us, theta, state_old, dt
         )
 
         vals = vmap(vmap(func))(grad_us)
         return vals
 
-    def state_method(func, params, domain, t, us, state_old, dt, *args):
+    def state_method(func, params, domain, t, us, theta, state_old, dt, *args):
         coords, conns, fspace = domain.coords, domain.conns, domain.fspace
         us = us[conns, :]
         xs = coords[conns, :]
@@ -118,24 +130,24 @@ def element_pp(
         return state_news
 
     if is_constitutive_method:
-        def new_func(p, d, t, u, s, dt, *args):
+        def new_func(p, d, t, u, theta, s, dt, *args):
             return constitutive_method(
                 # physics.constitutive_model.deformation_gradient,
                 func,
-                p, d, t, u, s, dt, *args
+                p, d, t, u, theta, s, dt, *args
             )
     elif is_kinematic_method:
-        def new_func(p, d, t, u, s, dt, *args):
+        def new_func(p, d, t, u, theta, s, dt, *args):
             return kinematic_method(
                 # physics.constitutive_model.deformation_gradient,
                 func,
-                p, d, t, u, s, dt, *args
+                p, d, t, u, theta, s, dt, *args
             )
     elif is_state_method:
-        def new_func(p, d, t, u, s, dt, *args):
+        def new_func(p, d, t, u, theta, s, dt, *args):
             return state_method(
                 physics.energy,
-                p, d, t, u, s, dt, *args
+                p, d, t, u, theta, s, dt, *args
             )
     else:
         assert False, 'Only kinematic methods are currently supported'
