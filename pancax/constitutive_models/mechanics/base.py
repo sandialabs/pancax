@@ -94,7 +94,11 @@ class MechanicsModel(ConstitutiveModel):
         """
         F = self.deformation_gradient(grad_u)
         J = jnp.linalg.det(F)
-        J = jax.lax.cond(J <= 0.0, lambda _: 1.0e3, lambda x: x, J)
+        # J = jax.lax.cond(J <= 0.0, lambda _: 1.0e3, lambda x: x, J)
+
+        # if J <= 0.0:
+        #     J = 1.0e3
+
         return J
 
     def log_strain(self, grad_u: Tensor) -> Tensor:

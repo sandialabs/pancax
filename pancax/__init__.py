@@ -73,9 +73,9 @@ from .physics_kernels import \
     LaplaceBeltrami, \
     Poisson, \
     SolidMechanics, \
-    BaseMechanicsFormulation, \
-    IncompressiblePlaneStress, \
+    AbstractMechanicsFormulation, \
     PlaneStrain, \
+    PlaneStress, \
     ThreeDimensional
 from .post_processor import PostProcessor
 from .problems import ForwardProblem, InverseProblem
@@ -181,9 +181,9 @@ __all__ = [
     "HeatEquation",
     "LaplaceBeltrami",
     "Poisson",
-    "BaseMechanicsFormulation",
-    "IncompressiblePlaneStress",
+    "AbstractMechanicsFormulation",
     "PlaneStrain",
+    "PlaneStress",
     "ThreeDimensional",
     "SolidMechanics",
     # post-processors
