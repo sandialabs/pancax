@@ -302,9 +302,12 @@ class ExodusPostProcessor(BasePostProcessor):
         elem_var_num = 0
         for var in self.element_variables:
             output = physics.var_name_to_method[var]
+            # TODO total hack for now. Need to bind temperature\
+            # somewhere somehow
+            theta = 60.
             pred = onp.array(
                 output["method"](
-                    params, problem, time, us, state_old, dt
+                    params, problem, time, us, theta, state_old, dt
                 )
             )
 

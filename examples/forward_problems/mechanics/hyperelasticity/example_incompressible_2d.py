@@ -64,7 +64,7 @@ print(params)
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt, opt_st = opt.init(params)
 
-for epoch in range(25000):
+for epoch in range(2500):
   params, opt_st, loss = opt.step(params, opt_st, problem)
   if epoch % 100 == 0:
     print(epoch, flush=True)
@@ -79,8 +79,9 @@ pp.init(params, problem, 'output.e',
     'internal_force'
   ], 
   element_variables=[
-    # 'deformation_gradient',
-    # 'I1_bar'
+    'deformation_gradient',
+    'I1_bar',
+    'pk1_stress'
   ]
 )
 pp.write_outputs(params, problem)
