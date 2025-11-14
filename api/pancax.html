@@ -1,0 +1,1547 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>API Documentation - pancax</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pancax</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/sandialabs/pancax" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/sandialabs/pancax/edit/main/book//api/pancax.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h1>
+<ul>
+<li><a href="#pancax">pancax</a></li>
+<li><a href="#pancax.optimizers.lbfgs">pancax.optimizers.lbfgs</a></li>
+<li><a href="#pancax.optimizers">pancax.optimizers</a></li>
+<li><a href="#pancax.optimizers.adam">pancax.optimizers.adam</a>
+<ul>
+<li><a href="#pancax.optimizers.adam.Adam">Adam</a>
+<ul>
+<li><a href="#pancax.optimizers.adam.Adam.loss_function">loss_function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.optimizers.base">pancax.optimizers.base</a>
+<ul>
+<li><a href="#pancax.optimizers.base.AbstractOptimizer">AbstractOptimizer</a>
+<ul>
+<li><a href="#pancax.optimizers.base.AbstractOptimizer.loss_function">loss_function</a></li>
+<li><a href="#pancax.optimizers.base.AbstractOptimizer.loss_and_grads">loss_and_grads</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.utils">pancax.utils</a></li>
+<li><a href="#pancax.timer">pancax.timer</a>
+<ul>
+<li><a href="#pancax.timer.TimerError">TimerError</a></li>
+<li><a href="#pancax.timer.Timer">Timer</a>
+<ul>
+<li><a href="#pancax.timer.Timer.__post_init__">__post_init__</a></li>
+<li><a href="#pancax.timer.Timer.start">start</a></li>
+<li><a href="#pancax.timer.Timer.stop">stop</a></li>
+<li><a href="#pancax.timer.Timer.__enter__">__enter__</a></li>
+<li><a href="#pancax.timer.Timer.__exit__">__exit__</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.post_processor">pancax.post_processor</a>
+<ul>
+<li><a href="#pancax.post_processor.VtkPostProcessor">VtkPostProcessor</a>
+<ul>
+<li><a href="#pancax.post_processor.VtkPostProcessor.convert_exodus_to_xml">convert_exodus_to_xml</a></li>
+<li><a href="#pancax.post_processor.VtkPostProcessor.get_vtk_cell_type">get_vtk_cell_type</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.bvps.simple_shear">pancax.bvps.simple_shear</a></li>
+<li><a href="#pancax.bvps.biaxial_tension">pancax.bvps.biaxial_tension</a></li>
+<li><a href="#pancax.bvps.uniaxial_tension">pancax.bvps.uniaxial_tension</a></li>
+<li><a href="#pancax.bvps">pancax.bvps</a></li>
+<li><a href="#pancax.math.tensor_math">pancax.math.tensor_math</a>
+<ul>
+<li><a href="#pancax.math.tensor_math.sqrtm_dbp">sqrtm_dbp</a></li>
+<li><a href="#pancax.math.tensor_math.log_pade_pf">log_pade_pf</a></li>
+</ul>
+</li>
+<li><a href="#pancax.math.math">pancax.math.math</a>
+<ul>
+<li><a href="#pancax.math.math.sum2">sum2</a></li>
+<li><a href="#pancax.math.math.dot2">dot2</a></li>
+</ul>
+</li>
+<li><a href="#pancax.math.scalar_root_find">pancax.math.scalar_root_find</a>
+<ul>
+<li><a href="#pancax.math.scalar_root_find.find_root">find_root</a></li>
+</ul>
+</li>
+<li><a href="#pancax.math">pancax.math</a></li>
+<li><a href="#pancax.domains.collocation_domain">pancax.domains.collocation_domain</a></li>
+<li><a href="#pancax.domains.variational_domain">pancax.domains.variational_domain</a></li>
+<li><a href="#pancax.domains">pancax.domains</a></li>
+<li><a href="#pancax.domains.delta_pinn_domain">pancax.domains.delta_pinn_domain</a></li>
+<li><a href="#pancax.domains.base">pancax.domains.base</a></li>
+<li><a href="#pancax.cli.cli">pancax.cli.cli</a></li>
+<li><a href="#pancax.cli">pancax.cli</a></li>
+<li><a href="#pancax.physics_kernels.beer_lambert_law">pancax.physics_kernels.beer_lambert_law</a></li>
+<li><a href="#pancax.physics_kernels.heat_equation">pancax.physics_kernels.heat_equation</a></li>
+<li><a href="#pancax.physics_kernels.burgers_equation">pancax.physics_kernels.burgers_equation</a></li>
+<li><a href="#pancax.physics_kernels.laplace_beltrami">pancax.physics_kernels.laplace_beltrami</a></li>
+<li><a href="#pancax.physics_kernels.solid_mechanics">pancax.physics_kernels.solid_mechanics</a>
+<ul>
+<li><a href="#pancax.physics_kernels.solid_mechanics.AbstractMechanicsFormulation">AbstractMechanicsFormulation</a>
+<ul>
+<li><a href="#pancax.physics_kernels.solid_mechanics.AbstractMechanicsFormulation.n_dimensions">n_dimensions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.physics_kernels">pancax.physics_kernels</a></li>
+<li><a href="#pancax.physics_kernels.poisson">pancax.physics_kernels.poisson</a></li>
+<li><a href="#pancax.physics_kernels.base">pancax.physics_kernels.base</a>
+<ul>
+<li><a href="#pancax.physics_kernels.base.nodal_pp">nodal_pp</a></li>
+<li><a href="#pancax.physics_kernels.base.BaseEnergyFormPhysics">BaseEnergyFormPhysics</a>
+<ul>
+<li><a href="#pancax.physics_kernels.base.BaseEnergyFormPhysics.element_interpolants">element_interpolants</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.constitutive_models.properties">pancax.constitutive_models.properties</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperviscoelasticity.simple_fefv">pancax.constitutive_models.mechanics.hyperviscoelasticity.simple_fefv</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperviscoelasticity">pancax.constitutive_models.mechanics.hyperviscoelasticity</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperviscoelasticity.base">pancax.constitutive_models.mechanics.hyperviscoelasticity.base</a></li>
+<li><a href="#pancax.constitutive_models.mechanics">pancax.constitutive_models.mechanics</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.gent">pancax.constitutive_models.mechanics.hyperelasticity.gent</a>
+<ul>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.gent.Gent">Gent</a></li>
+</ul>
+</li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.blatz_ko">pancax.constitutive_models.mechanics.hyperelasticity.blatz_ko</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.swanson">pancax.constitutive_models.mechanics.hyperelasticity.swanson</a>
+<ul>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.swanson.Swanson">Swanson</a></li>
+</ul>
+</li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.hencky">pancax.constitutive_models.mechanics.hyperelasticity.hencky</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity">pancax.constitutive_models.mechanics.hyperelasticity</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.neohookean">pancax.constitutive_models.mechanics.hyperelasticity.neohookean</a>
+<ul>
+<li><a href="#pancax.constitutive_models.mechanics.hyperelasticity.neohookean.NeoHookean">NeoHookean</a></li>
+</ul>
+</li>
+<li><a href="#pancax.constitutive_models.mechanics.base">pancax.constitutive_models.mechanics.base</a>
+<ul>
+<li><a href="#pancax.constitutive_models.mechanics.base.MechanicsModel">MechanicsModel</a>
+<ul>
+<li><a href="#pancax.constitutive_models.mechanics.base.MechanicsModel.energy">energy</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.base.MechanicsModel.I1">I1</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.base.MechanicsModel.I1_bar">I1_bar</a></li>
+<li><a href="#pancax.constitutive_models.mechanics.base.MechanicsModel.jacobian">jacobian</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.constitutive_models">pancax.constitutive_models</a></li>
+<li><a href="#pancax.constitutive_models.base">pancax.constitutive_models.base</a></li>
+<li><a href="#pancax.data.full_field_data">pancax.data.full_field_data</a>
+<ul>
+<li><a href="#pancax.data.full_field_data.FullFieldData">FullFieldData</a></li>
+</ul>
+</li>
+<li><a href="#pancax.data.global_data">pancax.data.global_data</a>
+<ul>
+<li><a href="#pancax.data.global_data.GlobalData">GlobalData</a>
+<ul>
+<li><a href="#pancax.data.global_data.GlobalData.times">times</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.data">pancax.data</a></li>
+<li><a href="#pancax.networks.fields">pancax.networks.fields</a>
+<ul>
+<li><a href="#pancax.networks.fields.Field">Field</a>
+<ul>
+<li><a href="#pancax.networks.fields.Field.x_mins">x_mins</a></li>
+<li><a href="#pancax.networks.fields.Field.x_maxs">x_maxs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.networks.input_polyconvex_nn">pancax.networks.input_polyconvex_nn</a></li>
+<li><a href="#pancax.networks.rbf">pancax.networks.rbf</a></li>
+<li><a href="#pancax.networks.elm">pancax.networks.elm</a></li>
+<li><a href="#pancax.networks.resnet">pancax.networks.resnet</a></li>
+<li><a href="#pancax.networks.ml_dirichlet_field">pancax.networks.ml_dirichlet_field</a></li>
+<li><a href="#pancax.networks.mlp">pancax.networks.mlp</a>
+<ul>
+<li><a href="#pancax.networks.mlp.Linear">Linear</a></li>
+</ul>
+</li>
+<li><a href="#pancax.networks.parameters">pancax.networks.parameters</a></li>
+<li><a href="#pancax.networks">pancax.networks</a></li>
+<li><a href="#pancax.networks.base">pancax.networks.base</a>
+<ul>
+<li><a href="#pancax.networks.base.AbstractPancaxModel">AbstractPancaxModel</a></li>
+</ul>
+</li>
+<li><a href="#pancax.problems.inverse_problem">pancax.problems.inverse_problem</a></li>
+<li><a href="#pancax.problems">pancax.problems</a></li>
+<li><a href="#pancax.problems.forward_problem">pancax.problems.forward_problem</a></li>
+<li><a href="#pancax.bcs.distance_functions">pancax.bcs.distance_functions</a></li>
+<li><a href="#pancax.bcs.dirichlet_bc">pancax.bcs.dirichlet_bc</a>
+<ul>
+<li><a href="#pancax.bcs.dirichlet_bc.DirichletBC">DirichletBC</a></li>
+</ul>
+</li>
+<li><a href="#pancax.bcs.neumann_bc">pancax.bcs.neumann_bc</a></li>
+<li><a href="#pancax.bcs">pancax.bcs</a></li>
+<li><a href="#pancax.loss_functions.base_loss_function">pancax.loss_functions.base_loss_function</a>
+<ul>
+<li><a href="#pancax.loss_functions.base_loss_function.BaseLossFunction">BaseLossFunction</a></li>
+<li><a href="#pancax.loss_functions.base_loss_function.BCLossFunction">BCLossFunction</a></li>
+<li><a href="#pancax.loss_functions.base_loss_function.PhysicsLossFunction">PhysicsLossFunction</a></li>
+</ul>
+</li>
+<li><a href="#pancax.loss_functions.utils">pancax.loss_functions.utils</a></li>
+<li><a href="#pancax.loss_functions.weak_form_loss_functions">pancax.loss_functions.weak_form_loss_functions</a>
+<ul>
+<li><a href="#pancax.loss_functions.weak_form_loss_functions.EnergyLoss">EnergyLoss</a></li>
+<li><a href="#pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss">EnergyAndResidualLoss</a></li>
+</ul>
+</li>
+<li><a href="#pancax.loss_functions.ic_loss_function">pancax.loss_functions.ic_loss_function</a></li>
+<li><a href="#pancax.loss_functions.strong_form_loss_functions">pancax.loss_functions.strong_form_loss_functions</a></li>
+<li><a href="#pancax.loss_functions.bc_loss_functions">pancax.loss_functions.bc_loss_functions</a></li>
+<li><a href="#pancax.loss_functions">pancax.loss_functions</a></li>
+<li><a href="#pancax.loss_functions.data_loss_functions">pancax.loss_functions.data_loss_functions</a></li>
+<li><a href="#pancax.trainer">pancax.trainer</a></li>
+<li><a href="#pancax.history_writer">pancax.history_writer</a></li>
+<li><a href="#pancax.fem.dof_manager">pancax.fem.dof_manager</a>
+<ul>
+<li><a href="#pancax.fem.dof_manager.DofManager">DofManager</a>
+<ul>
+<li><a href="#pancax.fem.dof_manager.DofManager.__init__">__init__</a></li>
+<li><a href="#pancax.fem.dof_manager.DofManager.get_bc_size">get_bc_size</a></li>
+<li><a href="#pancax.fem.dof_manager.DofManager.get_unknown_size">get_unknown_size</a></li>
+<li><a href="#pancax.fem.dof_manager.DofManager.create_field">create_field</a></li>
+<li><a href="#pancax.fem.dof_manager.DofManager.get_bc_values">get_bc_values</a></li>
+<li><a href="#pancax.fem.dof_manager.DofManager.get_unknown_values">get_unknown_values</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.fem.read_exodus_mesh">pancax.fem.read_exodus_mesh</a>
+<ul>
+<li><a href="#pancax.fem.read_exodus_mesh.read_exodus_mesh">read_exodus_mesh</a></li>
+</ul>
+</li>
+<li><a href="#pancax.fem.function_space">pancax.fem.function_space</a>
+<ul>
+<li><a href="#pancax.fem.function_space.NonAllocatedFunctionSpace">NonAllocatedFunctionSpace</a>
+<ul>
+<li><a href="#pancax.fem.function_space.NonAllocatedFunctionSpace.compute_field_gradient">compute_field_gradient</a></li>
+<li><a href="#pancax.fem.function_space.NonAllocatedFunctionSpace.evaluate_on_element">evaluate_on_element</a></li>
+</ul>
+</li>
+<li><a href="#pancax.fem.function_space.FunctionSpace">FunctionSpace</a></li>
+<li><a href="#pancax.fem.function_space.construct_function_space">construct_function_space</a></li>
+<li><a href="#pancax.fem.function_space.construct_function_space_from_parent_element">construct_function_space_from_parent_element</a></li>
+<li><a href="#pancax.fem.function_space.integrate_over_block">integrate_over_block</a></li>
+<li><a href="#pancax.fem.function_space.evaluate_on_block">evaluate_on_block</a></li>
+<li><a href="#pancax.fem.function_space.integrate_element_from_local_field">integrate_element_from_local_field</a></li>
+<li><a href="#pancax.fem.function_space.get_nodal_values_on_edge">get_nodal_values_on_edge</a></li>
+<li><a href="#pancax.fem.function_space.interpolate_nodal_field_on_edge">interpolate_nodal_field_on_edge</a></li>
+</ul>
+</li>
+<li><a href="#pancax.fem.mesh">pancax.fem.mesh</a>
+<ul>
+<li><a href="#pancax.fem.mesh.Mesh">Mesh</a>
+<ul>
+<li><a href="#pancax.fem.mesh.Mesh.num_dimensions">num_dimensions</a></li>
+<li><a href="#pancax.fem.mesh.Mesh.num_elements">num_elements</a></li>
+<li><a href="#pancax.fem.mesh.Mesh.num_nodes">num_nodes</a></li>
+</ul>
+</li>
+<li><a href="#pancax.fem.mesh.create_edges">create_edges</a></li>
+<li><a href="#pancax.fem.mesh.get_edge_field">get_edge_field</a></li>
+<li><a href="#pancax.fem.mesh.compute_edge_vectors">compute_edge_vectors</a></li>
+</ul>
+</li>
+<li><a href="#pancax.fem.sparse_matrix_assembler">pancax.fem.sparse_matrix_assembler</a></li>
+<li><a href="#pancax.fem.quadrature_rules">pancax.fem.quadrature_rules</a>
+<ul>
+<li><a href="#pancax.fem.quadrature_rules.QuadratureRule">QuadratureRule</a></li>
+<li><a href="#pancax.fem.quadrature_rules.create_quadrature_rule_1D">create_quadrature_rule_1D</a></li>
+<li><a href="#pancax.fem.quadrature_rules.create_quadrature_rule_on_quad">create_quadrature_rule_on_quad</a></li>
+<li><a href="#pancax.fem.quadrature_rules.create_quadrature_rule_on_triangle">create_quadrature_rule_on_triangle</a></li>
+<li><a href="#pancax.fem.quadrature_rules.create_padded_quadrature_rule_1D">create_padded_quadrature_rule_1D</a></li>
+</ul>
+</li>
+<li><a href="#pancax.fem.elements.base_element">pancax.fem.elements.base_element</a>
+<ul>
+<li><a href="#pancax.fem.elements.base_element.ShapeFunctions">ShapeFunctions</a></li>
+<li><a href="#pancax.fem.elements.base_element.BaseElement">BaseElement</a>
+<ul>
+<li><a href="#pancax.fem.elements.base_element.BaseElement.compute_shapes">compute_shapes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#pancax.fem.elements.simplex_tri_element">pancax.fem.elements.simplex_tri_element</a></li>
+<li><a href="#pancax.fem.elements.tet4_element">pancax.fem.elements.tet4_element</a></li>
+<li><a href="#pancax.fem.elements.line_element">pancax.fem.elements.line_element</a></li>
+<li><a href="#pancax.fem.elements.quad4_element">pancax.fem.elements.quad4_element</a></li>
+<li><a href="#pancax.fem.elements.tet10_element">pancax.fem.elements.tet10_element</a></li>
+<li><a href="#pancax.fem.elements.hex8_element">pancax.fem.elements.hex8_element</a></li>
+<li><a href="#pancax.fem.elements.quad9_element">pancax.fem.elements.quad9_element</a></li>
+<li><a href="#pancax.fem.elements">pancax.fem.elements</a></li>
+<li><a href="#pancax.fem.surface">pancax.fem.surface</a></li>
+<li><a href="#pancax.fem">pancax.fem</a></li>
+<li><a href="#pancax.fem.traction_bc">pancax.fem.traction_bc</a></li>
+</ul>
+<p><a id="pancax"></a></p>
+<h1 id="pancax"><a class="header" href="#pancax">pancax</a></h1>
+<p><a id="pancax.optimizers.lbfgs"></a></p>
+<h1 id="pancaxoptimizerslbfgs"><a class="header" href="#pancaxoptimizerslbfgs">pancax.optimizers.lbfgs</a></h1>
+<p><a id="pancax.optimizers"></a></p>
+<h1 id="pancaxoptimizers"><a class="header" href="#pancaxoptimizers">pancax.optimizers</a></h1>
+<p><a id="pancax.optimizers.adam"></a></p>
+<h1 id="pancaxoptimizersadam"><a class="header" href="#pancaxoptimizersadam">pancax.optimizers.adam</a></h1>
+<p><a id="pancax.optimizers.adam.Adam"></a></p>
+<h2 id="adam-objects"><a class="header" href="#adam-objects">Adam Objects</a></h2>
+<pre><code class="language-python">class Adam(AbstractOptimizer)
+</code></pre>
+<p><a id="pancax.optimizers.adam.Adam.loss_function"></a></p>
+<h4 id="loss_function"><a class="header" href="#loss_function">loss_function</a></h4>
+<p>TODO further type me</p>
+<p><a id="pancax.optimizers.base"></a></p>
+<h1 id="pancaxoptimizersbase"><a class="header" href="#pancaxoptimizersbase">pancax.optimizers.base</a></h1>
+<p><a id="pancax.optimizers.base.AbstractOptimizer"></a></p>
+<h2 id="abstractoptimizer-objects"><a class="header" href="#abstractoptimizer-objects">AbstractOptimizer Objects</a></h2>
+<pre><code class="language-python">class AbstractOptimizer(eqx.Module)
+</code></pre>
+<p><a id="pancax.optimizers.base.AbstractOptimizer.loss_function"></a></p>
+<h4 id="loss_function-1"><a class="header" href="#loss_function-1">loss_function</a></h4>
+<p>TODO further type me</p>
+<p><a id="pancax.optimizers.base.AbstractOptimizer.loss_and_grads"></a></p>
+<h4 id="loss_and_grads"><a class="header" href="#loss_and_grads">loss_and_grads</a></h4>
+<p>TODO not sure if this type is right?</p>
+<p><a id="pancax.utils"></a></p>
+<h1 id="pancaxutils"><a class="header" href="#pancaxutils">pancax.utils</a></h1>
+<p><a id="pancax.timer"></a></p>
+<h1 id="pancaxtimer"><a class="header" href="#pancaxtimer">pancax.timer</a></h1>
+<p><a id="pancax.timer.TimerError"></a></p>
+<h2 id="timererror-objects"><a class="header" href="#timererror-objects">TimerError Objects</a></h2>
+<pre><code class="language-python">class TimerError(Exception)
+</code></pre>
+<p>A custom exception used to report errors in use of Timer class</p>
+<p><a id="pancax.timer.Timer"></a></p>
+<h2 id="timer-objects"><a class="header" href="#timer-objects">Timer Objects</a></h2>
+<pre><code class="language-python">@dataclass
+class Timer(ContextDecorator)
+</code></pre>
+<p>Time your code using a class, context manager, or decorator</p>
+<p><a id="pancax.timer.Timer.__post_init__"></a></p>
+<h4 id="__post_init__"><a class="header" href="#__post_init__">__post_init__</a></h4>
+<pre><code class="language-python">def __post_init__() -&gt; None
+</code></pre>
+<p>Initialization: add timer to dict of timers</p>
+<p><a id="pancax.timer.Timer.start"></a></p>
+<h4 id="start"><a class="header" href="#start">start</a></h4>
+<pre><code class="language-python">def start() -&gt; None
+</code></pre>
+<p>Start a new timer</p>
+<p><a id="pancax.timer.Timer.stop"></a></p>
+<h4 id="stop"><a class="header" href="#stop">stop</a></h4>
+<pre><code class="language-python">def stop() -&gt; float
+</code></pre>
+<p>Stop the timer, and report the elapsed time</p>
+<p><a id="pancax.timer.Timer.__enter__"></a></p>
+<h4 id="__enter__"><a class="header" href="#__enter__">__enter__</a></h4>
+<pre><code class="language-python">def __enter__() -&gt; "Timer"
+</code></pre>
+<p>Start a new timer as a context manager</p>
+<p><a id="pancax.timer.Timer.__exit__"></a></p>
+<h4 id="__exit__"><a class="header" href="#__exit__">__exit__</a></h4>
+<pre><code class="language-python">def __exit__(*exc_info: Any) -&gt; None
+</code></pre>
+<p>Stop the context manager timer</p>
+<p><a id="pancax.post_processor"></a></p>
+<h1 id="pancaxpost_processor"><a class="header" href="#pancaxpost_processor">pancax.post_processor</a></h1>
+<p><a id="pancax.post_processor.VtkPostProcessor"></a></p>
+<h2 id="vtkpostprocessor-objects"><a class="header" href="#vtkpostprocessor-objects">VtkPostProcessor Objects</a></h2>
+<pre><code class="language-python">class VtkPostProcessor()
+</code></pre>
+<p><a id="pancax.post_processor.VtkPostProcessor.convert_exodus_to_xml"></a></p>
+<h4 id="convert_exodus_to_xml"><a class="header" href="#convert_exodus_to_xml">convert_exodus_to_xml</a></h4>
+<pre><code class="language-python">def convert_exodus_to_xml(exodus_file, xml_file)
+</code></pre>
+<p>Converts an Exodus II file to a VTK XML MultiBlock dataset.</p>
+<p><a id="pancax.post_processor.VtkPostProcessor.get_vtk_cell_type"></a></p>
+<h4 id="get_vtk_cell_type"><a class="header" href="#get_vtk_cell_type">get_vtk_cell_type</a></h4>
+<pre><code class="language-python">def get_vtk_cell_type(exodus_element_type)
+</code></pre>
+<p>Map Exodus element types to VTK cell types.</p>
+<p><a id="pancax.bvps.simple_shear"></a></p>
+<h1 id="pancaxbvpssimple_shear"><a class="header" href="#pancaxbvpssimple_shear">pancax.bvps.simple_shear</a></h1>
+<p><a id="pancax.bvps.biaxial_tension"></a></p>
+<h1 id="pancaxbvpsbiaxial_tension"><a class="header" href="#pancaxbvpsbiaxial_tension">pancax.bvps.biaxial_tension</a></h1>
+<p><a id="pancax.bvps.uniaxial_tension"></a></p>
+<h1 id="pancaxbvpsuniaxial_tension"><a class="header" href="#pancaxbvpsuniaxial_tension">pancax.bvps.uniaxial_tension</a></h1>
+<p><a id="pancax.bvps"></a></p>
+<h1 id="pancaxbvps"><a class="header" href="#pancaxbvps">pancax.bvps</a></h1>
+<p><a id="pancax.math.tensor_math"></a></p>
+<h1 id="pancaxmathtensor_math"><a class="header" href="#pancaxmathtensor_math">pancax.math.tensor_math</a></h1>
+<p><a id="pancax.math.tensor_math.sqrtm_dbp"></a></p>
+<h4 id="sqrtm_dbp"><a class="header" href="#sqrtm_dbp">sqrtm_dbp</a></h4>
+<pre><code class="language-python">def sqrtm_dbp(A)
+</code></pre>
+<p>Matrix square root by product form of Denman-Beavers iteration.</p>
+<p>Translated from the Matrix Function Toolbox
+http://www.ma.man.ac.uk/~higham/mftoolbox
+Nicholas J. Higham, Functions of Matrices: Theory and Computation,
+SIAM, Philadelphia, PA, USA, 2008. ISBN 978-0-898716-46-7,</p>
+<p><a id="pancax.math.tensor_math.log_pade_pf"></a></p>
+<h4 id="log_pade_pf"><a class="header" href="#log_pade_pf">log_pade_pf</a></h4>
+<pre><code class="language-python">def log_pade_pf(A, n)
+</code></pre>
+<p>Logarithmic map by Padé approximant and partial fractions</p>
+<p><a id="pancax.math.math"></a></p>
+<h1 id="pancaxmathmath"><a class="header" href="#pancaxmathmath">pancax.math.math</a></h1>
+<p><a id="pancax.math.math.sum2"></a></p>
+<h4 id="sum2"><a class="header" href="#sum2">sum2</a></h4>
+<pre><code class="language-python">def sum2(a)
+</code></pre>
+<p>Sum a vector to much higher accuracy than numpy.sum.</p>
+<h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
+<p>a : ndarray, with only one axis (shape [n,])</p>
+<h2 id="returns"><a class="header" href="#returns">Returns</a></h2>
+<p>sum : real
+The sum of the numbers in the array</p>
+<p>This special sum method computes the result as accurate as if
+computed in quadruple precision.</p>
+<p>Reference:
+T. Ogita, S. M. Rump, and S. Oishi. Accurate sum and dot product.
+SIAM J. Sci. Comput., Vol 26, No 6, pp. 1955-1988.
+doi: 10.1137/030601818</p>
+<p><a id="pancax.math.math.dot2"></a></p>
+<h4 id="dot2"><a class="header" href="#dot2">dot2</a></h4>
+<pre><code class="language-python">def dot2(x, y)
+</code></pre>
+<p>Compute inner product of 2 vectors to much higher accuracy than numpy.dot.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li>`` (<code>param x: ndarray, with only one axis (shape [n,])</code>): None</li>
+<li>`` (<code>param y: ndarray, with only one axis (shape [n,])</code>): None</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p><code>return dotprod: real</code>: The inner product of the input vectors.</p>
+<p><a id="pancax.math.scalar_root_find"></a></p>
+<h1 id="pancaxmathscalar_root_find"><a class="header" href="#pancaxmathscalar_root_find">pancax.math.scalar_root_find</a></h1>
+<p><a id="pancax.math.scalar_root_find.find_root"></a></p>
+<h4 id="find_root"><a class="header" href="#find_root">find_root</a></h4>
+<pre><code class="language-python">def find_root(f, x0, bracket, settings)
+</code></pre>
+<p>Find a root of a nonlinear scalar-valued equation.</p>
+<p>Uses Newton's method, safeguarded with bisection.
+See rtsafe(...) from Numerical Recipes. This function is differentiable
+using Jax transforms, and can be compsed with <code>vmap</code> and <code>jit</code>.</p>
+<h1 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h1>
+<p>f : callable
+Scalar function of which to find a root.
+x0 : real
+Initial guess for root. The value of x0 should be within the range
+defined by bracket. If not, the initial guess will be automatically
+clipped to the nearest bound.
+bracket : sequence of 2 reals (list, tuple, numpy array, etc)
+Upper and lower bounds for the root search. The existence of a
+root is inferred by checking that the values of <code>f</code> at both brackets
+do not have the same sign. If this check fails, <code>nan</code> is returned.
+settings : A settings object from this module
+Algorithmic settings.</p>
+<h1 id="returns-1"><a class="header" href="#returns-1">Returns</a></h1>
+<p>x : real (or nan)
+Argument of f such that f(x) = 0 (within provided tolerance). If the
+root is not bracketed, <code>nan</code> is returned.</p>
+<p><a id="pancax.math"></a></p>
+<h1 id="pancaxmath"><a class="header" href="#pancaxmath">pancax.math</a></h1>
+<p><a id="pancax.domains.collocation_domain"></a></p>
+<h1 id="pancaxdomainscollocation_domain"><a class="header" href="#pancaxdomainscollocation_domain">pancax.domains.collocation_domain</a></h1>
+<p><a id="pancax.domains.variational_domain"></a></p>
+<h1 id="pancaxdomainsvariational_domain"><a class="header" href="#pancaxdomainsvariational_domain">pancax.domains.variational_domain</a></h1>
+<p><a id="pancax.domains"></a></p>
+<h1 id="pancaxdomains"><a class="header" href="#pancaxdomains">pancax.domains</a></h1>
+<p><a id="pancax.domains.delta_pinn_domain"></a></p>
+<h1 id="pancaxdomainsdelta_pinn_domain"><a class="header" href="#pancaxdomainsdelta_pinn_domain">pancax.domains.delta_pinn_domain</a></h1>
+<p><a id="pancax.domains.base"></a></p>
+<h1 id="pancaxdomainsbase"><a class="header" href="#pancaxdomainsbase">pancax.domains.base</a></h1>
+<p><a id="pancax.cli.cli"></a></p>
+<h1 id="pancaxclicli"><a class="header" href="#pancaxclicli">pancax.cli.cli</a></h1>
+<p><a id="pancax.cli"></a></p>
+<h1 id="pancaxcli"><a class="header" href="#pancaxcli">pancax.cli</a></h1>
+<p><a id="pancax.physics_kernels.beer_lambert_law"></a></p>
+<h1 id="pancaxphysics_kernelsbeer_lambert_law"><a class="header" href="#pancaxphysics_kernelsbeer_lambert_law">pancax.physics_kernels.beer_lambert_law</a></h1>
+<p><a id="pancax.physics_kernels.heat_equation"></a></p>
+<h1 id="pancaxphysics_kernelsheat_equation"><a class="header" href="#pancaxphysics_kernelsheat_equation">pancax.physics_kernels.heat_equation</a></h1>
+<p><a id="pancax.physics_kernels.burgers_equation"></a></p>
+<h1 id="pancaxphysics_kernelsburgers_equation"><a class="header" href="#pancaxphysics_kernelsburgers_equation">pancax.physics_kernels.burgers_equation</a></h1>
+<p><a id="pancax.physics_kernels.laplace_beltrami"></a></p>
+<h1 id="pancaxphysics_kernelslaplace_beltrami"><a class="header" href="#pancaxphysics_kernelslaplace_beltrami">pancax.physics_kernels.laplace_beltrami</a></h1>
+<p><a id="pancax.physics_kernels.solid_mechanics"></a></p>
+<h1 id="pancaxphysics_kernelssolid_mechanics"><a class="header" href="#pancaxphysics_kernelssolid_mechanics">pancax.physics_kernels.solid_mechanics</a></h1>
+<p><a id="pancax.physics_kernels.solid_mechanics.AbstractMechanicsFormulation"></a></p>
+<h2 id="abstractmechanicsformulation-objects"><a class="header" href="#abstractmechanicsformulation-objects">AbstractMechanicsFormulation Objects</a></h2>
+<pre><code class="language-python">class AbstractMechanicsFormulation(eqx.Module)
+</code></pre>
+<p><a id="pancax.physics_kernels.solid_mechanics.AbstractMechanicsFormulation.n_dimensions"></a></p>
+<h4 id="n_dimensions"><a class="header" href="#n_dimensions">n_dimensions</a></h4>
+<p>does this need to be static?</p>
+<p><a id="pancax.physics_kernels"></a></p>
+<h1 id="pancaxphysics_kernels"><a class="header" href="#pancaxphysics_kernels">pancax.physics_kernels</a></h1>
+<p><a id="pancax.physics_kernels.poisson"></a></p>
+<h1 id="pancaxphysics_kernelspoisson"><a class="header" href="#pancaxphysics_kernelspoisson">pancax.physics_kernels.poisson</a></h1>
+<p><a id="pancax.physics_kernels.base"></a></p>
+<h1 id="pancaxphysics_kernelsbase"><a class="header" href="#pancaxphysics_kernelsbase">pancax.physics_kernels.base</a></h1>
+<p><a id="pancax.physics_kernels.base.nodal_pp"></a></p>
+<h4 id="nodal_pp"><a class="header" href="#nodal_pp">nodal_pp</a></h4>
+<pre><code class="language-python">def nodal_pp(func, physics, is_kinematic_method=False, jit=True)
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>func</code>: Function to use for a nodal property output variable</li>
+<li><code>has_props</code>: Whether or not this function need properties</li>
+<li><code>jit</code>: Whether or not to jit this function</li>
+</ul>
+<p><a id="pancax.physics_kernels.base.BaseEnergyFormPhysics"></a></p>
+<h2 id="baseenergyformphysics-objects"><a class="header" href="#baseenergyformphysics-objects">BaseEnergyFormPhysics Objects</a></h2>
+<pre><code class="language-python">class BaseEnergyFormPhysics(BasePhysics)
+</code></pre>
+<p><a id="pancax.physics_kernels.base.BaseEnergyFormPhysics.element_interpolants"></a></p>
+<h4 id="element_interpolants"><a class="header" href="#element_interpolants">element_interpolants</a></h4>
+<pre><code class="language-python">def element_interpolants(fspace, x, u)
+</code></pre>
+<p>Returns everything necessary for calculations at the element level</p>
+<p>return (ne, nq, ...) shaped arrays</p>
+<p>TODO type me/re-document me</p>
+<p><a id="pancax.constitutive_models.properties"></a></p>
+<h1 id="pancaxconstitutive_modelsproperties"><a class="header" href="#pancaxconstitutive_modelsproperties">pancax.constitutive_models.properties</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperviscoelasticity.simple_fefv"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperviscoelasticitysimple_fefv"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperviscoelasticitysimple_fefv">pancax.constitutive_models.mechanics.hyperviscoelasticity.simple_fefv</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperviscoelasticity"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperviscoelasticity"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperviscoelasticity">pancax.constitutive_models.mechanics.hyperviscoelasticity</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperviscoelasticity.base"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperviscoelasticitybase"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperviscoelasticitybase">pancax.constitutive_models.mechanics.hyperviscoelasticity.base</a></h1>
+<p><a id="pancax.constitutive_models.mechanics"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanics"><a class="header" href="#pancaxconstitutive_modelsmechanics">pancax.constitutive_models.mechanics</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.gent"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperelasticitygent"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperelasticitygent">pancax.constitutive_models.mechanics.hyperelasticity.gent</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.gent.Gent"></a></p>
+<h2 id="gent-objects"><a class="header" href="#gent-objects">Gent Objects</a></h2>
+<pre><code class="language-python">class Gent(HyperelasticModel)
+</code></pre>
+<p>Gent model with the following model form</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ψ</span><span class="mopen">(</span><span class="mord mathbf">F</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mop">ln</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.4471em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">G</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0962em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">ln</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4971em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0962em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span></span></span></span></span></p>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.blatz_ko"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperelasticityblatz_ko"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperelasticityblatz_ko">pancax.constitutive_models.mechanics.hyperelasticity.blatz_ko</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.swanson"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperelasticityswanson"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperelasticityswanson">pancax.constitutive_models.mechanics.hyperelasticity.swanson</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.swanson.Swanson"></a></p>
+<h2 id="swanson-objects"><a class="header" href="#swanson-objects">Swanson Objects</a></h2>
+<pre><code class="language-python">class Swanson(HyperelasticModel)
+</code></pre>
+<p>Swanson model truncated to 4 parameters</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ψ</span><span class="mopen">(</span><span class="mord mathbf">F</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">ln</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.6784em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4971em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.7283em;"><span style="top:-3.95em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.6784em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4971em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.7283em;"><span style="top:-3.95em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173em;"><span style="top:-2.357em;margin-left:-0.0077em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.hencky"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperelasticityhencky"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperelasticityhencky">pancax.constitutive_models.mechanics.hyperelasticity.hencky</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperelasticity"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperelasticity">pancax.constitutive_models.mechanics.hyperelasticity</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.neohookean"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicshyperelasticityneohookean"><a class="header" href="#pancaxconstitutive_modelsmechanicshyperelasticityneohookean">pancax.constitutive_models.mechanics.hyperelasticity.neohookean</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.hyperelasticity.neohookean.NeoHookean"></a></p>
+<h2 id="neohookean-objects"><a class="header" href="#neohookean-objects">NeoHookean Objects</a></h2>
+<pre><code class="language-python">class NeoHookean(HyperelasticModel)
+</code></pre>
+<p>NeoHookean model with the following model form</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ψ</span><span class="mopen">(</span><span class="mord mathbf">F</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mop">ln</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">3</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span></span></span></span></p>
+<p><a id="pancax.constitutive_models.mechanics.base"></a></p>
+<h1 id="pancaxconstitutive_modelsmechanicsbase"><a class="header" href="#pancaxconstitutive_modelsmechanicsbase">pancax.constitutive_models.mechanics.base</a></h1>
+<p><a id="pancax.constitutive_models.mechanics.base.MechanicsModel"></a></p>
+<h2 id="mechanicsmodel-objects"><a class="header" href="#mechanicsmodel-objects">MechanicsModel Objects</a></h2>
+<pre><code class="language-python">class MechanicsModel(ConstitutiveModel)
+</code></pre>
+<p><a id="pancax.constitutive_models.mechanics.base.MechanicsModel.energy"></a></p>
+<h4 id="energy"><a class="header" href="#energy">energy</a></h4>
+<pre><code class="language-python">@abstractmethod
+def energy(grad_u: Tensor, theta, state_old, dt) -&gt; Scalar
+</code></pre>
+<p>This method returns the algorithmic strain energy density.</p>
+<p><a id="pancax.constitutive_models.mechanics.base.MechanicsModel.I1"></a></p>
+<h4 id="i1"><a class="header" href="#i1">I1</a></h4>
+<pre><code class="language-python">def I1(grad_u: Tensor) -&gt; Scalar
+</code></pre>
+<p>Calculates the first invariant</p>
+<ul>
+<li><strong>grad_u</strong>: the displacement gradient</li>
+</ul>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2413em;vertical-align:-0.35em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathbf">F</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathbf">F</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span></span></span></span></p>
+<p><a id="pancax.constitutive_models.mechanics.base.MechanicsModel.I1_bar"></a></p>
+<h4 id="i1_bar"><a class="header" href="#i1_bar">I1_bar</a></h4>
+<pre><code class="language-python">def I1_bar(grad_u: Tensor) -&gt; Scalar
+</code></pre>
+<p>Calculates the first distortional invariant</p>
+<ul>
+<li><strong>grad_u</strong>: the displacement gradient</li>
+</ul>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9701em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.288em;vertical-align:-0.35em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">2/3</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathbf">F</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mord mathbf">F</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span></span></span></span></p>
+<p><a id="pancax.constitutive_models.mechanics.base.MechanicsModel.jacobian"></a></p>
+<h4 id="jacobian"><a class="header" href="#jacobian">jacobian</a></h4>
+<pre><code class="language-python">def jacobian(grad_u: Tensor) -&gt; Scalar
+</code></pre>
+<p>This simply calculate the jacobian but with guard rails
+to return nonsensical numbers if a non-positive jacobian
+is encountered during training.</p>
+<ul>
+<li><strong>grad_u</strong>: the displacement gradient</li>
+</ul>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mopen">(</span><span class="mord mathbf">F</span><span class="mclose">)</span></span></span></span></span></p>
+<p><a id="pancax.constitutive_models"></a></p>
+<h1 id="pancaxconstitutive_models"><a class="header" href="#pancaxconstitutive_models">pancax.constitutive_models</a></h1>
+<p><a id="pancax.constitutive_models.base"></a></p>
+<h1 id="pancaxconstitutive_modelsbase"><a class="header" href="#pancaxconstitutive_modelsbase">pancax.constitutive_models.base</a></h1>
+<p><a id="pancax.data.full_field_data"></a></p>
+<h1 id="pancaxdatafull_field_data"><a class="header" href="#pancaxdatafull_field_data">pancax.data.full_field_data</a></h1>
+<p><a id="pancax.data.full_field_data.FullFieldData"></a></p>
+<h2 id="fullfielddata-objects"><a class="header" href="#fullfielddata-objects">FullFieldData Objects</a></h2>
+<pre><code class="language-python">class FullFieldData(eqx.Module)
+</code></pre>
+<p>Data structure to store full field data used as ground truth</p>
+<p>for output fields of a PINN when solving inverse problems.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>inputs</code>: Data that serves as inputs to the PINN</li>
+<li><code>outputs</code>: Data that serves as outputs of the PINN</li>
+<li><code>n_time_steps</code>: Variable used for book keeping</li>
+</ul>
+<p><a id="pancax.data.global_data"></a></p>
+<h1 id="pancaxdataglobal_data"><a class="header" href="#pancaxdataglobal_data">pancax.data.global_data</a></h1>
+<p><a id="pancax.data.global_data.GlobalData"></a></p>
+<h2 id="globaldata-objects"><a class="header" href="#globaldata-objects">GlobalData Objects</a></h2>
+<pre><code class="language-python">class GlobalData(eqx.Module)
+</code></pre>
+<p>Data structure that holds global data to be used as</p>
+<p>ground truth for some global field calculated from
+PINN outputs used in inverse modeling training</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>times</code>: A set of times used to compare to physics calculations</li>
+<li><code>displacements</code>: Currently hardcoded to         use a displacement-force curve TODO</li>
+<li><code>outputs</code>: Field used as ground truth, hardcoded         essentially to a reaction force now</li>
+<li><code>n_nodes</code>: Book-keeping variable for number of nodes         on nodeset to measure global response from</li>
+<li><code>n_time_steps</code>: Book-keeping variable</li>
+<li><code>reaction_nodes</code>: Node set nodes for where to measure reaction forces</li>
+<li><code>reaction_dof</code>: Degree of freedom to use         for reaction force calculation</li>
+</ul>
+<p><a id="pancax.data.global_data.GlobalData.times"></a></p>
+<h4 id="times"><a class="header" href="#times">times</a></h4>
+<p>change to inputs?</p>
+<p><a id="pancax.data"></a></p>
+<h1 id="pancaxdata"><a class="header" href="#pancaxdata">pancax.data</a></h1>
+<p><a id="pancax.networks.fields"></a></p>
+<h1 id="pancaxnetworksfields"><a class="header" href="#pancaxnetworksfields">pancax.networks.fields</a></h1>
+<p><a id="pancax.networks.fields.Field"></a></p>
+<h2 id="field-objects"><a class="header" href="#field-objects">Field Objects</a></h2>
+<pre><code class="language-python">class Field(AbstractPancaxModel)
+</code></pre>
+<p><a id="pancax.networks.fields.Field.x_mins"></a></p>
+<h4 id="x_mins"><a class="header" href="#x_mins">x_mins</a></h4>
+<p>= jnp.zeros(3)</p>
+<p><a id="pancax.networks.fields.Field.x_maxs"></a></p>
+<h4 id="x_maxs"><a class="header" href="#x_maxs">x_maxs</a></h4>
+<p>= jnp.zeros(3)</p>
+<p><a id="pancax.networks.input_polyconvex_nn"></a></p>
+<h1 id="pancaxnetworksinput_polyconvex_nn"><a class="header" href="#pancaxnetworksinput_polyconvex_nn">pancax.networks.input_polyconvex_nn</a></h1>
+<p><a id="pancax.networks.rbf"></a></p>
+<h1 id="pancaxnetworksrbf"><a class="header" href="#pancaxnetworksrbf">pancax.networks.rbf</a></h1>
+<p><a id="pancax.networks.elm"></a></p>
+<h1 id="pancaxnetworkselm"><a class="header" href="#pancaxnetworkselm">pancax.networks.elm</a></h1>
+<p><a id="pancax.networks.resnet"></a></p>
+<h1 id="pancaxnetworksresnet"><a class="header" href="#pancaxnetworksresnet">pancax.networks.resnet</a></h1>
+<p><a id="pancax.networks.ml_dirichlet_field"></a></p>
+<h1 id="pancaxnetworksml_dirichlet_field"><a class="header" href="#pancaxnetworksml_dirichlet_field">pancax.networks.ml_dirichlet_field</a></h1>
+<p><a id="pancax.networks.mlp"></a></p>
+<h1 id="pancaxnetworksmlp"><a class="header" href="#pancaxnetworksmlp">pancax.networks.mlp</a></h1>
+<p><a id="pancax.networks.mlp.Linear"></a></p>
+<h4 id="linear"><a class="header" href="#linear">Linear</a></h4>
+<pre><code class="language-python">def Linear(n_inputs: int, n_outputs: int, key: jax.random.PRNGKey)
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>n_inputs</code>: Number of inputs to linear layer</li>
+<li><code>n_outputs</code>: Number of outputs of the linear layer</li>
+<li><code>key</code>: rng key</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>Equinox Linear layer</p>
+<p><a id="pancax.networks.parameters"></a></p>
+<h1 id="pancaxnetworksparameters"><a class="header" href="#pancaxnetworksparameters">pancax.networks.parameters</a></h1>
+<p><a id="pancax.networks"></a></p>
+<h1 id="pancaxnetworks"><a class="header" href="#pancaxnetworks">pancax.networks</a></h1>
+<p><a id="pancax.networks.base"></a></p>
+<h1 id="pancaxnetworksbase"><a class="header" href="#pancaxnetworksbase">pancax.networks.base</a></h1>
+<p><a id="pancax.networks.base.AbstractPancaxModel"></a></p>
+<h2 id="abstractpancaxmodel-objects"><a class="header" href="#abstractpancaxmodel-objects">AbstractPancaxModel Objects</a></h2>
+<pre><code class="language-python">class AbstractPancaxModel(eqx.Module)
+</code></pre>
+<p>Base class for pancax model parameters.</p>
+<p>This includes a few helper methods</p>
+<p><a id="pancax.problems.inverse_problem"></a></p>
+<h1 id="pancaxproblemsinverse_problem"><a class="header" href="#pancaxproblemsinverse_problem">pancax.problems.inverse_problem</a></h1>
+<p><a id="pancax.problems"></a></p>
+<h1 id="pancaxproblems"><a class="header" href="#pancaxproblems">pancax.problems</a></h1>
+<p><a id="pancax.problems.forward_problem"></a></p>
+<h1 id="pancaxproblemsforward_problem"><a class="header" href="#pancaxproblemsforward_problem">pancax.problems.forward_problem</a></h1>
+<p><a id="pancax.bcs.distance_functions"></a></p>
+<h1 id="pancaxbcsdistance_functions"><a class="header" href="#pancaxbcsdistance_functions">pancax.bcs.distance_functions</a></h1>
+<p><a id="pancax.bcs.dirichlet_bc"></a></p>
+<h1 id="pancaxbcsdirichlet_bc"><a class="header" href="#pancaxbcsdirichlet_bc">pancax.bcs.dirichlet_bc</a></h1>
+<p><a id="pancax.bcs.dirichlet_bc.DirichletBC"></a></p>
+<h2 id="dirichletbc-objects"><a class="header" href="#dirichletbc-objects">DirichletBC Objects</a></h2>
+<pre><code class="language-python">class DirichletBC(eqx.Module)
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>nodeSet</code>: A name for a nodeset in the mesh</li>
+<li><code>component</code>: The dof to apply the dirichlet bc to</li>
+<li><code>function</code>: A function f(x, t) = u that gives the value
+to enforce on the (nodeset, component) of a field.
+This defaults to the zero function</li>
+</ul>
+<p><a id="pancax.bcs.neumann_bc"></a></p>
+<h1 id="pancaxbcsneumann_bc"><a class="header" href="#pancaxbcsneumann_bc">pancax.bcs.neumann_bc</a></h1>
+<p><a id="pancax.bcs"></a></p>
+<h1 id="pancaxbcs"><a class="header" href="#pancaxbcs">pancax.bcs</a></h1>
+<p><a id="pancax.loss_functions.base_loss_function"></a></p>
+<h1 id="pancaxloss_functionsbase_loss_function"><a class="header" href="#pancaxloss_functionsbase_loss_function">pancax.loss_functions.base_loss_function</a></h1>
+<p><a id="pancax.loss_functions.base_loss_function.BaseLossFunction"></a></p>
+<h2 id="baselossfunction-objects"><a class="header" href="#baselossfunction-objects">BaseLossFunction Objects</a></h2>
+<pre><code class="language-python">class BaseLossFunction(eqx.Module)
+</code></pre>
+<p>Base class for loss functions.
+Currently does nothing but helps build a
+type hierarchy.</p>
+<p><a id="pancax.loss_functions.base_loss_function.BCLossFunction"></a></p>
+<h2 id="bclossfunction-objects"><a class="header" href="#bclossfunction-objects">BCLossFunction Objects</a></h2>
+<pre><code class="language-python">class BCLossFunction(BaseLossFunction)
+</code></pre>
+<p>Base class for boundary condition loss functions.</p>
+<p>A <code>load_step</code> method is expect with the following
+type signature
+<code>load_step(self, params, domain, t)</code></p>
+<p><a id="pancax.loss_functions.base_loss_function.PhysicsLossFunction"></a></p>
+<h2 id="physicslossfunction-objects"><a class="header" href="#physicslossfunction-objects">PhysicsLossFunction Objects</a></h2>
+<pre><code class="language-python">class PhysicsLossFunction(BaseLossFunction)
+</code></pre>
+<p>Base class for physics loss functions.</p>
+<p>A <code>load_step</code> method is expect with the following
+type signature
+<code>load_step(self, params, domain, t)</code></p>
+<p><a id="pancax.loss_functions.utils"></a></p>
+<h1 id="pancaxloss_functionsutils"><a class="header" href="#pancaxloss_functionsutils">pancax.loss_functions.utils</a></h1>
+<p><a id="pancax.loss_functions.weak_form_loss_functions"></a></p>
+<h1 id="pancaxloss_functionsweak_form_loss_functions"><a class="header" href="#pancaxloss_functionsweak_form_loss_functions">pancax.loss_functions.weak_form_loss_functions</a></h1>
+<p><a id="pancax.loss_functions.weak_form_loss_functions.EnergyLoss"></a></p>
+<h2 id="energyloss-objects"><a class="header" href="#energyloss-objects">EnergyLoss Objects</a></h2>
+<pre><code class="language-python">class EnergyLoss(PhysicsLossFunction)
+</code></pre>
+<p>Energy loss function akin to the deep energy method.</p>
+<p>Calculates the following quantity</p>
+<p>.. math::
+\mathcal{L} = w\Pi\left[u\right] = <br />
+w\int_\Omega\psi\left(\mathbf{F}\right)</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>weight</code>: weight for this loss function</li>
+</ul>
+<p><a id="pancax.loss_functions.weak_form_loss_functions.EnergyAndResidualLoss"></a></p>
+<h2 id="energyandresidualloss-objects"><a class="header" href="#energyandresidualloss-objects">EnergyAndResidualLoss Objects</a></h2>
+<pre><code class="language-python">class EnergyAndResidualLoss(PhysicsLossFunction)
+</code></pre>
+<p>Energy and residual loss function used in Hamel et. al</p>
+<p>Calculates the following quantity</p>
+<p>.. math::
+\mathcal{L} = w_1\Pi\left[u\right] + w_2\delta\Pi\left[u\right]_{free}</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>energy_weight</code>: Weight for the energy w_1</li>
+<li><code>residual_weight</code>: Weight for the residual w_2</li>
+</ul>
+<p><a id="pancax.loss_functions.ic_loss_function"></a></p>
+<h1 id="pancaxloss_functionsic_loss_function"><a class="header" href="#pancaxloss_functionsic_loss_function">pancax.loss_functions.ic_loss_function</a></h1>
+<p><a id="pancax.loss_functions.strong_form_loss_functions"></a></p>
+<h1 id="pancaxloss_functionsstrong_form_loss_functions"><a class="header" href="#pancaxloss_functionsstrong_form_loss_functions">pancax.loss_functions.strong_form_loss_functions</a></h1>
+<p><a id="pancax.loss_functions.bc_loss_functions"></a></p>
+<h1 id="pancaxloss_functionsbc_loss_functions"><a class="header" href="#pancaxloss_functionsbc_loss_functions">pancax.loss_functions.bc_loss_functions</a></h1>
+<p><a id="pancax.loss_functions"></a></p>
+<h1 id="pancaxloss_functions"><a class="header" href="#pancaxloss_functions">pancax.loss_functions</a></h1>
+<p><a id="pancax.loss_functions.data_loss_functions"></a></p>
+<h1 id="pancaxloss_functionsdata_loss_functions"><a class="header" href="#pancaxloss_functionsdata_loss_functions">pancax.loss_functions.data_loss_functions</a></h1>
+<p><a id="pancax.trainer"></a></p>
+<h1 id="pancaxtrainer"><a class="header" href="#pancaxtrainer">pancax.trainer</a></h1>
+<p><a id="pancax.history_writer"></a></p>
+<h1 id="pancaxhistory_writer"><a class="header" href="#pancaxhistory_writer">pancax.history_writer</a></h1>
+<p><a id="pancax.fem.dof_manager"></a></p>
+<h1 id="pancaxfemdof_manager"><a class="header" href="#pancaxfemdof_manager">pancax.fem.dof_manager</a></h1>
+<p><a id="pancax.fem.dof_manager.DofManager"></a></p>
+<h2 id="dofmanager-objects"><a class="header" href="#dofmanager-objects">DofManager Objects</a></h2>
+<pre><code class="language-python">class DofManager()
+</code></pre>
+<p>Collection of arrays needed to differentiate between
+fixed and free dofs for fem like calculations.</p>
+<p>TODO better document the parameters in this guy</p>
+<p><a id="pancax.fem.dof_manager.DofManager.__init__"></a></p>
+<h4 id="__init__"><a class="header" href="#__init__">__init__</a></h4>
+<pre><code class="language-python">def __init__(mesh, dim: int, DirichletBCs: List[DirichletBC]) -&gt; None
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>functionSpace</code>: <code>FunctionSpace</code> object</li>
+<li><code>dim</code>: The number of dims             (really the number of active dofs for the physics)</li>
+<li><code>DirichletBCs</code>: A list of of <code>DirichletBC</code> objects</li>
+</ul>
+<p><a id="pancax.fem.dof_manager.DofManager.get_bc_size"></a></p>
+<h4 id="get_bc_size"><a class="header" href="#get_bc_size">get_bc_size</a></h4>
+<pre><code class="language-python">def get_bc_size() -&gt; int
+</code></pre>
+<p><strong>Returns</strong>:</p>
+<p>the number of fixed dofs</p>
+<p><a id="pancax.fem.dof_manager.DofManager.get_unknown_size"></a></p>
+<h4 id="get_unknown_size"><a class="header" href="#get_unknown_size">get_unknown_size</a></h4>
+<pre><code class="language-python">def get_unknown_size() -&gt; int
+</code></pre>
+<p><strong>Returns</strong>:</p>
+<p>the size of the unkowns vector</p>
+<p><a id="pancax.fem.dof_manager.DofManager.create_field"></a></p>
+<h4 id="create_field"><a class="header" href="#create_field">create_field</a></h4>
+<pre><code class="language-python">def create_field(Uu, Ubc=0.0) -&gt; Float[Array, "nn nd"]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>Uu</code>: Vector of unknown values</li>
+<li><code>Ubc</code>: Values for bc to apply</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>U, a field of unknowns and bcs combined.</p>
+<p><a id="pancax.fem.dof_manager.DofManager.get_bc_values"></a></p>
+<h4 id="get_bc_values"><a class="header" href="#get_bc_values">get_bc_values</a></h4>
+<pre><code class="language-python">def get_bc_values(U) -&gt; Float[Array, "nb"]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>U</code>: a nodal field</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>the bc values in the field U</p>
+<p><a id="pancax.fem.dof_manager.DofManager.get_unknown_values"></a></p>
+<h4 id="get_unknown_values"><a class="header" href="#get_unknown_values">get_unknown_values</a></h4>
+<pre><code class="language-python">def get_unknown_values(U) -&gt; Float[Array, "nu"]
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>U</code>: a nodal field</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>the unknown values in the field U</p>
+<p><a id="pancax.fem.read_exodus_mesh"></a></p>
+<h1 id="pancaxfemread_exodus_mesh"><a class="header" href="#pancaxfemread_exodus_mesh">pancax.fem.read_exodus_mesh</a></h1>
+<p><a id="pancax.fem.read_exodus_mesh.read_exodus_mesh"></a></p>
+<h4 id="read_exodus_mesh"><a class="header" href="#read_exodus_mesh">read_exodus_mesh</a></h4>
+<pre><code class="language-python">def read_exodus_mesh(fileName: str)
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>fileName</code>: file name of exodus mesh to read</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>A mesh object</p>
+<p><a id="pancax.fem.function_space"></a></p>
+<h1 id="pancaxfemfunction_space"><a class="header" href="#pancaxfemfunction_space">pancax.fem.function_space</a></h1>
+<p><a id="pancax.fem.function_space.NonAllocatedFunctionSpace"></a></p>
+<h2 id="nonallocatedfunctionspace-objects"><a class="header" href="#nonallocatedfunctionspace-objects">NonAllocatedFunctionSpace Objects</a></h2>
+<pre><code class="language-python">class NonAllocatedFunctionSpace(eqx.Module)
+</code></pre>
+<p><a id="pancax.fem.function_space.NonAllocatedFunctionSpace.compute_field_gradient"></a></p>
+<h4 id="compute_field_gradient"><a class="header" href="#compute_field_gradient">compute_field_gradient</a></h4>
+<pre><code class="language-python">def compute_field_gradient(u, X)
+</code></pre>
+<p>Takes in element level coordinates X and field u</p>
+<p><a id="pancax.fem.function_space.NonAllocatedFunctionSpace.evaluate_on_element"></a></p>
+<h4 id="evaluate_on_element"><a class="header" href="#evaluate_on_element">evaluate_on_element</a></h4>
+<pre><code class="language-python">def evaluate_on_element(U, X, state, dt, props, func)
+</code></pre>
+<p>Takes in element level field, coordinates, states, etc.
+and evaluates the function func</p>
+<p><a id="pancax.fem.function_space.FunctionSpace"></a></p>
+<h2 id="functionspace-objects"><a class="header" href="#functionspace-objects">FunctionSpace Objects</a></h2>
+<pre><code class="language-python">class FunctionSpace(eqx.Module)
+</code></pre>
+<p>Data needed for calculus on functions in the discrete function space.</p>
+<p>In describing the shape of the attributes, <code>ne</code> is the number of
+elements in the mesh, <code>nqpe</code> is the number of quadrature points per
+element, <code>npe</code> is the number of nodes per element, and <code>nd</code> is the
+spatial dimension of the domain.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>shapes</code>: Shape function values on each element, shape (ne, nqpe, npe)</li>
+<li><code>vols</code>: Volume attributed to each quadrature point. That is, the
+quadrature weight (on the parameteric element domain) multiplied by
+the Jacobian determinant of the map from the parent element to the
+element in the domain. Shape (ne, nqpe).</li>
+<li><code>shapeGrads</code>: Derivatives of the shape functions with respect to the
+spatial coordinates of the domain. Shape (ne, nqpe, npe, nd).</li>
+<li><code>mesh</code>: The <code>Mesh</code> object of the domain.</li>
+<li><code>quadratureRule</code>: The <code>QuadratureRule</code> on which to sample the shape
+functions.</li>
+<li><code>isAxisymmetric</code>: boolean indicating if the function space data are
+axisymmetric.</li>
+</ul>
+<p><a id="pancax.fem.function_space.construct_function_space"></a></p>
+<h4 id="construct_function_space"><a class="header" href="#construct_function_space">construct_function_space</a></h4>
+<pre><code class="language-python">def construct_function_space(mesh, quadratureRule, mode2D="cartesian")
+</code></pre>
+<p>Construct a discrete function space.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li>`` (<code>param mesh: The mesh of the domain.</code>): None</li>
+<li>`` (<code>param quadratureRule: The quadrature rule to be used for integrating         on the domain.</code>): None</li>
+<li>`` (<code>param mode2D: A string indicating how the 2D domain is interpreted for</code>): None</li>
+<li><code>integration. Valid values are ``cartesian`` and ``axisymmetric``.</code>: None</li>
+<li>`Axisymetric mode will include the factor of 2<em>pi</em>r in the ``vols```: None</li>
+<li><code>attribute.</code>: None</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p><code>The ``FunctionSpace`` object.</code>:</p>
+<p><a id="pancax.fem.function_space.construct_function_space_from_parent_element"></a></p>
+<h4 id="construct_function_space_from_parent_element"><a class="header" href="#construct_function_space_from_parent_element">construct_function_space_from_parent_element</a></h4>
+<pre><code class="language-python">def construct_function_space_from_parent_element(mesh,
+                                                 shapeOnRef,
+                                                 quadratureRule,
+                                                 mode2D="cartesian")
+</code></pre>
+<p>Construct a function space with precomputed shape</p>
+<p>function data on the parent element.</p>
+<p>This version of the function space constructor is Jax-transformable,
+and in particular can be jitted. The computation of the shape function
+values and derivatives on the parent element is not transformable in
+general. However, the mapping of the shape function data to the elements in
+the mesh is transformable. One can precompute the parent element shape
+functions once and for all, and then use this special factory function to
+construct the function space and avoid the non-transformable part of the
+operation. The primary use case is for shape sensitivities: the coordinates
+of the mesh change, and we want Jax to pick up the sensitivities of the
+shape function derivatives in space to the coordinate changes
+(which occurs through the mapping from the parent element to the spatial
+domain).</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li>`` (<code>param mesh: The mesh of the domain.</code>): None</li>
+<li><code>(`param shapeOnRef: A tuple of the shape function values         and gradients on the`): parent element, evaluated at the quadrature points. The caller must take care to ensure the shape functions are evaluated at the same points as contained in the</code>quadratureRule`` parameter.</li>
+<li>`` (<code>param quadratureRule: The quadrature rule to be used for         integrating on the domain.</code>): None</li>
+<li>`` (<code>param mode2D: A string indicating how the 2D domain is interpreted for</code>): None</li>
+<li><code>integration. See the default factory function for details.</code>: None</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p><code>The ``FunctionSpace`` object.</code>:</p>
+<p><a id="pancax.fem.function_space.integrate_over_block"></a></p>
+<h4 id="integrate_over_block"><a class="header" href="#integrate_over_block">integrate_over_block</a></h4>
+<pre><code class="language-python">def integrate_over_block(
+        functionSpace,
+        U,
+        X,
+        stateVars,
+        props,
+        dt,
+        func,
+        block,
+        *params,
+        modify_element_gradient=default_modify_element_gradient)
+</code></pre>
+<p>Integrates a density function over a block of the mesh.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>functionSpace</code>: Function space object to do the integration with.</li>
+<li><code>U</code>: The vector of dofs for the primal field in the functional.</li>
+<li><code>X</code>: Nodal coordinates</li>
+<li><code>stateVars</code>: Internal state variable array.</li>
+<li><code>dt</code>: Current time increment</li>
+<li><code>func</code>: Lagrangian density function to integrate, Must have the
+signature
+<code>func(u, dudx, q, x, *params) -&gt; scalar</code>, where <code>u</code> is the
+primal field, <code>q</code> is the
+value of the internal variables, <code>x</code> is the current point
+coordinates, and <code>*params</code> is
+a variadic set of additional parameters, which correspond
+to the <code>*params</code> argument.
+block: Group of elements to integrate over. This is an
+array of element indices. For
+performance, the elements within the block
+should be numbered consecutively.</li>
+<li><code>modify_element_gradient</code>: Optional function that modifies
+the gradient at the element level.
+This can be to set the particular 2D mode, and additionally to
+enforce volume averaging
+on the gradient operator. This is a keyword-only argument.</li>
+</ul>
+<p>Returns
+A scalar value for the integral of the density functional
+<code>func</code> integrated over the
+block of elements.</p>
+<p><a id="pancax.fem.function_space.evaluate_on_block"></a></p>
+<h4 id="evaluate_on_block"><a class="header" href="#evaluate_on_block">evaluate_on_block</a></h4>
+<pre><code class="language-python">def evaluate_on_block(functionSpace,
+                      U,
+                      X,
+                      stateVars,
+                      dt,
+                      props,
+                      func,
+                      block,
+                      *params,
+                      modify_element_gradient=default_modify_element_gradient)
+</code></pre>
+<p>Evaluates a density function at every quadrature</p>
+<p>point in a block of the mesh.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>functionSpace</code>: Function space object to do the evaluation with.</li>
+<li><code>U</code>: The vector of dofs for the primal field in the functional.</li>
+<li><code>X</code>: Nodal coordinates</li>
+<li><code>stateVars</code>: Internal state variable array.</li>
+<li><code>dt</code>: Current time increment</li>
+<li><code>func</code>: Lagrangian density function to evaluate,
+Must have the signature
+<code>func(u, dudx, q, x, *params) -&gt; scalar</code>, where <code>u</code>
+is the primal field, <code>q</code> is the
+value of the internal variables, <code>x</code> is the current
+point coordinates, and <code>*params</code> is
+a variadic set of additional parameters, which correspond
+to the <code>*params</code> argument.</li>
+<li><code>block</code>: Group of elements to evaluate over.
+This is an array of element indices. For
+performance, the elements within the block
+should be numbered consecutively.</li>
+<li><code>modify_element_gradient</code>: Optional function that
+modifies the gradient at the element level.
+This can be to set the particular 2D mode,
+and additionally to enforce volume averaging
+on the gradient operator. This is a keyword-only argument.</li>
+</ul>
+<p>Returns
+An array of shape (numElements, numQuadPtsPerElement)
+that contains the scalar values of the
+density functional <code>func</code> at every quadrature point in the block.</p>
+<p><a id="pancax.fem.function_space.integrate_element_from_local_field"></a></p>
+<h4 id="integrate_element_from_local_field"><a class="header" href="#integrate_element_from_local_field">integrate_element_from_local_field</a></h4>
+<pre><code class="language-python">def integrate_element_from_local_field(
+        elemNodalField,
+        elemNodalCoords,
+        elemStates,
+        dt,
+        elemShapes,
+        elemShapeGrads,
+        elemVols,
+        func,
+        modify_element_gradient=default_modify_element_gradient)
+</code></pre>
+<p>Integrate over element with element nodal field as input.
+This allows element residuals and element stiffness matrices to computed.</p>
+<p><a id="pancax.fem.function_space.get_nodal_values_on_edge"></a></p>
+<h4 id="get_nodal_values_on_edge"><a class="header" href="#get_nodal_values_on_edge">get_nodal_values_on_edge</a></h4>
+<pre><code class="language-python">def get_nodal_values_on_edge(functionSpace, nodalField, edge)
+</code></pre>
+<p>Get nodal values of a field on an element edge.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>functionSpace</code>: a FunctionSpace object</li>
+<li><code>nodalField</code>: The nodal vector defined
+over the mesh (shape is number of
+nodes by number of field components)</li>
+<li><code>edge</code>: tuple containing the element number
+containing the edge and the
+permutation (0, 1, or 2) of the edge within the triangle</li>
+</ul>
+<p><a id="pancax.fem.function_space.interpolate_nodal_field_on_edge"></a></p>
+<h4 id="interpolate_nodal_field_on_edge"><a class="header" href="#interpolate_nodal_field_on_edge">interpolate_nodal_field_on_edge</a></h4>
+<pre><code class="language-python">def interpolate_nodal_field_on_edge(functionSpace, U, interpolationPoints,
+                                    edge)
+</code></pre>
+<p>Interpolate a nodal field to specified points on an element edge.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>functionSpace</code>: a FunctionSpace object</li>
+<li><code>U</code>: the nodal values array</li>
+<li><code>interpolationPoints</code>: coordinates of points
+(in the 1D parametric space) to
+interpolate to</li>
+<li><code>edge</code>: tuple containing the element number
+containing the edge and the
+permutation (0, 1, or 2) of the edge within the triangle</li>
+</ul>
+<p><a id="pancax.fem.mesh"></a></p>
+<h1 id="pancaxfemmesh"><a class="header" href="#pancaxfemmesh">pancax.fem.mesh</a></h1>
+<p><a id="pancax.fem.mesh.Mesh"></a></p>
+<h2 id="mesh-objects"><a class="header" href="#mesh-objects">Mesh Objects</a></h2>
+<pre><code class="language-python">class Mesh(eqx.Module)
+</code></pre>
+<p>Triangle mesh representing a domain.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>coords</code>: Coordinates of the nodes, shape <code>(nNodes, nDim)</code>.</li>
+<li><code>conns</code>: Nodal connectivity table of the elements.</li>
+<li><code>simplexNodesOrdinals</code>: Indices of the nodes that are vertices.</li>
+<li><code>parentElement</code>: A <code>ParentElement</code> that is the element type in
+parametric space. A mesh can contain only 1 element type.</li>
+<li><code>parentElement1d</code>:</li>
+<li><code>blocks</code>: A dictionary mapping element block names to the
+indices of the elements in the block.</li>
+<li><code>nodeSets</code>: A dictionary mapping node set names to the indices of the
+nodes.</li>
+<li><code>sideSets</code>: A dictionary mapping side set names to the edges. The
+edge data structure is a tuple of the element index and the local
+number of the edge within that element. For example, triangle
+elements will have edge 0, 1, or 2 for this entry.</li>
+</ul>
+<p><a id="pancax.fem.mesh.Mesh.num_dimensions"></a></p>
+<h4 id="num_dimensions"><a class="header" href="#num_dimensions">num_dimensions</a></h4>
+<pre><code class="language-python">@property
+def num_dimensions() -&gt; int
+</code></pre>
+<p><strong>Returns</strong>:</p>
+<p>dimension number of mesh</p>
+<p><a id="pancax.fem.mesh.Mesh.num_elements"></a></p>
+<h4 id="num_elements"><a class="header" href="#num_elements">num_elements</a></h4>
+<pre><code class="language-python">@property
+def num_elements() -&gt; int
+</code></pre>
+<p><strong>Returns</strong>:</p>
+<p>number of elements in mesh</p>
+<p><a id="pancax.fem.mesh.Mesh.num_nodes"></a></p>
+<h4 id="num_nodes"><a class="header" href="#num_nodes">num_nodes</a></h4>
+<pre><code class="language-python">@property
+def num_nodes() -&gt; int
+</code></pre>
+<p>number of nodes in mesh</p>
+<p><a id="pancax.fem.mesh.create_edges"></a></p>
+<h4 id="create_edges"><a class="header" href="#create_edges">create_edges</a></h4>
+<pre><code class="language-python">def create_edges(conns)
+</code></pre>
+<p>Generate topological information about edges in a triangulation.</p>
+<h2 id="parameters-2"><a class="header" href="#parameters-2">Parameters</a></h2>
+<p>conns : (nTriangles, 3) array
+Connectivity table of the triangulation.</p>
+<h2 id="returns-2"><a class="header" href="#returns-2">Returns</a></h2>
+<p>edgeConns : (nEdges, 2) array
+Vertices of each edge. Boundary edges are always in the
+counter-clockwise sense, so that the interior
+of the body is on the left
+side when walking from the first vertex to the second.
+edges : (nEdges, 4) array
+Edge-to-triangle topological information. Each row provides the
+follwing information for each edge: [leftT, leftP, rightT, rightP],
+where leftT is the ID of the triangle to the left, leftP is the
+permutation of the edge in the left triangle (edge 0, 1, or 2), rightT
+is the ID of the triangle to the right, and rightP is the permutation
+of the edge in the right triangle. If the edge is a boundary edge, the
+values of rightT and rightP are -1.</p>
+<p><a id="pancax.fem.mesh.get_edge_field"></a></p>
+<h4 id="get_edge_field"><a class="header" href="#get_edge_field">get_edge_field</a></h4>
+<pre><code class="language-python">def get_edge_field(mesh: Mesh, edge, field)
+</code></pre>
+<p>Evaluate field on nodes of an element edge.</p>
+<p>Arguments:</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>mesh</code>: a Mesh object</li>
+<li><code>edge</code>: tuple containing the element number
+containing the edge and the
+permutation (0, 1, or 2) of the edge within the triangle</li>
+</ul>
+<p><a id="pancax.fem.mesh.compute_edge_vectors"></a></p>
+<h4 id="compute_edge_vectors"><a class="header" href="#compute_edge_vectors">compute_edge_vectors</a></h4>
+<pre><code class="language-python">def compute_edge_vectors(mesh: Mesh, edgeCoords)
+</code></pre>
+<p>Get geometric vectors for an element edge.</p>
+<p>Assumes that the edgs has a constant shape jacobian, that is, the
+transformation from the parent element is affine.</p>
+<p>Arguments</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>mesh</code>: a Mesh object</li>
+<li><code>edgeCoords</code>: coordinates of all nodes on the edge, in the order
+defined by the 1D parent element convention</li>
+</ul>
+<p>Returns
+tuple (t, n, j) with</p>
+<p><strong>Returns</strong>:</p>
+<p><code>t</code>: the unit tangent vector</p>
+<p><a id="pancax.fem.sparse_matrix_assembler"></a></p>
+<h1 id="pancaxfemsparse_matrix_assembler"><a class="header" href="#pancaxfemsparse_matrix_assembler">pancax.fem.sparse_matrix_assembler</a></h1>
+<p><a id="pancax.fem.quadrature_rules"></a></p>
+<h1 id="pancaxfemquadrature_rules"><a class="header" href="#pancaxfemquadrature_rules">pancax.fem.quadrature_rules</a></h1>
+<p><a id="pancax.fem.quadrature_rules.QuadratureRule"></a></p>
+<h2 id="quadraturerule-objects"><a class="header" href="#quadraturerule-objects">QuadratureRule Objects</a></h2>
+<pre><code class="language-python">class QuadratureRule(eqx.Module)
+</code></pre>
+<p>Quadrature rule points and weights.</p>
+<p>A <code>namedtuple</code> containing <code>xigauss</code>, a numpy array of the
+coordinates of the sample points in the reference domain, and
+<code>wgauss</code>, a numpy array with the weights.</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>xigauss</code>: coordinates of gauss points in reference element</li>
+<li><code>wgauss</code>: weights of gauss points in reference element</li>
+</ul>
+<p><a id="pancax.fem.quadrature_rules.create_quadrature_rule_1D"></a></p>
+<h4 id="create_quadrature_rule_1d"><a class="header" href="#create_quadrature_rule_1d">create_quadrature_rule_1D</a></h4>
+<pre><code class="language-python">def create_quadrature_rule_1D(degree: int) -&gt; QuadratureRule
+</code></pre>
+<p>Creates a Gauss-Legendre quadrature on the unit interval.</p>
+<p>The rule can exactly integrate polynomials of degree up to
+<code>degree</code>.</p>
+<h2 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h2>
+<p>degree: Highest degree polynomial to be exactly integrated
+by the quadrature rule</p>
+<h2 id="returns-3"><a class="header" href="#returns-3">Returns</a></h2>
+<p>A <code>QuadratureRule</code> named tuple containing the quadrature
+point coordinates
+and the weights.</p>
+<p><a id="pancax.fem.quadrature_rules.create_quadrature_rule_on_quad"></a></p>
+<h4 id="create_quadrature_rule_on_quad"><a class="header" href="#create_quadrature_rule_on_quad">create_quadrature_rule_on_quad</a></h4>
+<pre><code class="language-python">def create_quadrature_rule_on_quad(quad_degree: int) -&gt; QuadratureRule
+</code></pre>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>quad_degree</code>: degree of quadrature rule to create</li>
+</ul>
+<p><a id="pancax.fem.quadrature_rules.create_quadrature_rule_on_triangle"></a></p>
+<h4 id="create_quadrature_rule_on_triangle"><a class="header" href="#create_quadrature_rule_on_triangle">create_quadrature_rule_on_triangle</a></h4>
+<pre><code class="language-python">def create_quadrature_rule_on_triangle(degree: int) -&gt; QuadratureRule
+</code></pre>
+<p>Creates a Gauss-Legendre quadrature on the unit triangle.</p>
+<p>The rule can exactly integrate 2D polynomials up to the value of
+<code>degree</code>. The domain is the triangle between the vertices
+(0, 0)-(1, 0)-(0, 1). The rules here are guaranteed to be
+cyclically symmetric in triangular coordinates and to have strictly
+positive weights.</p>
+<h2 id="parameters-4"><a class="header" href="#parameters-4">Parameters</a></h2>
+<p>degree: Highest degree polynomial to be exactly integrated by
+the quadrature rule</p>
+<h2 id="returns-4"><a class="header" href="#returns-4">Returns</a></h2>
+<p>A <code>QuadratureRule</code> named tuple containing the
+quadrature point coordinates
+and the weights.</p>
+<p><a id="pancax.fem.quadrature_rules.create_padded_quadrature_rule_1D"></a></p>
+<h4 id="create_padded_quadrature_rule_1d"><a class="header" href="#create_padded_quadrature_rule_1d">create_padded_quadrature_rule_1D</a></h4>
+<pre><code class="language-python">def create_padded_quadrature_rule_1D(degree)
+</code></pre>
+<p>Creates 1D Gauss quadrature rule data that are padded to maintain a
+uniform size, which makes this function jit-able.</p>
+<p>This function is inteded to be used only when jit
+compilation of calls to the
+quadrature rules are needed. Otherwise, prefer to
+use the standard quadrature
+rules. The standard rules do not contain extra 0s for padding, which makes
+them more efficient when  used repeatedly (such as in the global energy).</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>degree</code> - degree of highest polynomial to be integrated exactly</li>
+</ul>
+<p><a id="pancax.fem.elements.base_element"></a></p>
+<h1 id="pancaxfemelementsbase_element"><a class="header" href="#pancaxfemelementsbase_element">pancax.fem.elements.base_element</a></h1>
+<p><a id="pancax.fem.elements.base_element.ShapeFunctions"></a></p>
+<h2 id="shapefunctions-objects"><a class="header" href="#shapefunctions-objects">ShapeFunctions Objects</a></h2>
+<pre><code class="language-python">class ShapeFunctions(NamedTuple)
+</code></pre>
+<p>Shape functions and shape function gradients (in the parametric space).</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>values</code>: Values of the shape functions at a discrete set of points.
+Shape is <code>(nPts, nNodes)</code>, where <code>nPts</code> is the number of
+points at which the shame functinos are evaluated, and <code>nNodes</code>
+is the number of nodes in the element (which is equal to the
+number of shape functions).</li>
+<li><code>gradients</code>: Values of the parametric gradients of         the shape functions.
+Shape is <code>(nPts, nDim, nNodes)</code>, where <code>nDim</code> is the number
+of spatial dimensions. Line elements are an exception, which
+have shape <code>(nPts, nNdodes)</code>.</li>
+</ul>
+<p><a id="pancax.fem.elements.base_element.BaseElement"></a></p>
+<h2 id="baseelement-objects"><a class="header" href="#baseelement-objects">BaseElement Objects</a></h2>
+<pre><code class="language-python">class BaseElement(eqx.Module)
+</code></pre>
+<p>Base class for different element technologies</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>elementType</code>: Element type name</li>
+<li><code>degree</code>: Polynomial degree</li>
+<li><code>coordinates</code>: Nodal coordinates in the reference configuration</li>
+<li><code>vertexNodes</code>: Vertex node number, 0-based</li>
+<li><code>faceNodes</code>: Nodes associated with each face, 0-based</li>
+<li><code>interiorNodes</code>: Nodes in the interior, 0-based or empty</li>
+</ul>
+<p><a id="pancax.fem.elements.base_element.BaseElement.compute_shapes"></a></p>
+<h4 id="compute_shapes"><a class="header" href="#compute_shapes">compute_shapes</a></h4>
+<pre><code class="language-python">@abstractmethod
+def compute_shapes(nodalPoints, evaluationPoints)
+</code></pre>
+<p>Method to be defined to calculate shape function values
+and gradients given a list of nodal points (usually the vertexNodes)
+and a list of evaluation points (usually the quadrature points).</p>
+<p><a id="pancax.fem.elements.simplex_tri_element"></a></p>
+<h1 id="pancaxfemelementssimplex_tri_element"><a class="header" href="#pancaxfemelementssimplex_tri_element">pancax.fem.elements.simplex_tri_element</a></h1>
+<p><a id="pancax.fem.elements.tet4_element"></a></p>
+<h1 id="pancaxfemelementstet4_element"><a class="header" href="#pancaxfemelementstet4_element">pancax.fem.elements.tet4_element</a></h1>
+<p><a id="pancax.fem.elements.line_element"></a></p>
+<h1 id="pancaxfemelementsline_element"><a class="header" href="#pancaxfemelementsline_element">pancax.fem.elements.line_element</a></h1>
+<p><a id="pancax.fem.elements.quad4_element"></a></p>
+<h1 id="pancaxfemelementsquad4_element"><a class="header" href="#pancaxfemelementsquad4_element">pancax.fem.elements.quad4_element</a></h1>
+<p><a id="pancax.fem.elements.tet10_element"></a></p>
+<h1 id="pancaxfemelementstet10_element"><a class="header" href="#pancaxfemelementstet10_element">pancax.fem.elements.tet10_element</a></h1>
+<p><a id="pancax.fem.elements.hex8_element"></a></p>
+<h1 id="pancaxfemelementshex8_element"><a class="header" href="#pancaxfemelementshex8_element">pancax.fem.elements.hex8_element</a></h1>
+<p><a id="pancax.fem.elements.quad9_element"></a></p>
+<h1 id="pancaxfemelementsquad9_element"><a class="header" href="#pancaxfemelementsquad9_element">pancax.fem.elements.quad9_element</a></h1>
+<p><a id="pancax.fem.elements"></a></p>
+<h1 id="pancaxfemelements"><a class="header" href="#pancaxfemelements">pancax.fem.elements</a></h1>
+<p><a id="pancax.fem.surface"></a></p>
+<h1 id="pancaxfemsurface"><a class="header" href="#pancaxfemsurface">pancax.fem.surface</a></h1>
+<p><a id="pancax.fem"></a></p>
+<h1 id="pancaxfem"><a class="header" href="#pancaxfem">pancax.fem</a></h1>
+<p><a id="pancax.fem.traction_bc"></a></p>
+<h1 id="pancaxfemtraction_bc"><a class="header" href="#pancaxfemtraction_bc">pancax.fem.traction_bc</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../examples/poisson_equation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../examples/poisson_equation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
