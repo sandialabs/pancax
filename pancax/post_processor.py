@@ -242,22 +242,112 @@ class ExodusPostProcessor(BasePostProcessor):
                                 )
                                 n = n + 1
 
-    # def write_outputs(self, params, problem):
-    #     if params.is_ensemble:
-    #         parts = self.output_file.split('.')
-    #         base_name = parts[0]
-    #         ext = parts[1]
-    #         n_emsemble = jnp.arange(params.n_ensemble)
+    def _write_step_outputs(
+        self,
+        dataset, n,
+        params, problem, time, dt, state_old
+    ):
+        physics = problem.physics
 
-    #         @eqx.filter_vmap()
-    #         def vmap_func(params, n):
-    #             output_file = f"{base_name}_{n}.e"
-    #         assert False, "Need to implement for ensemble"
-    #     else:
-    #         self._write_outputs(params, problem, self.output_file)
+        # write new time value
+        time_var = dataset.variables["time_whole"]
+        time_var[n] = time
+
+        # useful for all methods later on
+        us = physics.var_name_to_method["field_values"]["method"](
+            params, problem, time
+        )
+        # calculate something with state update at least once to update
+        # state later
+        _, state_new = physics.potential_energy(
+            params, problem.domain, time, us, state_old, dt
+        )
+
+        node_var_num = 0
+        for var in self.node_variables:
+            if (
+                var == "internal_force"
+            ):
+                pred = physics.\
+                    var_name_to_method["internal_force"]["method"](
+                        params, problem.domain,
+                        time, us, state_old, dt
+                    )
+                for i in range(pred.shape[1]):
+                    node_var = dataset.variables[
+                        f"vals_nod_var{node_var_num + 1}"
+                    ]
+                    node_var[n, :] = pred[:, i]
+                    node_var_num = node_var_num + 1
+            else:
+                output = physics.var_name_to_method[var]
+                pred = onp.array(
+                    output["method"](params, problem, time)
+                )
+                if len(pred.shape) > 2:
+                    for i in range(pred.shape[1]):
+                        for j in range(pred.shape[2]):
+                            # k = pred.shape[1] * i + j
+                            assert False, "Support this"
+                            # self.exo.put_node_variable_values(
+                            # output['names'][k], n + 1, pred[:, i, j])
+                else:
+                    for i in range(pred.shape[1]):
+                        node_var = dataset.variables[
+                            f"vals_nod_var{node_var_num + 1}"
+                        ]
+                        node_var[n, :] = pred[:, i]
+                        node_var_num = node_var_num + 1
+
+        elem_var_num = 0
+        for var in self.element_variables:
+            output = physics.var_name_to_method[var]
+            pred = onp.array(
+                output["method"](
+                    params, problem, time, us, state_old, dt
+                )
+            )
+
+            # for q in range(pred.shape[1]):
+            # for i in range(pred.shape[2])
+            if len(pred.shape) == 2:
+                for q in range(pred.shape[1]):
+                    elem_var = dataset.variables[
+                        # NOTE this will only work for
+                        # single block models
+                        f"vals_elem_var{elem_var_num + 1}eb1"
+                    ]
+                    elem_var[n, :] = pred[:, q]
+                    elem_var_num = elem_var_num + 1
+            elif len(pred.shape) == 3:
+                # this is the state variable case
+                for s in range(pred.shape[2]):
+                    for q in range(pred.shape[1]):
+                        elem_var = dataset.variables[
+                            # NOTE this will only work for
+                            # single block models
+                            f"vals_elem_var{elem_var_num + 1}eb1"
+                        ]
+                        elem_var[n, :] = pred[:, q, s]
+                        elem_var_num = elem_var_num + 1
+            elif len(pred.shape) == 4:
+                temp = pred.reshape((pred.shape[0], pred.shape[1], 9))
+                for i in range(temp.shape[2]):
+                    for q in range(pred.shape[1]):
+                        elem_var = dataset.variables[
+                            # NOTE this will only work for
+                            # single block models
+                            f"vals_elem_var{elem_var_num + 1}eb1"
+                        ]
+                        elem_var[n, :] = temp[:, q, i]
+                        elem_var_num = elem_var_num + 1
+            else:
+                assert False, f"Shape of output val is {pred.shape}"
+
+        return state_new
 
     def _write_outputs(self, params, problem, output_file):
-        physics = problem.physics
+        # physics = problem.physics
         times = problem.times
 
         with nc.Dataset(output_file, "a") as dataset:
@@ -275,100 +365,112 @@ class ExodusPostProcessor(BasePostProcessor):
             )
 
             for n, time in enumerate(times):
-                # write new time value
-                time_var = dataset.variables["time_whole"]
-                time_var[n] = time
+                if n == 0:
+                    dt = 0.0
+                else:
+                    dt = times[n] - times[n - 1]
 
-                # useful for all methods later on
-                us = physics.var_name_to_method["field_values"]["method"](
-                    params, problem, time
+                # # write new time value
+                # time_var = dataset.variables["time_whole"]
+                # time_var[n] = time
+
+                # # useful for all methods later on
+                # us = physics.var_name_to_method["field_values"]["method"](
+                #     params, problem, time
+                # )
+                # # calculate something with state
+                # update at least once to update
+                # # state later
+                # _, state_new = physics.potential_energy(
+                #     params, problem.domain, time, us, state_old, dt
+                # )
+
+                # node_var_num = 0
+                # for var in self.node_variables:
+                #     if (
+                #         var == "internal_force"
+                #     ):
+                #         pred = physics.\
+                #             var_name_to_method["internal_force"]["method"](
+                #                 params, problem.domain,
+                #                 time, us, state_old, dt
+                #             )
+                #         for i in range(pred.shape[1]):
+                #             node_var = dataset.variables[
+                #                 f"vals_nod_var{node_var_num + 1}"
+                #             ]
+                #             node_var[n, :] = pred[:, i]
+                #             node_var_num = node_var_num + 1
+                #     else:
+                #         output = physics.var_name_to_method[var]
+                #         pred = onp.array(
+                #             output["method"](params, problem, time)
+                #         )
+                #         if len(pred.shape) > 2:
+                #             for i in range(pred.shape[1]):
+                #                 for j in range(pred.shape[2]):
+                #                     # k = pred.shape[1] * i + j
+                #                     assert False, "Support this"
+                #                     # self.exo.
+                # put_node_variable_values(
+                # # output['names'][k], n + 1, pred[:, i, j])
+                #         else:
+                #             for i in range(pred.shape[1]):
+                #                 node_var = dataset.variables[
+                #                     f"vals_nod_var{node_var_num + 1}"
+                #                 ]
+                #                 node_var[n, :] = pred[:, i]
+                #                 node_var_num = node_var_num + 1
+
+                # elem_var_num = 0
+                # for var in self.element_variables:
+                #     output = physics.var_name_to_method[var]
+                #     pred = onp.array(
+                #         output["method"](
+                #             params, problem, time, us, state_old, dt
+                #         )
+                #     )
+
+                #     # for q in range(pred.shape[1]):
+                #     # for i in range(pred.shape[2])
+                #     if len(pred.shape) == 2:
+                #         for q in range(pred.shape[1]):
+                #             elem_var = dataset.variables[
+                #                 # NOTE this will only work for
+                #                 # single block models
+                #                 f"vals_elem_var{elem_var_num + 1}eb1"
+                #             ]
+                #             elem_var[n, :] = pred[:, q]
+                #             elem_var_num = elem_var_num + 1
+                #     elif len(pred.shape) == 3:
+                #         # this is the state variable case
+                #         for s in range(pred.shape[2]):
+                #             for q in range(pred.shape[1]):
+                #                 elem_var = dataset.variables[
+                #                     # NOTE this will only work for
+                #                     # single block models
+                #                     f"vals_elem_var{elem_var_num + 1}eb1"
+                #                 ]
+                #                 elem_var[n, :] = pred[:, q, s]
+                #                 elem_var_num = elem_var_num + 1
+                #     elif len(pred.shape) == 4:
+                #         temp = pred.
+                # reshape((pred.shape[0], pred.shape[1], 9))
+                #         for i in range(temp.shape[2]):
+                #             for q in range(pred.shape[1]):
+                #                 elem_var = dataset.variables[
+                #                     # NOTE this will only work for
+                #                     # single block models
+                #                     f"vals_elem_var{elem_var_num + 1}eb1"
+                #                 ]
+                #                 elem_var[n, :] = temp[:, q, i]
+                #                 elem_var_num = elem_var_num + 1
+                #     else:
+                #         assert False, f"Shape of output val is {pred.shape}"
+
+                state_new = self._write_step_outputs(
+                    dataset, n, params, problem, time, dt, state_old
                 )
-                # calculate something with state update at least once to update
-                # state later
-                _, state_new = physics.potential_energy(
-                    params, problem.domain, time, us, state_old, dt
-                )
-
-                node_var_num = 0
-                for var in self.node_variables:
-                    if (
-                        var == "internal_force"
-                    ):
-                        pred = physics.\
-                            var_name_to_method["internal_force"]["method"](
-                                params, problem.domain,
-                                time, us, state_old, dt
-                            )
-                        for i in range(pred.shape[1]):
-                            node_var = dataset.variables[
-                                f"vals_nod_var{node_var_num + 1}"
-                            ]
-                            node_var[n, :] = pred[:, i]
-                            node_var_num = node_var_num + 1
-                    else:
-                        output = physics.var_name_to_method[var]
-                        pred = onp.array(
-                            output["method"](params, problem, time)
-                        )
-                        if len(pred.shape) > 2:
-                            for i in range(pred.shape[1]):
-                                for j in range(pred.shape[2]):
-                                    # k = pred.shape[1] * i + j
-                                    assert False, "Support this"
-                                    # self.exo.put_node_variable_values(
-                                    # output['names'][k], n + 1, pred[:, i, j])
-                        else:
-                            for i in range(pred.shape[1]):
-                                node_var = dataset.variables[
-                                    f"vals_nod_var{node_var_num + 1}"
-                                ]
-                                node_var[n, :] = pred[:, i]
-                                node_var_num = node_var_num + 1
-
-                elem_var_num = 0
-                for var in self.element_variables:
-                    output = physics.var_name_to_method[var]
-                    pred = onp.array(
-                        output["method"](
-                            params, problem, time, us, state_old, dt
-                        )
-                    )
-
-                    # for q in range(pred.shape[1]):
-                    # for i in range(pred.shape[2])
-                    if len(pred.shape) == 2:
-                        for q in range(pred.shape[1]):
-                            elem_var = dataset.variables[
-                                # NOTE this will only work for
-                                # single block models
-                                f"vals_elem_var{elem_var_num + 1}eb1"
-                            ]
-                            elem_var[n, :] = pred[:, q]
-                            elem_var_num = elem_var_num + 1
-                    elif len(pred.shape) == 3:
-                        # this is the state variable case
-                        for s in range(pred.shape[2]):
-                            for q in range(pred.shape[1]):
-                                elem_var = dataset.variables[
-                                    # NOTE this will only work for
-                                    # single block models
-                                    f"vals_elem_var{elem_var_num + 1}eb1"
-                                ]
-                                elem_var[n, :] = pred[:, q, s]
-                                elem_var_num = elem_var_num + 1
-                    elif len(pred.shape) == 4:
-                        temp = pred.reshape((pred.shape[0], pred.shape[1], 9))
-                        for i in range(temp.shape[2]):
-                            for q in range(pred.shape[1]):
-                                elem_var = dataset.variables[
-                                    # NOTE this will only work for
-                                    # single block models
-                                    f"vals_elem_var{elem_var_num + 1}eb1"
-                                ]
-                                elem_var[n, :] = temp[:, q, i]
-                                elem_var_num = elem_var_num + 1
-                    else:
-                        assert False, f"Shape of output val is {pred.shape}"
 
                 # finally update state
                 state_old = state_new

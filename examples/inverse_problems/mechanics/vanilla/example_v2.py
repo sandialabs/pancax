@@ -3,7 +3,6 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-# key = random.key(10)
 key = random.PRNGKey(10)
 key = random.split(key, 8)
 
@@ -13,7 +12,7 @@ key = random.split(key, 8)
 full_field_data_file = find_data_file('data_full_field.csv')
 global_data_file = find_data_file('data_global_data.csv')
 mesh_file = find_mesh_file('mesh.g')
-# logger = Logger('pinn.log', log_every=250)
+
 history = HistoryWriter('history.csv', log_every=250, write_every=250)
 pp = PostProcessor(mesh_file)
 
@@ -34,18 +33,14 @@ global_data = GlobalData(
 ##################
 times = jnp.linspace(0.0, 1.0, len(global_data.outputs))
 domain = VariationalDomain(mesh_file, times)
+
 ##################
 # physics setup
 ##################
-# @eqx.filter_vmap
-# def models(key):
 model = NeoHookean(
   bulk_modulus=0.833,
-  # bulk_modulus=BoundedProperty(0.01, 5., key=key),
   shear_modulus=BoundedProperty(0.01, 5., key=key)
 )
-  # return model
-
 physics = SolidMechanics(model, PlaneStrain())
 
 ##################
@@ -57,7 +52,7 @@ dirichlet_bc_func = UniaxialTensionLinearRamp(
   final_displacement=jnp.max(field_data.outputs[:, 0]), 
   length=1.0, direction='x', n_dimensions=2
 )
-physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+# physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 dirichlet_bcs = [
   DirichletBC('nodeset_2', 0), # left edge fixed in x
   DirichletBC('nodeset_2', 1), # left edge fixed in y
@@ -77,7 +72,10 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 # ML setup
 ##################
-params = Parameters(problem, key)#, seperate_networks=True, network_type=ResNet)
+params = Parameters(
+  problem, key,
+  dirichlet_bc_func=dirichlet_bc_func
+)#, seperate_networks=True, network_type=ResNet)
 print(params)
 physics_and_global_loss = EnergyResidualAndReactionLoss(
   residual_weight=250.e9, reaction_weight=250.e9
@@ -87,12 +85,18 @@ full_field_data_loss = FullFieldDataLoss(weight=10.e9)
 def loss_function(params, problem, inputs, outputs):
   loss_1, aux_1 = physics_and_global_loss(params, problem)
   loss_2, aux_2 = full_field_data_loss(params, problem, inputs, outputs)
+  # reg = 1.e9 * jnp.sum(jnp.sum(jnp.abs(param)) for param in eqx.filter(params.fields.networks.mlp.layers, eqx.is_array))
+  # nn_params = eqx.partition(params.fields, eqx.is_array)
+  # reg = 1.e9 * jnp.sum(jnp.sum(jnp.abs(p)) for p in nn_params)
+  reg = eqx.filter(params.fields, lambda x: isinstance(x, jax.Array) and x.ndim > 1)
+  reg = 1.e7 * sum(jnp.sum(jnp.abs(x)) for x in jax.tree_util.tree_leaves(reg))
   aux_1.update(aux_2)
-  return loss_1 + loss_2, aux_1
+  aux_1.update(dict(reg=reg))
+  return loss_1 + loss_2 + reg, aux_1
 
 loss_function = UserDefinedLossFunction(loss_function)
 
-opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, transition_steps=50000)
+opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, transition_steps=500)
 
 ##################
 # Training
@@ -100,7 +104,7 @@ opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, transition_steps=5
 opt, opt_st = opt.init(params)
 
 dataloader = FullFieldDataLoader(problem.field_data)
-for epoch in range(10000):
+for epoch in range(100000):
   for inputs, outputs in dataloader.dataloader(1024):
     params, opt_st, loss = opt.step(params, opt_st, problem, inputs, outputs)
 

@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from jax import hessian, jacfwd, value_and_grad, vmap
-from jaxtyping import Array, Float
 from pancax.fem import assemble_sparse_stiffness_matrix
 from typing import Callable, Dict
 import equinox as eqx
@@ -9,13 +8,58 @@ import jax.numpy as jnp
 import numpy as onp
 
 
+def _output_names(var_name: str, var_type: str):
+    if var_type == "full_tensor":
+        return (
+            f"{var_name}_xx", f"{var_name}_xy", f"{var_name}_xz",
+            f"{var_name}_yx", f"{var_name}_yy", f"{var_name}_yz",
+            f"{var_name}_zx", f"{var_name}_zy", f"{var_name}_zz",
+        )
+    elif var_type == "scalar":
+        return (var_name,)
+    else:
+        raise ValueError(f"Unsupported variable type {var_type}")
+
+
 def element_pp(
     func,
     physics,
+    is_constitutive_method=False,
     is_kinematic_method=False,
     is_state_method=False,
     jit=True
 ):
+    def constitutive_method(func, params, domain, t, us, state_old, dt, *args):
+        coords, conns, fspace = domain.coords, domain.conns, domain.fspace
+        us = us[conns, :]
+        xs = coords[conns, :]
+
+        def _vmap_func(x, u):
+            vs = fspace.shape_function_values(x)
+            grad_vs = fspace.shape_function_gradients(x)
+            JxWs = fspace.JxWs(x)
+            xs = vmap(lambda y: jnp.dot(y, x))(vs)
+            us = vmap(lambda y: jnp.dot(y, u))(vs)
+            grad_us = vmap(lambda y: (y.T @ u).T)(grad_vs)
+            return xs, us, grad_us, JxWs
+
+        xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+        # in_axes_1 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+        # in_axes_2 = (None, 0, None, 0, 0, 0, None) + len(args) * (None,)
+
+        # outs, _ = vmap(
+        #     vmap(func, in_axes=in_axes_2), in_axes=in_axes_1)(
+        #         params, xs, t, us, grad_us, state_old, dt
+        # )
+        grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
+            grad_us
+        )
+        theta = 60.
+        vals, _ = vmap(
+            vmap(func, in_axes=(0, None, 0, None)), in_axes=(0, None, 0, None)
+        )(grad_us, theta, state_old, dt)
+        return vals
+
     def kinematic_method(func, params, domain, t, us, state_old, dt, *args):
         coords, conns, fspace = domain.coords, domain.conns, domain.fspace
         us = us[conns, :]
@@ -61,10 +105,15 @@ def element_pp(
                 params, xs, t, us, grad_us, state_old, dt
         )
         return state_news
-        # vals = vmap(vmap(func))(grad_us)
-        # return vals
 
-    if is_kinematic_method:
+    if is_constitutive_method:
+        def new_func(p, d, t, u, s, dt, *args):
+            return constitutive_method(
+                # physics.constitutive_model.deformation_gradient,
+                func,
+                p, d, t, u, s, dt, *args
+            )
+    elif is_kinematic_method:
         def new_func(p, d, t, u, s, dt, *args):
             return kinematic_method(
                 # physics.constitutive_model.deformation_gradient,
@@ -128,17 +177,6 @@ def standard_pp(physics):
 class BasePhysics(eqx.Module):
     field_value_names: tuple[str, ...]
     var_name_to_method: Dict[str, Callable]
-    # needs to be set
-    # by default it just returns network output
-    dirichlet_bc_func: Callable  # = lambda x, t, z: z
-    # TODO how to make this dimension dependent?
-    # finally use generics in python?
-    # maybe loop in the mechanics formulation here and rename it?
-    x_mins: Float[Array, "nd"]  # = jnp.zeros(3)
-    x_maxs: Float[Array, "nd"]  # = jnp.zeros(3)
-    t_min: Float[Array, "1"]
-    t_max: Float[Array, "1"]
-    #
     is_delta_pinn: bool
 
     def __init__(
@@ -147,25 +185,11 @@ class BasePhysics(eqx.Module):
     ) -> None:
         self.field_value_names = field_value_names
         self.var_name_to_method = {}
-        self.dirichlet_bc_func = lambda x, t, z: z
-        # TODO improve this error handling
-        self.x_mins = jnp.zeros(3)
-        self.x_maxs = jnp.zeros(3)
-        self.t_min = jnp.zeros(1)
-        self.t_max = jnp.ones(1)
-
         self.is_delta_pinn = False
 
     # TODO need to modify for delta pinn
     def field_values(self, field, x, t, *args):
-        # x = (x - stop_gradient(self.x_mins)) /
-        #   (stop_gradient(self.x_maxs) - stop_gradient(self.x_mins))
-        x_norm = (x - self.x_mins) / (self.x_maxs - self.x_mins)
-        t_norm = (t - self.t_min) / (self.t_max - self.t_min)
-        inputs = jnp.hstack((x_norm, t_norm))
-        z = field(inputs)
-        u = self.dirichlet_bc_func(x, t, z)
-        return u
+        return field(x, t)
 
     def field_gradients(self, field, x, t, *args):
         return jacfwd(self.field_values, argnums=1)(field, x, t, *args)
@@ -189,27 +213,6 @@ class BasePhysics(eqx.Module):
     @property
     def num_state_variables(self):
         return 0
-
-    def update_dirichlet_bc_func(self, bc_func: Callable):
-        # get_fn = lambda x: x.dirichlet_bc_func
-        def get_fn(x):
-            return x.dirichlet_bc_func
-        new_pytree = eqx.tree_at(get_fn, self, bc_func)
-        return new_pytree
-
-    def update_normalization(self, domain):
-        x_mins = jnp.min(domain.coords, axis=0)
-        x_maxs = jnp.max(domain.coords, axis=0)
-        t_min = jnp.min(domain.times, axis=0)
-        t_max = jnp.max(domain.times, axis=0)
-        # x_mins = jnp.append(x_mins, jnp.min(domain.times))
-        # x_maxs = jnp.append(x_maxs, jnp.max(domain.times))
-
-        new_pytree = eqx.tree_at(lambda x: x.x_mins, self, x_mins)
-        new_pytree = eqx.tree_at(lambda x: x.x_maxs, new_pytree, x_maxs)
-        new_pytree = eqx.tree_at(lambda x: x.t_min, new_pytree, t_min)
-        new_pytree = eqx.tree_at(lambda x: x.t_max, new_pytree, t_max)
-        return new_pytree
 
     def update_var_name_to_method(self):
         var_name_to_method = standard_pp(self)
@@ -341,7 +344,7 @@ class BaseEnergyFormPhysics(BasePhysics):
             params, domain, t, us, state_old, dt, *args
         )
         return (pi, state_new), jnp.linalg.norm(
-            f.flatten()[domain.dof_manager.unknownIndices]
+            f.ravel()[domain.dof_manager.unknownIndices]
         )
 
     def potential_energy_residual_and_reaction_force(
@@ -351,7 +354,7 @@ class BaseEnergyFormPhysics(BasePhysics):
         pi, f = self.potential_energy_and_internal_force(
             params, domain, t, us, state_old, dt, *args
         )
-        R = jnp.linalg.norm(f.flatten()[domain.dof_manager.unknownIndices])
+        R = jnp.linalg.norm(f.ravel()[domain.dof_manager.unknownIndices])
         reaction = jnp.sum(
             f[global_data.reaction_nodes, global_data.reaction_dof]
         )

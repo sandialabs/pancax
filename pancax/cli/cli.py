@@ -1,7 +1,6 @@
-from importlib import import_module
 from pathlib import Path
 import argparse
-# import jax
+import runpy
 import sys
 
 
@@ -43,13 +42,11 @@ SOFTWARE.
 def pancax_main():
     parser = argparse.ArgumentParser(
         prog='pancax',
-        # prog=code_name,
         description='Physics Informed Neural Network library written in jax',
         epilog='Reach out to chamel@sandia.gov for help'
     )
     parser.add_argument(
         '-d', '--debug-nans',
-        # default='off',
         action='store_true',
         default=False,
         help='Flag to debug nans. Options are on or off.'
@@ -122,13 +119,22 @@ def pancax_main():
         print(code_name, flush=True)
         # read input file and run it
         if input_file.suffix == '.py':
-            try:
-                # with jax.profiler.trace("/tmp/jax-trace",
-                # create_perfetto_link=True):
-                import_module(str(input_file).replace('/', '.'))
-            except ModuleNotFoundError:
-                # things bug out currently if we use above in the bootstrapper
-                print('Finished running')
+            # input_file_dir = os.path.dirname(os.path.abspath(input_file))
+            # os.chdir(input_file_dir)
+
+            # input_file = os.path.basename(input_file)
+            # with open(input_file, "r") as f:
+            #     code = f.read()
+            #     exec(code)
+            # subprocess.run(["python", input_file])
+            # try:
+            #     import_module(str(input_file).replace('/', '.'))
+            # except:
+            #     print('Finished running')
+            # with open(input_file, "r") as f:
+            #     code = f.read()
+            #     exec(code, globals())
+            runpy.run_path(str(input_file))
         else:
             raise ValueError('Only python files are supported currently!')
 

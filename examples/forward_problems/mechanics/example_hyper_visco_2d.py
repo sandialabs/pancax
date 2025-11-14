@@ -58,7 +58,8 @@ def dirichlet_bc_func(xs, t, nn):
 # model = NeoHookean(bulk_modulus=10., shear_modulus=0.855)
 model = SimpleFeFv(
     NeoHookean(bulk_modulus=10.0, shear_modulus=1.0),
-    PronySeries(moduli=[1.0, 2.0], relaxation_times=[10.0, 20.0]),
+    # PronySeries(moduli=[1.0, 2.0], relaxation_times=[10.0, 20.0]),
+    PronySeries(moduli=[1.], relaxation_times=[10.]),
     WLF(C1=17.44, C2=51.6, theta_ref=60.0),
 )
 physics = SolidMechanics(model, PlaneStrain())
@@ -86,7 +87,7 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 loss_function = PathDependentEnergyLoss()
 # loss_function = EnergyLoss()
 
-params = Parameters(problem, key, seperate_networks=False)
+params = Parameters(problem, key, seperate_networks=True)
 print(params)
 
 ##################
@@ -94,7 +95,7 @@ print(params)
 ##################
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt, opt_st = opt.init(params)
-for epoch in range(1000):
+for epoch in range(25000):
     params, opt_st, loss = opt.step(params, opt_st, problem)
     # logger.log_loss(loss, epoch)
     if epoch % 100 == 0:

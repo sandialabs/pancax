@@ -188,7 +188,7 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
             jnp.zeros((ne, nq))
         )
 
-        def body(n, carry):
+        def fori_loop_body(n, carry):
             pi, state_old, dt = carry
             t = problem.times[n]
             pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
@@ -198,11 +198,24 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
             carry = pi, state_old, dt
             return carry
 
-        # pi, state_old = jax.lax.fori_loop(
-        #     0, len(problem.times), body, (pi, state_old)
+        def scan_body(carry, n):
+            pi, state_old, dt = carry
+            t = problem.times[n]
+            pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
+            pi = pi + pi_t
+            state_old = state_new
+            dt = problem.times[n] - problem.times[n - 1]
+            carry = pi, state_old, dt
+            return carry, None
+
+        # starting at 1 assuming time step 0 is initial condition
+        # pi, state_old, dt = jax.lax.fori_loop(
+        #     1, len(problem.times), fori_loop_body, (pi, state_old, dt)
         # )
-        pi, state_old, dt = jax.lax.fori_loop(
-            1, len(problem.times), body, (pi, state_old, dt)
+        (pi, state_old, dt), _ = jax.lax.scan(
+            scan_body,
+            (pi, state_old, dt),
+            jnp.arange(1, len(problem.times))
         )
         loss = pi
         return self.weight * loss, dict(energy=pi)

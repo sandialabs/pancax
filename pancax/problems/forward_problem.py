@@ -69,7 +69,7 @@ class ForwardProblem(eqx.Module):
             domain = domain.update_dof_manager(dirichlet_bcs, physics.n_dofs)
 
         # setup physics
-        physics = physics.update_normalization(domain)
+        # physics = physics.update_normalization(domain)
         physics = physics.update_var_name_to_method()
 
         if type(domain) is DeltaPINNDomain:

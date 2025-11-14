@@ -2,7 +2,7 @@ from .base import AbstractPancaxModel
 from .fields import Field
 from .mlp import MLP
 from jaxtyping import Array, Float
-from typing import Optional, Union
+from typing import Callable, Optional, Union
 import equinox as eqx
 import jax.tree_util as jtu
 
@@ -29,11 +29,13 @@ class _Parameters(AbstractPancaxModel):
         problem,
         constitutive_model,
         key,
+        dirichlet_bc_func: Optional[Callable] = lambda x, t, z: z,
         network_type: Optional[eqx.Module] = MLP,
         seperate_networks: Optional[bool] = False
     ) -> None:
         fields = Field(
             problem, key,
+            dirichlet_bc_func=dirichlet_bc_func,
             network_type=network_type,
             seperate_networks=seperate_networks
         )
@@ -60,6 +62,7 @@ class Parameters(AbstractPancaxModel):
         self,
         problem,
         key,
+        dirichlet_bc_func: Optional[Callable] = lambda x, t, z: z,
         network_type: Optional[eqx.Module] = MLP,
         seperate_networks: Optional[bool] = False
     ) -> None:
@@ -68,6 +71,7 @@ class Parameters(AbstractPancaxModel):
             n_ensemble = 1
             parameters = _Parameters(
                 problem, problem.physics.constitutive_model, key,
+                dirichlet_bc_func=dirichlet_bc_func,
                 network_type=network_type,
                 seperate_networks=seperate_networks
             )
@@ -79,6 +83,7 @@ class Parameters(AbstractPancaxModel):
             def vmap_func(key, constitutive_model):
                 return _Parameters(
                     problem, constitutive_model, key,
+                    dirichlet_bc_func=dirichlet_bc_func,
                     network_type=network_type,
                     seperate_networks=seperate_networks
                 )
@@ -117,16 +122,16 @@ class Parameters(AbstractPancaxModel):
 
         # freeze normalization
         filter_spec = eqx.tree_at(
-            lambda x: x.parameters.physics.x_mins, filter_spec, replace=False
+            lambda x: x.parameters.fields.x_mins, filter_spec, replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda x: x.parameters.physics.x_maxs, filter_spec, replace=False
+            lambda x: x.parameters.fields.x_maxs, filter_spec, replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda x: x.parameters.physics.t_min, filter_spec, replace=False
+            lambda x: x.parameters.fields.t_min, filter_spec, replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda x: x.parameters.physics.t_max, filter_spec, replace=False
+            lambda x: x.parameters.fields.t_max, filter_spec, replace=False
         )
         return filter_spec
 
@@ -142,19 +147,19 @@ class Parameters(AbstractPancaxModel):
     def freeze_physics_normalization_filter(self):
         filter_spec = jtu.tree_map(lambda _: True, self)
         filter_spec = eqx.tree_at(
-            lambda tree: tree.parameters.physics.x_mins, filter_spec,
+            lambda tree: tree.parameters.fields.x_mins, filter_spec,
             replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda tree: tree.parameters.physics.x_maxs, filter_spec,
+            lambda tree: tree.parameters.fields.x_maxs, filter_spec,
             replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda tree: tree.parameters.physics.t_min, filter_spec,
+            lambda tree: tree.parameters.fields.t_min, filter_spec,
             replace=False
         )
         filter_spec = eqx.tree_at(
-            lambda tree: tree.parameters.physics.t_max, filter_spec,
+            lambda tree: tree.parameters.fields.t_max, filter_spec,
             replace=False
         )
         return filter_spec

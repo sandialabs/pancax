@@ -30,7 +30,7 @@ model = NeoHookean(
   shear_modulus=1.,
 )
 physics = SolidMechanics(model, PlaneStrain())
-physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+# physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 ics = [
 ]
 dirichlet_bcs = [
@@ -51,7 +51,11 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 # ML setup
 ##################
 loss_function = EnergyLoss()
-params = Parameters(problem, key, seperate_networks=False)
+params = Parameters(
+  problem, key, 
+  dirichlet_bc_func=dirichlet_bc_func,
+  seperate_networks=False
+)
 print(params)
 
 ##################
