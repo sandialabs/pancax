@@ -10,7 +10,7 @@ class BaseMechanicsFormulation(eqx.Module):
     n_dimensions: int = eqx.field(static=True)  # does this need to be static?
 
     @abstractmethod
-    def modify_field_gradient(self, grad_u):
+    def modify_field_gradient(self, constitutive_model, grad_u):
         pass
 
 
@@ -31,7 +31,7 @@ class IncompressiblePlaneStress(BaseMechanicsFormulation):
         F = F.at[2, 2].set(1.0 / jnp.linalg.det(grad_u + jnp.eye(2)))
         return F
 
-    def modify_field_gradient(self, grad_u):
+    def modify_field_gradient(self, constitutive_model, grad_u):
         F = self.deformation_gradient(grad_u)
         return F - jnp.eye(3)
 
@@ -42,14 +42,14 @@ class PlaneStrain(BaseMechanicsFormulation):
     def extract_stress(self, P):
         return P[0:2, 0:2]
 
-    def modify_field_gradient(self, grad_u):
+    def modify_field_gradient(self, constitutive_model, grad_u):
         return tensor_2D_to_3D(grad_u)
 
 
 class ThreeDimensional(BaseMechanicsFormulation):
     n_dimensions: int = 3
 
-    def modify_field_gradient(self, grad_u):
+    def modify_field_gradient(self, constitutive_model, grad_u):
         return grad_u
 
 
@@ -71,7 +71,9 @@ class SolidMechanics(BaseEnergyFormPhysics):
 
     def energy(self, params, x, t, u, grad_u, state_old, dt, *args):
         theta = 60.
-        grad_u = self.formulation.modify_field_gradient(grad_u)
+        grad_u = self.formulation.modify_field_gradient(
+            self.constitutive_model, grad_u
+        )
         return self.constitutive_model.energy(grad_u, theta, state_old, dt)
 
     @property

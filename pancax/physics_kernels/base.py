@@ -51,8 +51,13 @@ def element_pp(
         #     vmap(func, in_axes=in_axes_2), in_axes=in_axes_1)(
         #         params, xs, t, us, grad_us, state_old, dt
         # )
+        if hasattr(physics, "constitutive_model"):
+            constitutive_model = physics.constitutive_model
+        else:
+            constitutive_model = None
+
         grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
-            grad_us
+            constitutive_model, grad_us
         )
         theta = 60.
         vals, _ = vmap(
@@ -75,8 +80,14 @@ def element_pp(
             return xs, us, grad_us, JxWs
 
         xs, us, grad_us, JxWs = vmap(_vmap_func, in_axes=(0, 0))(xs, us)
+
+        if hasattr(physics, "constitutive_model"):
+            constitutive_model = physics.constitutive_model
+        else:
+            constitutive_model = None
+
         grad_us = vmap(vmap(physics.formulation.modify_field_gradient))(
-            grad_us
+            constitutive_model, grad_us
         )
 
         vals = vmap(vmap(func))(grad_us)
