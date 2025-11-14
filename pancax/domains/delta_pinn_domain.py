@@ -27,7 +27,7 @@ class DeltaPINNDomain(VariationalDomain):
         super().__init__(mesh_file, times, p_order=p_order, q_order=q_order)
         self.n_eigen_values = n_eigen_values
         physics = LaplaceBeltrami()
-        physics = physics.update_normalization(self)
+        # physics = physics.update_normalization(self)
         self.physics = physics.update_var_name_to_method()
         self.eigen_modes = self.solve_eigen_problem()
 
@@ -51,6 +51,7 @@ class DeltaPINNDomain(VariationalDomain):
         with Timer("eigen solve"):
             nModes = self.n_eigen_values
             mu, modes = linalg.eigsh(A=K, k=nModes, M=M, which="SM")
+            # mu, modes = linalg.eigsh(A=M, k=nModes, M=K, which="LA")
 
             lambdas = 1.0 / mu
             for n in range(len(lambdas)):

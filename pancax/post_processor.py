@@ -243,8 +243,8 @@ class ExodusPostProcessor(BasePostProcessor):
                                 n = n + 1
 
     def _write_step_outputs(
-        self, 
-        dataset, n, 
+        self,
+        dataset, n,
         params, problem, time, dt, state_old
     ):
         physics = problem.physics
@@ -347,7 +347,7 @@ class ExodusPostProcessor(BasePostProcessor):
         return state_new
 
     def _write_outputs(self, params, problem, output_file):
-        physics = problem.physics
+        # physics = problem.physics
         times = problem.times
 
         with nc.Dataset(output_file, "a") as dataset:
@@ -378,7 +378,8 @@ class ExodusPostProcessor(BasePostProcessor):
                 # us = physics.var_name_to_method["field_values"]["method"](
                 #     params, problem, time
                 # )
-                # # calculate something with state update at least once to update
+                # # calculate something with state
+                # update at least once to update
                 # # state later
                 # _, state_new = physics.potential_energy(
                 #     params, problem.domain, time, us, state_old, dt
@@ -410,8 +411,9 @@ class ExodusPostProcessor(BasePostProcessor):
                 #                 for j in range(pred.shape[2]):
                 #                     # k = pred.shape[1] * i + j
                 #                     assert False, "Support this"
-                #                     # self.exo.put_node_variable_values(
-                #                     # output['names'][k], n + 1, pred[:, i, j])
+                #                     # self.exo.
+                # put_node_variable_values(
+                # # output['names'][k], n + 1, pred[:, i, j])
                 #         else:
                 #             for i in range(pred.shape[1]):
                 #                 node_var = dataset.variables[
@@ -452,7 +454,8 @@ class ExodusPostProcessor(BasePostProcessor):
                 #                 elem_var[n, :] = pred[:, q, s]
                 #                 elem_var_num = elem_var_num + 1
                 #     elif len(pred.shape) == 4:
-                #         temp = pred.reshape((pred.shape[0], pred.shape[1], 9))
+                #         temp = pred.
+                # reshape((pred.shape[0], pred.shape[1], 9))
                 #         for i in range(temp.shape[2]):
                 #             for q in range(pred.shape[1]):
                 #                 elem_var = dataset.variables[
@@ -465,7 +468,9 @@ class ExodusPostProcessor(BasePostProcessor):
                 #     else:
                 #         assert False, f"Shape of output val is {pred.shape}"
 
-                state_new = self._write_step_outputs(dataset, n, params, problem, time, dt, state_old)
+                state_new = self._write_step_outputs(
+                    dataset, n, params, problem, time, dt, state_old
+                )
 
                 # finally update state
                 state_old = state_new

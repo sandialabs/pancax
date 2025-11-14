@@ -212,7 +212,11 @@ class PathDependentEnergyLoss(PhysicsLossFunction):
         # pi, state_old, dt = jax.lax.fori_loop(
         #     1, len(problem.times), fori_loop_body, (pi, state_old, dt)
         # )
-        (pi, state_old, dt), _ = jax.lax.scan(scan_body, (pi, state_old, dt), jnp.arange(1, len(problem.times)))
+        (pi, state_old, dt), _ = jax.lax.scan(
+            scan_body,
+            (pi, state_old, dt),
+            jnp.arange(1, len(problem.times))
+        )
         loss = pi
         return self.weight * loss, dict(energy=pi)
 

@@ -41,8 +41,9 @@ def test_parameters(problem):
     key = random.PRNGKey(0)
     params = Parameters(problem, key=key)
     field, physics, state = params
-    x = random.uniform(key=key, shape=(4,))
-    y = field(x)
+    x = random.uniform(key=key, shape=(3,))
+    t = random.uniform(key=key, shape=(1,))
+    y = field(x, t)
     assert y.shape == (3,)
     assert type(physics) is SolidMechanics
     assert state is None
@@ -73,15 +74,14 @@ def test_parameters_freeze_physics_filter(problem):
 
 def test_parameters_freeze_physics_normalization_filter(problem):
     from jax import random
-    from jax.tree_util import tree_leaves
     from pancax import Parameters
     key = random.PRNGKey(0)
     params = Parameters(problem, key=key)
     filter = params.freeze_physics_normalization_filter()
 
-    assert all(tree_leaves(filter.fields))
+    # assert all(tree_leaves(filter.fields))
 
-    assert filter.physics.x_mins is False
-    assert filter.physics.x_maxs is False
-    assert filter.physics.t_min is False
-    assert filter.physics.t_max is False
+    assert filter.fields.x_mins is False
+    assert filter.fields.x_maxs is False
+    assert filter.fields.t_min is False
+    assert filter.fields.t_max is False

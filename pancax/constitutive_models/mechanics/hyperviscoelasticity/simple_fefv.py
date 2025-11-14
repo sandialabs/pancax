@@ -34,7 +34,7 @@ class SimpleFeFv(HyperViscoElastic):
         # new approach vmapinng over all branches
         psi_eq = self.equilibirum_branch(grad_u, theta)
         psi_neq, Fv_news = vmap(
-            self.non_equilibrium_branch, 
+            self.non_equilibrium_branch,
             in_axes=(None, 0, None, 0, 0, None)
         )(grad_u, Fvs_old, dt, Gs, taus, a_T)
         Z = Fv_news.ravel()
@@ -53,7 +53,8 @@ class SimpleFeFv(HyperViscoElastic):
         # Ees = Ee_trials - delta_Evs
         # Dvs = delta_Evs / dt
         # Fvs_new = vmap(
-        #     lambda Fv_old, delta_Ev: jax.scipy.linalg.expm(delta_Ev) @ Fv_old,
+        #     lambda Fv_old,
+        # delta_Ev: jax.scipy.linalg.expm(delta_Ev) @ Fv_old,
         #     in_axes=(0, 0),
         # )(Fvs_old, delta_Evs)
         # Z = Fvs_new.ravel()
@@ -92,8 +93,8 @@ class SimpleFeFv(HyperViscoElastic):
         Fv_new = jax.scipy.linalg.expm(delta_Ev) @ Fv_old
         psi_neq = G * tensor_math.norm_of_deviator_squared(Ee)
         d = self.dissipation(Dv, G, tau)
-        # return psi_neq + d, Fv_new
-        return psi_neq, Fv_new
+        return psi_neq + d, Fv_new
+        # return psi_neq, Fv_new
 
     @property
     def num_state_variables(self):

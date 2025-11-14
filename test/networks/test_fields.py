@@ -40,8 +40,9 @@ def test_fields(problem):
     from pancax import Field
     key = random.key(0)
     field = Field(problem, key, seperate_networks=False)
-    x = random.uniform(key=key, shape=(4,))
-    y = field(x)
+    x = random.uniform(key=key, shape=(3,))
+    t = random.uniform(key=key, shape=(1,))
+    y = field(x, t)
     assert y.shape == (3,)
 
 
@@ -50,6 +51,7 @@ def test_fields_with_seperate_networks(problem):
     from pancax import Field
     key = random.key(0)
     field = Field(problem, key, seperate_networks=True)
-    x = random.uniform(key=key, shape=(4,))
-    y = field(x)
+    x = random.uniform(key=key, shape=(3,))
+    t = random.uniform(key=key, shape=(1,))
+    y = field(x, t)
     assert y.shape == (3,)
