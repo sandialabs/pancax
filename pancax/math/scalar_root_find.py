@@ -73,12 +73,13 @@ def rtsafe_(f, x0, bracket, settings):
     # testing bracket values as solutions).
     x0 = jnp.clip(x0, bracket[0], bracket[1])
 
+    # TODO re-enable eventually
     # check that root is bracketed
-    x0 = jnp.where(
-        fl * fh < 0.0,
-        x0,
-        jnp.nan
-    )
+    # x0 = jnp.where(
+    #     fl * fh < 0.0,
+    #     x0,
+    #     jnp.nan
+    # )
 
     # Check if either bracket is a root
     leftBracketIsSolution = (fl == 0.0)

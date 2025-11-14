@@ -29,8 +29,8 @@ model = NeoHookean(
   bulk_modulus=1000.0,
   shear_modulus=1.,
 )
-physics = SolidMechanics(model, PlaneStrain())
-# physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+# physics = SolidMechanics(model, PlaneStrain())
+physics = SolidMechanics(model, PlaneStress())
 ics = [
 ]
 dirichlet_bcs = [
@@ -64,11 +64,26 @@ print(params)
 opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
 opt, opt_st = opt.init(params)
 
-for epoch in range(2500):
+for epoch in range(10000):
   params, opt_st, loss = opt.step(params, opt_st, problem)
   if epoch % 100 == 0:
     print(epoch, flush=True)
     print(loss, flush=True)
+
+
+# # now try planestress after pre-training
+# physics = SolidMechanics(model, PlaneStress())
+# problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
+# params = eqx.tree_at(lambda x: x.physics, params, physics)
+
+# opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
+# opt, opt_st = opt.init(params)
+
+# for epoch in range(25000):
+#   params, opt_st, loss = opt.step(params, opt_st, problem)
+#   if epoch % 1 == 0:
+#     print(epoch, flush=True)
+#     print(loss, flush=True)
 
 ##################
 # post-processing

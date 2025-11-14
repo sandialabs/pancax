@@ -1,12 +1,13 @@
 from abc import abstractmethod
 from .base import BaseEnergyFormPhysics, element_pp, _output_names
+from pancax.math import scalar_root_find
 from pancax.math.tensor_math import tensor_2D_to_3D
 import equinox as eqx
 import jax.numpy as jnp
 
 
 # different formulations e.g. plane strain/stress, axisymmetric etc.
-class BaseMechanicsFormulation(eqx.Module):
+class AbstractMechanicsFormulation(eqx.Module):
     n_dimensions: int = eqx.field(static=True)  # does this need to be static?
 
     @abstractmethod
@@ -16,31 +17,7 @@ class BaseMechanicsFormulation(eqx.Module):
         pass
 
 
-# note for this formulation we're getting NaNs if the
-# reference configuration is used during calculation
-# of the loss function
-class IncompressiblePlaneStress(BaseMechanicsFormulation):
-    n_dimensions = 2
-
-    def __init__(self) -> None:
-        print(
-            "WARNING: Do not include a time of 0.0 with this formulation. "
-            "You will get NaNs."
-        )
-
-    def deformation_gradient(self, grad_u):
-        F = tensor_2D_to_3D(grad_u) + jnp.eye(3)
-        F = F.at[2, 2].set(1.0 / jnp.linalg.det(grad_u + jnp.eye(2)))
-        return F
-
-    def modify_field_gradient(
-        self, constitutive_model, grad_u, theta, state_old, dt
-    ):
-        F = self.deformation_gradient(grad_u)
-        return F - jnp.eye(3)
-
-
-class PlaneStrain(BaseMechanicsFormulation):
+class PlaneStrain(AbstractMechanicsFormulation):
     n_dimensions: int = 2
 
     def extract_stress(self, P):
@@ -52,8 +29,53 @@ class PlaneStrain(BaseMechanicsFormulation):
         return tensor_2D_to_3D(grad_u)
 
 
-class ThreeDimensional(BaseMechanicsFormulation):
+class PlaneStress(AbstractMechanicsFormulation):
+    n_dimensions: int
+    settings: scalar_root_find.Settings
+
+    def __init__(self):
+        self.n_dimensions = 2
+        self.settings = scalar_root_find.get_settings()
+
+    def displacement_gradient(self, grad_u_33, grad_u):
+        grad_u = jnp.array([
+            [grad_u[0, 0], grad_u[0, 1], 0.],
+            [grad_u[1, 0], grad_u[1, 1], 0.],
+            [0., 0., grad_u_33]
+        ])
+        return grad_u
+
+    def extract_stress(self, P):
+        return P[0:2, 0:2]
+
+    def modify_field_gradient(
+        self, constitutive_model, grad_u, theta, state_old, dt
+    ):
+        def func(grad_u_33, constitutive_model, grad_u, theta, state_old, dt):
+            grad_u = self.displacement_gradient(grad_u_33, grad_u)
+            return constitutive_model.cauchy_stress(
+                grad_u, theta, state_old, dt
+            )[0][2, 2]
+
+        def my_func(x):
+            return func(x, constitutive_model, grad_u, theta, state_old, dt)
+
+        # TODO make below options
+        root_guess = 0.05
+        root_bracket = jnp.array([-0.99, 10.])
+
+        root, _ = scalar_root_find.find_root(
+            my_func, root_guess, root_bracket, self.settings
+        )
+        grad_u = self.displacement_gradient(root, grad_u)
+        return grad_u
+
+
+class ThreeDimensional(AbstractMechanicsFormulation):
     n_dimensions: int = 3
+
+    def extract_stress(self, P):
+        return P
 
     def modify_field_gradient(
         self, constitutive_model, grad_u, theta, state_old, dt
@@ -64,7 +86,7 @@ class ThreeDimensional(BaseMechanicsFormulation):
 class SolidMechanics(BaseEnergyFormPhysics):
     field_value_names: tuple[str, ...]
     constitutive_model: any
-    formulation: BaseMechanicsFormulation
+    formulation: AbstractMechanicsFormulation
 
     def __init__(self, constitutive_model, formulation) -> None:
         # TODO clean this up below

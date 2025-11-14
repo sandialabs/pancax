@@ -8,9 +8,9 @@ from .heat_equation import HeatEquation
 from .laplace_beltrami import LaplaceBeltrami
 from .poisson import Poisson
 from .solid_mechanics import (
-    BaseMechanicsFormulation,
-    IncompressiblePlaneStress,
+    AbstractMechanicsFormulation,
     PlaneStrain,
+    PlaneStress,
     ThreeDimensional,
 )
 from .solid_mechanics import SolidMechanics
@@ -25,9 +25,9 @@ __all__ = [
     "HeatEquation",
     "LaplaceBeltrami",
     "Poisson",
-    "BaseMechanicsFormulation",
-    "IncompressiblePlaneStress",
+    "AbstractMechanicsFormulation",
     "PlaneStrain",
+    "PlaneStress",
     "ThreeDimensional",
     "SolidMechanics"
 ]
