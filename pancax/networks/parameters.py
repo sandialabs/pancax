@@ -42,9 +42,14 @@ class _Parameters(AbstractPancaxModel):
         # TODO what do we do with this guy?
         state = None
 
-        physics = eqx.tree_at(
-            lambda x: x.constitutive_model, problem.physics, constitutive_model
-        )
+        if hasattr(problem.physics, "constitutive_model"):
+            physics = eqx.tree_at(
+                lambda x: x.constitutive_model, problem.physics,
+                constitutive_model
+            )
+        else:
+            physics = problem.physics
+
         self.fields = fields
         self.physics = physics
         self.state = state
@@ -66,11 +71,16 @@ class Parameters(AbstractPancaxModel):
         network_type: Optional[eqx.Module] = MLP,
         seperate_networks: Optional[bool] = False
     ) -> None:
+        if hasattr(problem.physics, "constitutive_model"):
+            constitutive_model = problem.physics.constitutive_model
+        else:
+            constitutive_model = None
+
         if len(key.shape) == 1:
             is_ensemble = False
             n_ensemble = 1
             parameters = _Parameters(
-                problem, problem.physics.constitutive_model, key,
+                problem, constitutive_model, key,
                 dirichlet_bc_func=dirichlet_bc_func,
                 network_type=network_type,
                 seperate_networks=seperate_networks
@@ -88,7 +98,7 @@ class Parameters(AbstractPancaxModel):
                     seperate_networks=seperate_networks
                 )
 
-            parameters = vmap_func(key, problem.physics.constitutive_model)
+            parameters = vmap_func(key, constitutive_model)
         else:
             raise ValueError(
                 f"Invalid shape for key {key} with shape {key.shape}"

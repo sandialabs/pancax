@@ -3,13 +3,12 @@ from pancax import *
 ##################
 # for reproducibility
 ##################
-key = random.key(10)
+key = random.PRNGKey(10)
 
 ##################
 # file management
 ##################
 mesh_file = find_mesh_file('mesh_quad4.g')
-logger = Logger('pinn.log', log_every=250)
 pp = PostProcessor(mesh_file, 'exodus')
 
 ##################
@@ -30,15 +29,13 @@ def bc_func(x, t, z):
   x, y = x[0], x[1]
   return x * (1. - x) * y * (1. - y) * z
 
-physics = physics.update_dirichlet_bc_func(bc_func)
-
 ics = [
 ]
 essential_bcs = [
-  EssentialBC('nset_1', 0),
-  EssentialBC('nset_2', 0),
-  EssentialBC('nset_3', 0),
-  EssentialBC('nset_4', 0),
+  DirichletBC('nset_1', 0),
+  DirichletBC('nset_2', 0),
+  DirichletBC('nset_3', 0),
+  DirichletBC('nset_4', 0),
 ]
 natural_bcs = [
 ]
@@ -51,31 +48,39 @@ problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
 ##################
 # ML setup
 ##################
-n_dims = domain.coords.shape[1]
-field = MLP(n_dims + 1, physics.n_dofs, 50, 3, jax.nn.tanh, key)
-params = FieldPhysicsPair(field, problem.physics)
+params = Parameters(problem, key, dirichlet_bc_func=bc_func, network_type=ResNet)
 
-loss_function = StrongFormResidualLoss()
+def loss_function(params, problem, inputs, outputs):
+  field, physics, state = params
+  residuals = jax.vmap(physics.strong_form_residual, in_axes=(None, 0, 0))(
+    field, inputs[:, 0:2], inputs[:, 2:3]
+  )
+  return jnp.square(residuals - outputs).mean(), dict(nothing=0.0)
+
+loss_function = UserDefinedLossFunction(loss_function)
+
 opt = Adam(loss_function, learning_rate=1e-3, has_aux=True)
-opt_st = opt.init(params)
+opt, opt_st = opt.init(params)
 
-for epoch in range(5000):
-  params, opt_st, loss = opt.step(params, problem, opt_st)
+dataloader = CollocationDataLoader(problem.domain, num_fields=1)
+for epoch in range(50000):
+  for inputs, outputs in dataloader.dataloader(512):
+    params, opt_st, loss = opt.step(params, opt_st, problem, inputs, outputs)
 
   if epoch % 100 == 0:
     print(epoch)
     print(loss)
 
-##################
-# post-processing
-##################
-pp.init(problem, 'output.e',
-  node_variables=['field_values']        
-)
-pp.write_outputs(params, problem)
-pp.close()
+# ##################
+# # post-processing
+# ##################
+# pp.init(params, problem, 'output.e',
+#   node_variables=['field_values']        
+# )
+# pp.write_outputs(params, problem)
+# pp.close()
 
-import pyvista as pv
-exo = pv.read('output.e')[0][0]
-exo.set_active_scalars('u')
-exo.plot(show_axes=False, cpos='xy', show_edges=True)
+# # import pyvista as pv
+# # exo = pv.read('output.e')[0][0]
+# # exo.set_active_scalars('u')
+# # exo.plot(show_axes=False, cpos='xy', show_edges=True)

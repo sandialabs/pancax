@@ -28,3 +28,4 @@ rocm_venv/
 venv/
 dd_solver.dat
 krylov_solver.dat
+.vscode/

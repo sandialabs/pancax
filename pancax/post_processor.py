@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from pancax.domains.variational_domain import VariationalDomain
 from typing import List
 import equinox as eqx
 import jax
@@ -259,9 +260,12 @@ class ExodusPostProcessor(BasePostProcessor):
         )
         # calculate something with state update at least once to update
         # state later
-        _, state_new = physics.potential_energy(
-            params, problem.domain, time, us, state_old, dt
-        )
+        if type(problem.domain) is VariationalDomain:
+            _, state_new = physics.potential_energy(
+                params, problem.domain, time, us, state_old, dt
+            )
+        else:
+            state_new = None
 
         node_var_num = 0
         for var in self.node_variables:
@@ -354,18 +358,25 @@ class ExodusPostProcessor(BasePostProcessor):
         times = problem.times
 
         with nc.Dataset(output_file, "a") as dataset:
-            ne = problem.domain.conns.shape[0]
-            nq = len(problem.domain.fspace.quadrature_rule)
+            try:
+                ne = problem.domain.conns.shape[0]
+                nq = len(problem.domain.fspace.quadrature_rule)
 
-            def _vmap_func(n):
-                return problem.physics.constitutive_model.\
-                    initial_state()
+                def _vmap_func(n):
+                    return problem.physics.constitutive_model.\
+                        initial_state()
 
-            # TODO assumes constantly spaced timesteps
-            dt = problem.times[1] - problem.times[0]
-            state_old = jax.vmap(jax.vmap(_vmap_func))(
-                jnp.zeros((ne, nq))
-            )
+                # TODO assumes constantly spaced timesteps
+                dt = problem.times[1] - problem.times[0]
+
+                if hasattr(problem.physics, "constitutive_model"):
+                    state_old = jax.vmap(jax.vmap(_vmap_func))(
+                        jnp.zeros((ne, nq))
+                    )
+                else:
+                    state_old = jnp.zeros((ne, nq, 0))
+            except AttributeError:
+                state_old = None
 
             for n, time in enumerate(times):
                 if n == 0:
