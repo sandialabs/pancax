@@ -63,7 +63,7 @@ model = SimpleFeFv(
     WLF(C1=17.44, C2=51.6, theta_ref=60.0),
 )
 physics = SolidMechanics(model, PlaneStrain())
-physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+# physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 
 ics = []
 dirichlet_bcs = [
@@ -84,10 +84,14 @@ problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
 ##################
 # ML setup
 ##################
-loss_function = PathDependentEnergyLoss()
-# loss_function = EnergyLoss()
+# loss_function = PathDependentEnergyLoss()
+loss_function = EnergyLoss(is_path_dependent=True)
 
-params = Parameters(problem, key, seperate_networks=True)
+params = Parameters(
+    problem, key,
+    dirichlet_bc_func=dirichlet_bc_func,
+    seperate_networks=False
+)
 print(params)
 
 ##################

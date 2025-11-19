@@ -29,8 +29,8 @@ model = NeoHookean(
   bulk_modulus=1000.0,
   shear_modulus=1.,
 )
-# physics = SolidMechanics(model, PlaneStrain())
-physics = SolidMechanics(model, PlaneStress())
+physics = SolidMechanics(model, PlaneStrain())
+# physics = SolidMechanics(model, PlaneStress())
 ics = [
 ]
 dirichlet_bcs = [
