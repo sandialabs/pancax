@@ -6,6 +6,7 @@ from .mechanics.hyperelasticity import \
     BlatzKo, \
     Gent, \
     Hencky, \
+    InputPolyConvexPotential, \
     NeoHookean, \
     Swanson
 from .mechanics.hyperviscoelasticity import \
@@ -26,6 +27,7 @@ __all__ = [
     "BlatzKo",
     "Gent",
     "Hencky",
+    "InputPolyConvexPotential",
     "NeoHookean",
     "Swanson",
     # Hyperviscoelasticity

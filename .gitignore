@@ -26,3 +26,5 @@ pinn*.log
 sierra_batch_script_*
 rocm_venv/
 venv/
+dd_solver.dat
+krylov_solver.dat

@@ -5,10 +5,12 @@ import netCDF4 as nc
 import numpy as np
 import pandas
 
-parser = argparse.ArgumentParser(description="A script to plot force displacement curves.")
+parser = argparse.ArgumentParser(
+    description="A script to plot force displacement curves."
+)
 
 parser.add_argument(
-    "--displacement-variable", 
+    "--displacement-variable",
     help="name of the displacment variable"
 )
 parser.add_argument(
@@ -24,7 +26,7 @@ parser.add_argument(
     help="name of the Sierra node set to read data from"
 )
 parser.add_argument(
-    "--sierra-exodus-file", 
+    "--sierra-exodus-file",
     help="The name of the Sierra exodus file."
 )
 parser.add_argument(
@@ -49,9 +51,12 @@ def extract_data(exo_file, nset_name, disp_var_name, force_var_name):
         nsets = _read_node_sets(data)
         node_var_names = data.variables["name_nod_var"]
         node_var_names.set_auto_mask(False)
-        node_var_names = [b"".join(c).decode("UTF-8").rstrip() for c in node_var_names[:]]
+        node_var_names = [
+            b"".join(c).decode("UTF-8").rstrip() for c in node_var_names[:]
+        ]
 
-        assert nset_name in nsets.keys(), f"Available nodesets are {nsets.keys()}"
+        assert nset_name in nsets.keys(), \
+            f"Available nodesets are {nsets.keys()}"
         assert disp_var_name in node_var_names
         assert force_var_name in node_var_names
 
@@ -80,8 +85,13 @@ def extract_data(exo_file, nset_name, disp_var_name, force_var_name):
 
     return times, displacements, forces
 
-p_times, p_displacements, p_forces = extract_data(pinn_exo_file, pinn_nset_name, disp_var_name, force_var_name)
-s_times, s_displacements, s_forces = extract_data(sierra_exo_file, sierra_nset_name, disp_var_name, force_var_name)
+
+p_times, p_displacements, p_forces = \
+    extract_data(pinn_exo_file, pinn_nset_name, disp_var_name, force_var_name)
+s_times, s_displacements, s_forces = \
+    extract_data(
+        sierra_exo_file, sierra_nset_name, disp_var_name, force_var_name
+    )
 
 # save sierra exo file to csv file
 df_data = np.array([p_times, p_displacements, p_forces]).T
