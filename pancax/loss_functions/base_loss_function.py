@@ -1,5 +1,9 @@
 from abc import abstractmethod
+from jax import vmap
+from typing import Optional
 import equinox as eqx
+import jax
+import jax.numpy as jnp
 
 
 class BaseLossFunction(eqx.Module):
@@ -35,7 +39,40 @@ class PhysicsLossFunction(BaseLossFunction):
     type signature
     ``load_step(self, params, domain, t)``
     """
-
     @abstractmethod
     def load_step(self, params, domain, t):
         pass
+
+    def path_dependent_loop(
+        self, func, start, end, *args,
+        use_fori_loop: Optional[bool] = False
+    ):
+        if use_fori_loop:
+            def fori_loop_body(n, carry):
+                return func(n, carry)
+
+            return jax.lax.fori_loop(
+                start, end, fori_loop_body, args
+            )
+        else:
+            def scan_body(carry, n):
+                return func(n, carry), None
+
+            return jax.lax.scan(
+                scan_body,
+                args,
+                jnp.arange(start, end)
+            )[0]
+
+    def state_variable_init(self, problem):
+        ne = problem.domain.conns.shape[0]
+        nq = len(problem.domain.fspace.quadrature_rule)
+
+        def _vmap_func(n):
+            return problem.physics.constitutive_model.\
+                initial_state()
+
+        state_old = vmap(vmap(_vmap_func))(
+            jnp.zeros((ne, nq))
+        )
+        return state_old

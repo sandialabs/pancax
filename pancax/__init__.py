@@ -51,8 +51,6 @@ from .loss_functions import \
     EnergyAndResidualLoss, \
     EnergyResidualAndReactionLoss, \
     ResidualMSELoss, \
-    PathDependentEnergyLoss, \
-    PathDependentEnergyResidualAndReactionLoss, \
     UserDefinedLossFunction
 from .networks import \
     Field, \
@@ -159,8 +157,6 @@ __all__ = [
     "EnergyAndResidualLoss",
     "EnergyResidualAndReactionLoss",
     "ResidualMSELoss",
-    "PathDependentEnergyLoss",
-    "PathDependentEnergyResidualAndReactionLoss",
     "UserDefinedLossFunction",
     # networks
     "Field",
