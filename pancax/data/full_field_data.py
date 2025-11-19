@@ -1,4 +1,4 @@
-from jaxtyping import Array, Float
+from jaxtyping import Array
 from typing import List
 import equinox as eqx
 import jax.numpy as jnp
@@ -93,7 +93,7 @@ class FullFieldDataLoader(eqx.Module):
     def __len__(self):
         return len(self.data)
 
-    def dataloader(self, batch_size: int) -> Float[Array, "bs d"]:
+    def dataloader(self, batch_size: int):
         perm = np.random.permutation(self.indices)
         start = 0
         end = batch_size

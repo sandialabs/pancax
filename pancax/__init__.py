@@ -17,7 +17,11 @@ from .constitutive_models import \
     SimpleFeFv, \
     WLF
 from .data import FullFieldData, FullFieldDataLoader, GlobalData
-from .domains import CollocationDomain, DeltaPINNDomain, VariationalDomain
+from .domains import \
+    CollocationDataLoader, \
+    CollocationDomain, \
+    DeltaPINNDomain, \
+    VariationalDomain
 from .fem import \
     DofManager, \
     FunctionSpace, \
@@ -118,6 +122,7 @@ __all__ = [
     "FullFieldDataLoader",
     "GlobalData",
     # domains
+    "CollocationDataLoader",
     "CollocationDomain",
     "DeltaPINNDomain",
     "VariationalDomain",

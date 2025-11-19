@@ -10,6 +10,7 @@ import jax.numpy as jnp
 class Field(AbstractPancaxModel):
     dirichlet_bc_func: Callable
     networks: Union[eqx.Module, List[eqx.Module]]
+    normalize_time: bool  # to help with static problems
     seperate_networks: bool
     t_min: Float[Array, "1"]
     t_max: Float[Array, "1"]
@@ -69,10 +70,26 @@ class Field(AbstractPancaxModel):
         self.x_mins = jnp.min(problem.coords, axis=0)
         self.x_maxs = jnp.max(problem.coords, axis=0)
 
+        if jnp.allclose(self.t_min, self.t_max):
+            self.normalize_time = False
+        else:
+            self.normalize_time = True
+
     # def __call__(self, x):
     def __call__(self, x, t):
         x_norm = (x - self.x_mins) / (self.x_maxs - self.x_mins)
-        t_norm = (t - self.t_min) / (self.t_max - self.t_min)
+
+        # if self.normalize_time:
+        #     t_norm = (t - self.t_min) / (self.t_max - self.t_min)
+        # else:
+        #     t_norm = t
+        t_norm = jax.lax.cond(
+            self.normalize_time,
+            lambda z: (z - self.t_min) / (self.t_max - self.t_min),
+            lambda z: z,
+            t
+        )
+
         inputs = jnp.hstack((x_norm, t_norm))
 
         if self.seperate_networks:
@@ -85,7 +102,5 @@ class Field(AbstractPancaxModel):
         else:
             # z = self.networks(x)
             z = self.networks(inputs)
-
-        # TODO call dirichlet bc func
 
         return self.dirichlet_bc_func(x, t, z)

@@ -72,7 +72,10 @@ class PhysicsLossFunction(BaseLossFunction):
             return problem.physics.constitutive_model.\
                 initial_state()
 
-        state_old = vmap(vmap(_vmap_func))(
-            jnp.zeros((ne, nq))
-        )
+        if hasattr(problem.physics, "constitutive_model"):
+            state_old = vmap(vmap(_vmap_func))(
+                jnp.zeros((ne, nq))
+            )
+        else:
+            state_old = jnp.zeros((ne, nq, 0))
         return state_old
