@@ -10,6 +10,7 @@ from .constitutive_models import \
     BlatzKo, \
     Gent, \
     Hencky, \
+    InputPolyConvexPotential, \
     NeoHookean, \
     Swanson, \
     PronySeries, \
@@ -106,6 +107,7 @@ __all__ = [
     "BlatzKo",
     "Gent",
     "Hencky",
+    "InputPolyConvexPotential",
     "NeoHookean",
     "Swanson",
     "PronySeries",

@@ -1,2 +1,5 @@
 flake8 pancax
 flake8 test
+flake8 scripts/extract_full_field_mechanics_data.py
+flake8 scripts/extract_global_mechanics_data.py
+flake8 scripts/plot_force_disp.py
