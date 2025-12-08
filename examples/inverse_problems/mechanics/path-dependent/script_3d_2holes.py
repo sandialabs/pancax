@@ -86,7 +86,7 @@ def dirichlet_bc_func(xs, t, nn):
     return u_out
 
 # model = NeoHookean(bulk_modulus=10., shear_modulus=0.855)
-physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
+# physics = physics.update_dirichlet_bc_func(dirichlet_bc_func)
 dirichlet_bcs = [
   DirichletBC('nodeset_3', 0),
   DirichletBC('nodeset_3', 1),
@@ -108,9 +108,15 @@ problem = InverseProblem(domain, physics, field_data, global_data, ics, dirichle
 ##################
 # ML setup
 ##################
-params = Parameters(problem, key, seperate_networks=False, network_type=MLP)
-physics_and_global_loss = PathDependentEnergyResidualAndReactionLoss(
+params = Parameters(
+  problem, key, 
+  dirichlet_bc_func=dirichlet_bc_func,
+  network_type=MLP,
+  seperate_networks=False
+)
+physics_and_global_loss = EnergyResidualAndReactionLoss(
   energy_weight=0.,
+  is_path_dependent=True,
   # residual_weight=250.e9, reaction_weight=250.e9
   residual_weight=250., reaction_weight=250.
 )

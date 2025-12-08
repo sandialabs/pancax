@@ -16,13 +16,13 @@ dependencies = [
 [project.optional-dependencies]
 cpu = [
   'equinox~=0.13',
-  'jax~=0.6.2',
+  'jax~=0.8.1',
   'jaxtyping',
   'optax'
 ]
 cuda = [
   'equinox~=0.13',
-  'jax[cuda12]~=0.6.2',
+  'jax[cuda12]~=0.8.1',
   'jaxtyping',
   'optax'
 ]
@@ -38,7 +38,6 @@ dev = [
   'sphinxcontrib-napoleon'
 ]
 rocm = [
-  'chex',
   'equinox~=0.13',
   'jax[rocm]~=0.5',
   'jaxtyping',

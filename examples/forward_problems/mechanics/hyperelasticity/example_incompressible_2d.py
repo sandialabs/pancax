@@ -31,21 +31,18 @@ model = NeoHookean(
 )
 physics = SolidMechanics(model, PlaneStrain())
 # physics = SolidMechanics(model, PlaneStress())
-ics = [
-]
+
 dirichlet_bcs = [
   DirichletBC('nset_1', 0),
   DirichletBC('nset_1', 1),
   DirichletBC('nset_3', 0),
   DirichletBC('nset_3', 1),
 ]
-neumann_bcs = [
-]
 
 ##################
 # problem setup
 ##################
-problem = ForwardProblem(domain, physics, ics, dirichlet_bcs, neumann_bcs)
+problem = ForwardProblem(domain, physics, dirichlet_bcs=dirichlet_bcs)
 
 ##################
 # ML setup
