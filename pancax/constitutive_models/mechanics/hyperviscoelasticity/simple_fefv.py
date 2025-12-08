@@ -76,7 +76,8 @@ class SimpleFeFv(HyperViscoElastic):
         return self.eq_model.energy(grad_u, theta, Z, dt)[0]
 
     def initial_state(self):
-        Fvs = vmap(lambda _: jnp.eye(3))(range(self.num_prony_terms()))
+        # Fvs = vmap(lambda _: jnp.eye(3))(range(self.num_prony_terms()))
+        Fvs = vmap(lambda _: jnp.eye(3))(jnp.arange(self.num_prony_terms()))
         return Fvs.ravel()
 
     def neq_strain_energy(self, Ee, G):
