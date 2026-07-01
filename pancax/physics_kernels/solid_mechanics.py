@@ -3,6 +3,7 @@ from .base import BaseEnergyFormPhysics, element_pp, _output_names
 from pancax.math import scalar_root_find
 from pancax.math.tensor_math import tensor_2D_to_3D
 import equinox as eqx
+import jax
 import jax.numpy as jnp
 
 
@@ -104,7 +105,7 @@ class SolidMechanics(BaseEnergyFormPhysics):
         grad_u = self.formulation.modify_field_gradient(
             self.constitutive_model, grad_u, theta, state_old, dt
         )
-        return self.constitutive_model.energy(grad_u, theta, state_old, dt)
+        return self.constitutive_model.energy(grad_u, theta, state_old, dt, *args)
 
     @property
     def num_state_variables(self):

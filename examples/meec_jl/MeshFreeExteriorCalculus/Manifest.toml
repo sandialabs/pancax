@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "66fea55962dbee7c304ba688668397d1d06b1c04"
+project_hash = "94875f1f2a51c788a63588608e0f4ef06c952940"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -50,9 +50,9 @@ version = "1.7.0"
 
 [[deps.Exodus]]
 deps = ["DocStringExtensions", "Exodus_jll"]
-git-tree-sha1 = "c7d73b668a8b9c215d7293b6fa162b07ff526a72"
+git-tree-sha1 = "b2810d5933cbdb82869ab3267d99a4b6ee3ea31d"
 uuid = "f57ae99e-f805-4780-bdca-96e224be1e5a"
-version = "0.14.3"
+version = "0.14.2"
 
     [deps.Exodus.extensions]
     ExodusMeshesExt = "Meshes"
@@ -94,9 +94,9 @@ version = "2.13.0+1"
 
 [[deps.JLLWrappers]]
 deps = ["Artifacts", "Preferences"]
-git-tree-sha1 = "7204148362dafe5fe6a273f855b8ccbe4df8173e"
+git-tree-sha1 = "0533e564aae234aff59ab625543145446d8b6ec2"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
-version = "1.8.0"
+version = "1.7.1"
 
 [[deps.JuliaSyntaxHighlighting]]
 deps = ["StyledStrings"]
@@ -305,9 +305,9 @@ version = "5.8.3+0"
 
 [[deps.Xorg_libpciaccess_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "58972370b81423fc546c56a60ed1a009450177c3"
+git-tree-sha1 = "4909eb8f1cbf6bd4b1c30dd18b2ead9019ef2fad"
 uuid = "a65dc6b1-eb27-53a1-bb3e-dea574b5389e"
-version = "0.19.0+0"
+version = "0.18.1+0"
 
 [[deps.Zlib_jll]]
 deps = ["Libdl"]

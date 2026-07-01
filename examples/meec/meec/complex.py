@@ -8,7 +8,7 @@ import scipy.sparse.linalg as spla
 
 
 @dataclass
-class MEECComplex:
+class MEECComplex: 
     x: torch.Tensor
     senders: torch.Tensor
     receivers: torch.Tensor

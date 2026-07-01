@@ -374,8 +374,9 @@ class BaseEnergyFormPhysics(BasePhysics):
         self, params, domain, t, us, state_old, dt, *args
     ):
         global_data = args[0]
+        other_args = args[1:]
         pi, f = self.potential_energy_and_internal_force(
-            params, domain, t, us, state_old, dt, *args
+            params, domain, t, us, state_old, dt, *other_args
         )
         R = jnp.linalg.norm(f.ravel()[domain.dof_manager.unknownIndices])
         reaction = jnp.sum(
