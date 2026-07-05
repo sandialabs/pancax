@@ -36,10 +36,10 @@ def bc_func(x, t, z):
 ics = [
 ]
 dirichlet_bcs = [
-  DirichletBC('nset_1', 0),
-  DirichletBC('nset_2', 0),
-  DirichletBC('nset_3', 0),
-  DirichletBC('nset_4', 0),
+  DirichletBC(nset_name="nset_1", component=0),
+  DirichletBC(nset_name="nset_2", component=0),
+  DirichletBC(nset_name="nset_3", component=0),
+  DirichletBC(nset_name="nset_4", component=0),
 ]
 neumann_bcs = [
 ]

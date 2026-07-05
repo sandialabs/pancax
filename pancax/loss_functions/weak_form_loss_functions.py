@@ -53,7 +53,9 @@ class EnergyLoss(PhysicsLossFunction):
         def body(n, carry):
             pi, state_old, dt = carry
             t = problem.times[n]
-            pi_t, state_new = self.load_step(params, problem, t, dt, state_old, *args)
+            pi_t, state_new = self.load_step(
+                params, problem, t, dt, state_old, *args
+            )
             pi = pi + pi_t
             state_old = state_new
             dt = problem.times[n] - problem.times[n - 1]
@@ -73,7 +75,7 @@ class EnergyLoss(PhysicsLossFunction):
         state_old = self.state_variable_init(problem)
         dt = problem.times[1] - problem.times[0]
         in_axes = (None, None, 0, None, None) + len(args) * (None,)
-        
+
         energies, state_news = vmap(
             self.load_step,
             # in_axes=(None, None, 0, None, None)

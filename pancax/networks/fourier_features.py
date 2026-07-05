@@ -55,10 +55,10 @@ class FourierFeatures(eqx.Module):
                 Standard deviation of Gaussian matrix for mode="gaussian".
 
             include_input:
-                If True, concatenate the original input to the Fourier features.
+                If True, concatenate the original input to the Fourier features
 
             trainable:
-                If True, Gaussian B or dyadic frequencies can receive gradients.
+                If True, Gaussian B or dyadic frequencies can receive gradients
                 Usually False for fixed Fourier features.
 
             use_2pi:
@@ -69,7 +69,8 @@ class FourierFeatures(eqx.Module):
                 use_2pi=False.
 
             encode_features:
-                Number of leading input coordinates to encode with Fourier features.
+                Number of leading input coordinates to encode with Fourier
+                features
 
                 If None, encode all input features.
 

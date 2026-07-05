@@ -1,17 +1,48 @@
 from jaxtyping import Array, Float
-from pancax.fem import surface
-from typing import Callable, Optional
+from typing import Callable, List, Optional, Union
 import equinox as eqx
-import jax
-import jax.numpy as jnp
 
 
-BCFunc = Callable[[Float[Array, "nd"], float], Float[Array, "nf"]]
+BCFunc = Callable[[Float[Array, "nd"], float], float]
+SetName = Union[None, str]
+
+# TODO build a type hiearchy
+# class BaseBC(eqx.Module):
+#     function: BCFunc
 
 
-# remove component from the definition.
-# it doesn't appear to be doing anything
-# class NaturalBC(NamedTuple):
+class DirichletBC(eqx.Module):
+    function: BCFunc
+    block_name: SetName
+    nset_name: SetName
+    sset_name: SetName
+    component: int
+
+    def __init__(
+        self,
+        component,
+        function: Optional[BCFunc] = lambda x, t: 0.0,
+        block_name: Optional[SetName] = None,
+        nset_name: Optional[SetName] = None,
+        sset_name: Optional[SetName] = None
+    ) -> None:
+        self.component = component
+        self.function = function
+        self.block_name = block_name
+        self.nset_name = nset_name
+        self.sset_name = sset_name
+
+    def coordinates(self, mesh):
+        nodes = mesh.nodeSets[self.nset_name]
+        coords = mesh.coords
+        return coords[nodes, :]
+
+
+# DO we need this anymore?
+class DirichletBCSet(eqx.Module):
+    bcs: List[DirichletBC]
+
+
 class NeumannBC(eqx.Module):
     sideset: str
     function: Optional[BCFunc] = lambda x, t: 0.0

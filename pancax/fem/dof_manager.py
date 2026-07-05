@@ -32,7 +32,7 @@ class DofManager:
             self.fieldShape = mesh.num_nodes, dim
             self.isBc = onp.full(self.fieldShape, False, dtype=bool)
             for ebc in DirichletBCs:
-                self.isBc[mesh.nodeSets[ebc.nodeSet], ebc.component] = True
+                self.isBc[mesh.nodeSets[ebc.nset_name], ebc.component] = True
 
             self.isUnknown = ~self.isBc
 

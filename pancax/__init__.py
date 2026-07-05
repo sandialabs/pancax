@@ -1,5 +1,5 @@
 # from .bcs import *
-from .bcs import DirichletBC, distance_function, NeumannBC
+from .bcs import DirichletBC, NeumannBC
 from .bvps import SimpleShearLinearRamp, UniaxialTensionLinearRamp
 from .cli import pancax_main
 from .constitutive_models import \
@@ -17,6 +17,7 @@ from .constitutive_models import \
     SimpleFeFv, \
     WLF
 from .data import FullFieldData, FullFieldDataLoader, GlobalData
+from .distance_functions import distance_function
 from .domains import \
     CollocationDataLoader, \
     CollocationDomain, \

@@ -1,5 +1,5 @@
 from jaxtyping import Array, Float, Int
-from pancax.fem import DofManager, FunctionSpace, Mesh, SimplexTriElement,\
+from pancax.fem import DofManager, FunctionSpace, Mesh, SimplexTriElement, \
     NonAllocatedFunctionSpace, QuadratureRule
 from pancax.fem import create_higher_order_mesh_from_simplex_mesh
 from pancax.fem import read_exodus_mesh

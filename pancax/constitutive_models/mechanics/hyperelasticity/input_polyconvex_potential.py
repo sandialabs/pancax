@@ -41,6 +41,7 @@ class InputPolyConvexPotential(HyperelasticModel):
                 activation_y=jax.nn.softplus,
                 key=key
             )
+
             def alpha_func(p):
                 return 0.01 * jax.random.normal(key, p.shape)
 
@@ -48,7 +49,7 @@ class InputPolyConvexPotential(HyperelasticModel):
                 lambda x: alpha_func(x),
                 eqx.partition(self.network, eqx.is_array)[0]
             )
-            
+
         elif len(key.shape) == 2:
             @eqx.filter_vmap
             def vmap_func(_key):
@@ -60,18 +61,17 @@ class InputPolyConvexPotential(HyperelasticModel):
                     activation_y=jax.nn.softplus,
                     key=_key
                 )
-            
+
             self.network = vmap_func(key)
         else:
             raise ValueError(
                 f"Invalid shape for key {key} with shape {key.shape}"
             )
 
-
     def energy(self, grad_u, theta, state_old, dt, *args):
         gate_key = args[0]
 
-        K = self.bulk_modulus
+        # K = self.bulk_modulus
         J = self.jacobian(grad_u)
         I1_bar = self.I1_bar(grad_u)
         I2_bar = self.I2_bar(grad_u)
@@ -101,7 +101,9 @@ class InputPolyConvexPotential(HyperelasticModel):
         )
         # TODO probably need to add dpsi/dJ to the term below
         # W_dev_s = 2. * (grad_W_dev_nn[0] + 2. * grad_W_dev_nn[1]) * (J - 1.)
-        W_dev_s = (2 * grad_W_dev_nn[0] + 4 * grad_W_dev_nn[1] + grad_W_dev_nn[2]) * (J - 1)
+        W_dev_s = (
+            2 * grad_W_dev_nn[0] + 4 * grad_W_dev_nn[1] + grad_W_dev_nn[2]
+        ) * (J - 1)
 
         # return W_vol + (W_dev_nn - W_dev_0 - W_dev_s), state_old
         return W_dev_nn - W_dev_0 - W_dev_s, state_old
@@ -113,7 +115,9 @@ class InputPolyConvexPotential(HyperelasticModel):
         def theta_func(theta_bar, log_alpha):
             u = jax.random.uniform(gate_key, theta_bar.shape)
             # log_alpha = 0.01 * jax.random.normal(sub_key, theta_bar.shape)
-            s = jax.nn.sigmoid((jnp.log(u) - jnp.log(1 - u) + log_alpha) / self.beta)
+            s = jax.nn.sigmoid(
+                (jnp.log(u) - jnp.log(1 - u) + log_alpha) / self.beta
+            )
             s_bar = (self.zeta - self.gamma) * s + self.gamma
             z = jnp.clip(s, 0.0, 1.0)
             theta = theta_bar * z

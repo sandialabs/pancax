@@ -9,6 +9,7 @@ def R():
 
 def numerical_grad(f):
     import jax.numpy as jnp
+
     def lam(A):
         df = jnp.zeros((3, 3))
         eps = 1e-7
@@ -176,7 +177,8 @@ def test_pow_scaled_identity():
 
     powVal = jnp.power(val, m)
     jnp.array_equal(
-        tensor_math.mtk_pow(C, m), jnp.diag(jnp.array([powVal, powVal, powVal]))
+        tensor_math.mtk_pow(C, m),
+        jnp.diag(jnp.array([powVal, powVal, powVal]))
     )
 
 
@@ -330,7 +332,6 @@ def test_logm_iss_on_matrix_near_identity():
 
 
 def test_logm_iss_on_double_degenerate_eigenvalues(R):
-    from jax.test_util import check_grads
     from pancax.math import tensor_math
     import jax.numpy as jnp
     eigvals = jnp.array([2.0, 0.5, 2.0])

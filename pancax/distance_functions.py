@@ -2,8 +2,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from jax import numpy as jnp
 from jax import vmap
-from typing import Dict, Iterable, List, Optional, Tuple, Union
-import jax
+from typing import Dict, Iterable, List, Optional
+# import jax
 import numpy as np
 
 
@@ -271,7 +271,8 @@ def iter_element_blocks(mesh) -> Iterable[ElementBlock]:
         # else:
         #     iterable = blocks
         if len(blocks.keys()) > 1:
-            assert False, "Probably only single block meshes are supported currently."
+            assert False, \
+                "Probably only single block meshes are supported currently."
 
         for block in blocks.keys():
             # elem_type = (
@@ -313,7 +314,8 @@ def iter_element_blocks(mesh) -> Iterable[ElementBlock]:
     if hasattr(mesh, "connectivity") and (
         hasattr(mesh, "elem_type") or hasattr(mesh, "elemType")
     ):
-        elem_type = getattr(mesh, "elem_type", None) or getattr(mesh, "elemType", None)
+        elem_type = getattr(mesh, "elem_type", None) or \
+            getattr(mesh, "elemType", None)
 
         yield ElementBlock(
             elem_type=normalize_elem_type(elem_type),
@@ -376,7 +378,9 @@ def build_element_lookup(mesh) -> Dict[int, ElementRecord]:
         n_elem = conn.shape[0]
 
         if block.elem_ids is None:
-            elem_ids = np.arange(next_elem_id, next_elem_id + n_elem, dtype=np.int64)
+            elem_ids = np.arange(
+                next_elem_id, next_elem_id + n_elem, dtype=np.int64
+            )
         else:
             elem_ids = np.asarray(block.elem_ids, dtype=np.int64)
 
@@ -391,7 +395,9 @@ def build_element_lookup(mesh) -> Dict[int, ElementRecord]:
     return lookup
 
 
-def orient_face_outward(face_nodes: np.ndarray, elem_conn: np.ndarray, coords: np.ndarray):
+def orient_face_outward(
+    face_nodes: np.ndarray, elem_conn: np.ndarray, coords: np.ndarray
+):
     """
     Orient a 3D face outward relative to its parent element.
 
@@ -519,7 +525,8 @@ def get_boundary_entities(
                 quad_faces = entities
             else:
                 raise ValueError(
-                    f"3D node-based side sets should have 3 or 4 nodes per face. "
+                    f"3D node-based side sets should have "
+                    f"3 or 4 nodes per face."
                     f"Got {entities.shape}."
                 )
 
@@ -743,11 +750,15 @@ def distance_function(
             pieces = []
 
             if tri_faces is not None:
-                phi_tri = vmap(triangle_face_adf, in_axes=(None, 0))(x, tri_faces)
+                phi_tri = vmap(triangle_face_adf, in_axes=(None, 0))(
+                    x, tri_faces
+                )
                 pieces.append(phi_tri)
 
             if quad_faces is not None:
-                phi_quad = vmap(quad_face_adf, in_axes=(None, 0))(x, quad_faces)
+                phi_quad = vmap(quad_face_adf, in_axes=(None, 0))(
+                    x, quad_faces
+                )
                 pieces.append(phi_quad)
 
             phi_all = jnp.concatenate(pieces, axis=0)

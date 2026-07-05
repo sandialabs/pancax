@@ -20,8 +20,8 @@ def dof_manager_test_fixture():
     mesh, _ = create_mesh_and_disp(Nx, Ny, xRange, yRange, lambda x: 0 * x)
 
     ebcs = [
-        DirichletBC(nodeSet="top", component=0),
-        DirichletBC(nodeSet="right", component=1),
+        DirichletBC(nset_name="top", component=0),
+        DirichletBC(nset_name="right", component=1),
     ]
 
     dofManager = DofManager(mesh, nFields, ebcs)
