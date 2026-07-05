@@ -266,35 +266,14 @@ def iter_element_blocks(mesh) -> Iterable[ElementBlock]:
     if hasattr(mesh, "blocks"):
         blocks = mesh.blocks
 
-        # if isinstance(blocks, dict):
-        #     iterable = blocks.values()
-        # else:
-        #     iterable = blocks
         if len(blocks.keys()) > 1:
             assert False, \
                 "Probably only single block meshes are supported currently."
 
         for block in blocks.keys():
-            # elem_type = (
-            #     getattr(block, "elem_type", None)
-            #     or getattr(block, "elemType", None)
-            #     or getattr(block, "type", None)
-            #     or getattr(block, "name", None)
-            # )
             elem_type = mesh.parentElement.elementType
-
-            # conn = (
-            #     getattr(block, "connectivity", None)
-            #     or getattr(block, "conn", None)
-            # )
-            # TODO fix this
+            # TODO fix this for multi block
             conn = mesh.conns
-
-            # elem_ids = (
-            #     getattr(block, "elem_ids", None)
-            #     or getattr(block, "elemIds", None)
-            #     or None
-            # )
             elem_ids = blocks[block]
             print(conn)
             if elem_type is None or conn is None:

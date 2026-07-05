@@ -10,9 +10,16 @@ SetName = Union[None, str]
 # class BaseBC(eqx.Module):
 #     function: BCFunc
 
+class BCFunction(eqx.Module):
+    func: BCFunc
+
+    def __call__(self, x, t):
+        return self.bc_func(x, t)
+
 
 class DirichletBC(eqx.Module):
-    function: BCFunc
+    # function: BCFunc
+    function: BCFunction
     block_name: SetName
     nset_name: SetName
     sset_name: SetName
@@ -27,7 +34,7 @@ class DirichletBC(eqx.Module):
         sset_name: Optional[SetName] = None
     ) -> None:
         self.component = component
-        self.function = function
+        self.function = BCFunction(function)
         self.block_name = block_name
         self.nset_name = nset_name
         self.sset_name = sset_name
