@@ -12,6 +12,8 @@ def get_lobatto_nodes_1d(degree):
     dp = p.deriv()
     xInterior = dp.roots()
     xn = jnp.hstack((jnp.array([0.0]), xInterior, jnp.array([1.0])))
+    if jnp.iscomplexobj(xn):
+        xn = jnp.real(xn)
     return xn
 
 

@@ -23,13 +23,13 @@ class SimplexTriElement(BaseElement):
         for i in range(degree):
             for j in range(degree + 1 - i):
                 k = degree - i - j
-                points[point, 0] = (
-                    1.0 + 2.0 *
-                    lobattoPoints[k] - lobattoPoints[j] - lobattoPoints[i]
+                points[point, 0] = (\
+                    1.0 + 2.0 *\
+                    lobattoPoints[k] - lobattoPoints[j] - lobattoPoints[i]\
                 ) / 3.0
-                points[point, 1] = (
-                    1.0 + 2.0 *
-                    lobattoPoints[j] - lobattoPoints[i] - lobattoPoints[k]
+                points[point, 1] = (\
+                    1.0 + 2.0 *\
+                    lobattoPoints[j] - lobattoPoints[i] - lobattoPoints[k]\
                 ) / 3.0
                 point += 1
         self.coordinates = jnp.asarray(points)

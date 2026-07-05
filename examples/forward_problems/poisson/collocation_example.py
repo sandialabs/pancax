@@ -1,30 +1,12 @@
 from pancax import *
 
-##################
-# for reproducibility
-##################
 key = random.PRNGKey(10)
-
-##################
-# file management
-##################
 mesh_file = find_mesh_file('mesh_quad4.g')
 pp = PostProcessor(mesh_file, 'exodus')
-
-##################
-# domain setup
-##################
 times = jnp.linspace(0.0, 0.0, 1)
 domain = CollocationDomain(mesh_file, times)
-
-##################
-# physics setup
-##################
 physics = Poisson(lambda x: 2 * jnp.pi**2 * jnp.sin(2. * jnp.pi * x[0]) * jnp.sin(2. * jnp.pi * x[1]))
 
-##################
-# bcs
-##################
 def bc_func(x, t, z):
   x, y = x[0], x[1]
   return x * (1. - x) * y * (1. - y) * z
@@ -40,14 +22,7 @@ essential_bcs = [
 natural_bcs = [
 ]
 
-##################
-# problem setup
-##################
 problem = ForwardProblem(domain, physics, ics, essential_bcs, natural_bcs)
-
-##################
-# ML setup
-##################
 params = Parameters(problem, key, dirichlet_bc_func=bc_func, network_type=ResNet)
 
 def loss_function(params, problem, inputs, outputs):

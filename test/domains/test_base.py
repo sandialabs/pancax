@@ -1,6 +1,6 @@
 def test_simulation_times_unique_exception():
-    from pancax.domains.base import BaseDomain
-    from pancax.domains.base import \
+    from pancax.domains import BaseDomain
+    from pancax.domains import \
         SimulationTimesNotUniqueException
     from pathlib import Path
     import jax.numpy as jnp
@@ -14,8 +14,8 @@ def test_simulation_times_unique_exception():
 
 
 def test_simulation_times_not_strictly_increasing():
-    from pancax.domains.base import BaseDomain
-    from pancax.domains.base import \
+    from pancax.domains import BaseDomain
+    from pancax.domains import \
         SimulationTimesNotStrictlyIncreasingException
     from pathlib import Path
     import jax.numpy as jnp

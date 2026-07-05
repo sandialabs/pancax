@@ -1,5 +1,5 @@
 # from .bcs import *
-from .bcs import DirichletBC, NeumannBC
+from .bcs import DirichletBC, distance_function, NeumannBC
 from .bvps import SimpleShearLinearRamp, UniaxialTensionLinearRamp
 from .cli import pancax_main
 from .constitutive_models import \
@@ -97,6 +97,7 @@ import os
 __all__ = [
     # bcs
     "DirichletBC",
+    "distance_function",
     "NeumannBC",
     # bvps
     "SimpleShearLinearRamp",

@@ -7,34 +7,32 @@ import jax
 import numpy as np
 
 
-SIDE_NODES_2D = {
+SIDE_NODES = {
     "TRI3": {
-        1: [0, 1],
-        2: [1, 2],
-        3: [2, 0],
+        0: [0, 1],
+        1: [1, 2],
+        2: [2, 0],
     },
     "QUAD4": {
-        1: [0, 1],
-        2: [1, 2],
-        3: [2, 3],
-        4: [3, 0],
+        0: [0, 1],
+        1: [1, 2],
+        2: [2, 3],
+        3: [3, 0],
     },
-}
-SIDE_NODES_3D = {
     "TET4": {
-        1: [0, 1, 3],
-        2: [1, 2, 3],
-        3: [0, 3, 2],
-        4: [0, 2, 1],
+        0: [0, 1, 3],
+        1: [1, 2, 3],
+        2: [0, 3, 2],
+        3: [0, 2, 1],
     },
     "HEX8": {
         # Bottom, top, front, right, back, left for standard HEX8.
-        1: [0, 3, 2, 1],
-        2: [4, 5, 6, 7],
-        3: [0, 1, 5, 4],
-        4: [1, 2, 6, 5],
-        5: [2, 3, 7, 6],
-        6: [3, 0, 4, 7],
+        0: [0, 3, 2, 1],
+        1: [4, 5, 6, 7],
+        2: [0, 1, 5, 4],
+        3: [1, 2, 6, 5],
+        4: [2, 3, 7, 6],
+        5: [3, 0, 4, 7],
     },
 }
 
@@ -264,75 +262,40 @@ def iter_element_blocks(mesh) -> Iterable[ElementBlock]:
         numbered consecutively in block order.
     """
 
-    # Case 1: mesh.elementBlocks is a dict or list.
-    if hasattr(mesh, "elementBlocks"):
-        blocks = mesh.elementBlocks
-
-        if isinstance(blocks, dict):
-            iterable = blocks.values()
-        else:
-            iterable = blocks
-
-        for block in iterable:
-            elem_type = (
-                getattr(block, "elem_type", None)
-                or getattr(block, "elemType", None)
-                or getattr(block, "type", None)
-                or getattr(block, "name", None)
-            )
-
-            conn = (
-                getattr(block, "connectivity", None)
-                or getattr(block, "conn", None)
-            )
-
-            elem_ids = (
-                getattr(block, "elem_ids", None)
-                or getattr(block, "elemIds", None)
-                or None
-            )
-
-            if elem_type is None or conn is None:
-                raise AttributeError(
-                    "Could not infer elem_type/connectivity from mesh.elementBlocks."
-                )
-
-            yield ElementBlock(
-                elem_type=normalize_elem_type(elem_type),
-                connectivity=np.asarray(conn),
-                elem_ids=None if elem_ids is None else np.asarray(elem_ids),
-            )
-
-        return
-
     # Case 2: mesh.blocks is a dict or list.
     if hasattr(mesh, "blocks"):
         blocks = mesh.blocks
 
-        if isinstance(blocks, dict):
-            iterable = blocks.values()
-        else:
-            iterable = blocks
+        # if isinstance(blocks, dict):
+        #     iterable = blocks.values()
+        # else:
+        #     iterable = blocks
+        if len(blocks.keys()) > 1:
+            assert False, "Probably only single block meshes are supported currently."
 
-        for block in iterable:
-            elem_type = (
-                getattr(block, "elem_type", None)
-                or getattr(block, "elemType", None)
-                or getattr(block, "type", None)
-                or getattr(block, "name", None)
-            )
+        for block in blocks.keys():
+            # elem_type = (
+            #     getattr(block, "elem_type", None)
+            #     or getattr(block, "elemType", None)
+            #     or getattr(block, "type", None)
+            #     or getattr(block, "name", None)
+            # )
+            elem_type = mesh.parentElement.elementType
 
-            conn = (
-                getattr(block, "connectivity", None)
-                or getattr(block, "conn", None)
-            )
+            # conn = (
+            #     getattr(block, "connectivity", None)
+            #     or getattr(block, "conn", None)
+            # )
+            # TODO fix this
+            conn = mesh.conns
 
-            elem_ids = (
-                getattr(block, "elem_ids", None)
-                or getattr(block, "elemIds", None)
-                or None
-            )
-
+            # elem_ids = (
+            #     getattr(block, "elem_ids", None)
+            #     or getattr(block, "elemIds", None)
+            #     or None
+            # )
+            elem_ids = blocks[block]
+            print(conn)
             if elem_type is None or conn is None:
                 raise AttributeError(
                     "Could not infer elem_type/connectivity from mesh.blocks."
@@ -507,7 +470,7 @@ def get_boundary_entities(
     -------
     BoundaryEntities
     """
-    mesh = domain.fspace.mesh
+    mesh = domain.mesh
     coords = np.asarray(mesh.coords)
     spatial_dim = coords.shape[1]
 
@@ -607,12 +570,12 @@ def get_boundary_entities(
                 elem_type = rec.elem_type
                 conn = rec.conn
 
-                if elem_type not in SIDE_NODES_2D:
+                if elem_type not in SIDE_NODES:
                     raise ValueError(
                         f"Element type {elem_type} is not a supported 2D element."
                     )
 
-                local_nodes = SIDE_NODES_2D[elem_type][side_id]
+                local_nodes = SIDE_NODES[elem_type][side_id]
                 edge_nodes = conn[local_nodes]
                 edges.append(edge_nodes)
 
@@ -636,12 +599,12 @@ def get_boundary_entities(
                 elem_type = rec.elem_type
                 conn = rec.conn
 
-                if elem_type not in SIDE_NODES_3D:
+                if elem_type not in SIDE_NODES:
                     raise ValueError(
                         f"Element type {elem_type} is not a supported 3D element."
                     )
 
-                local_nodes = SIDE_NODES_3D[elem_type][side_id]
+                local_nodes = SIDE_NODES[elem_type][side_id]
                 face_nodes = conn[local_nodes]
 
                 # Orient face outward relative to parent element.
@@ -734,7 +697,7 @@ def distance_function(
         Function mapping X with shape (n_points, dim) to phi values
         with shape (n_points,).
     """
-    mesh = domain.fspace.mesh
+    mesh = domain.mesh
     coords_np = np.asarray(mesh.coords)
     spatial_dim = coords_np.shape[1]
 
@@ -758,7 +721,8 @@ def distance_function(
             phi_edges = vmap(line_segment_adf, in_axes=(None, 0))(x, segments)
             return r_equiv_combine(phi_edges, m=m)
 
-        return vmap(phi_one)
+        # return vmap(phi_one)
+        return phi_one
 
     elif spatial_dim == 3:
         tri_faces = None
