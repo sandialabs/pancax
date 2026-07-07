@@ -104,7 +104,9 @@ class SolidMechanics(BaseEnergyFormPhysics):
         grad_u = self.formulation.modify_field_gradient(
             self.constitutive_model, grad_u, theta, state_old, dt
         )
-        return self.constitutive_model.energy(grad_u, theta, state_old, dt)
+        return self.constitutive_model.energy(
+            grad_u, theta, state_old, dt, *args
+        )
 
     @property
     def num_state_variables(self):

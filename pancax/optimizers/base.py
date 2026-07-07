@@ -55,7 +55,12 @@ class AbstractOptimizer(eqx.Module):
 
         @eqx.filter_vmap(in_axes=(eqx.if_array(0),))
         def vmap_func(p):
-            return self.opt.init(eqx.filter(p, eqx.is_array))
+            trainable_params = eqx.filter(params, filter_spec)
+            trainable_params = eqx.filter(
+                trainable_params, eqx.is_inexact_array
+            )
+            opt_st = self.opt.init(trainable_params)
+            return opt_st
 
         opt_st = vmap_func(params)
 
@@ -71,7 +76,9 @@ class AbstractOptimizer(eqx.Module):
             lambda x: x.step, self, step,
             is_leaf=lambda x: x is None
         )
-        opt_st = self.opt.init(eqx.filter(params, eqx.is_array))
+        trainable_params = eqx.filter(params, filter_spec)
+        trainable_params = eqx.filter(trainable_params, eqx.is_inexact_array)
+        opt_st = self.opt.init(trainable_params)
         return self, opt_st
 
     def init(self, params, filter_spec: Optional[Callable] = None):

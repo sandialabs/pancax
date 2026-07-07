@@ -22,12 +22,12 @@ def problem():
     ]
     # essential_bc_func = lambda x, t, z: z
     essential_bcs = [
-        DirichletBC('nset_4', 0),
-        DirichletBC('nset_4', 1),
-        DirichletBC('nset_4', 2),
-        DirichletBC('nset_6', 0),
-        DirichletBC('nset_6', 1),
-        DirichletBC('nset_6', 2)
+        DirichletBC(nset_name="nset_4", component=0),
+        DirichletBC(nset_name="nset_4", component=1),
+        DirichletBC(nset_name="nset_4", component=2),
+        DirichletBC(nset_name="nset_6", component=0),
+        DirichletBC(nset_name="nset_6", component=1),
+        DirichletBC(nset_name="nset_6", component=2)
     ]
     natural_bcs = [
     ]

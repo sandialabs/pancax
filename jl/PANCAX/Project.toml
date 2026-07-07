@@ -1,0 +1,12 @@
+name = "PANCAX"
+uuid = "a6492935-b5e1-4737-b8b4-650924122f74"
+version = "0.1.0"
+authors = ["Craig M. Hamel <chamel@sandia.gov>"]
+
+[deps]
+Exodus = "f57ae99e-f805-4780-bdca-96e224be1e5a"
+Reactant = "3c362404-f566-11ee-1572-e11a4b42c853"
+
+[compat]
+Exodus = "0.14.2"
+Reactant = "0.2.253"

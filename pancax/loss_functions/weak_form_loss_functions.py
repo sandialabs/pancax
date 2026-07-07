@@ -31,21 +31,21 @@ class EnergyLoss(PhysicsLossFunction):
         self.use_fori_loop = use_fori_loop
         self.weight = weight
 
-    def __call__(self, params, problem):
+    def __call__(self, params, problem, *args):
         if self.is_path_dependent:
-            return self.path_dependent_call(params, problem)
+            return self.path_dependent_call(params, problem, *args)
         else:
-            return self.path_independent_call(params, problem)
+            return self.path_independent_call(params, problem, *args)
 
-    def load_step(self, params, problem, t, dt, state_old):
+    def load_step(self, params, problem, t, dt, state_old, *args):
         field, physics, state = params
         us = physics.vmap_field_values(field, problem.coords, t)
         pi, state_new = physics.potential_energy(
-            physics, problem.domain, t, us, state_old, dt
+            physics, problem.domain, t, us, state_old, dt, *args
         )
         return pi, state_new
 
-    def path_dependent_call(self, params, problem):
+    def path_dependent_call(self, params, problem, *args):
         state_old = self.state_variable_init(problem)
         dt = problem.times[1] - problem.times[0]
         pi = 0.0
@@ -53,7 +53,9 @@ class EnergyLoss(PhysicsLossFunction):
         def body(n, carry):
             pi, state_old, dt = carry
             t = problem.times[n]
-            pi_t, state_new = self.load_step(params, problem, t, dt, state_old)
+            pi_t, state_new = self.load_step(
+                params, problem, t, dt, state_old, *args
+            )
             pi = pi + pi_t
             state_old = state_new
             dt = problem.times[n] - problem.times[n - 1]
@@ -69,12 +71,15 @@ class EnergyLoss(PhysicsLossFunction):
         loss = pi
         return self.weight * loss, dict(energy=pi)
 
-    def path_independent_call(self, params, problem):
+    def path_independent_call(self, params, problem, *args):
         state_old = self.state_variable_init(problem)
         dt = problem.times[1] - problem.times[0]
+        in_axes = (None, None, 0, None, None) + len(args) * (None,)
+
         energies, state_news = vmap(
             self.load_step,
-            in_axes=(None, None, 0, None, None)
+            # in_axes=(None, None, 0, None, None)
+            in_axes=in_axes
         )(
             params, problem, problem.times, dt, state_old
         )
@@ -89,14 +94,16 @@ class ResidualMSELoss(PhysicsLossFunction):
     def __init__(self, weight: Optional[float] = 1.0):
         self.weight = weight
 
-    def __call__(self, params, domain):
-        mses = vmap(self.load_step, in_axes=(None, None, 0))(
-            params, domain, domain.times
+    def __call__(self, params, domain, *args):
+        in_axes = (None, None, 0) + len(args) * (None,)
+        # mses = vmap(self.load_step, in_axes=(None, None, 0))(
+        mses = vmap(self.load_step, in_axes=in_axes)(
+            params, domain, domain.times, *args
         )
         mse = mses.mean()
         return self.weight * mse, dict(residual=mse)
 
-    def load_step(self, params, domain, t):
+    def load_step(self, params, domain, t, *args):
         field, physics, state = params
         us = physics.vmap_field_values(field, domain.coords, t)
         rs = jnp.linalg.norm(physics.vmap_element_residual(
@@ -226,13 +233,13 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
         self.reaction_weight = reaction_weight
         self.use_fori_loop = use_fori_loop
 
-    def __call__(self, params, problem):
+    def __call__(self, params, problem, *args):
         if self.is_path_dependent:
-            return self.path_dependent_call(params, problem)
+            return self.path_dependent_call(params, problem, *args)
         else:
-            return self.path_independent_call(params, problem)
+            return self.path_independent_call(params, problem, *args)
 
-    def path_dependent_call(self, params, problem):
+    def path_dependent_call(self, params, problem, *args):
         state_old = self.state_variable_init(problem)
         dt = problem.times[1] - problem.times[0]
         pi = 0.0
@@ -243,7 +250,7 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
             pi, state_old, dt, R, reaction = carry
             t = problem.times[n]
             (pi_t, state_new), R_t, reaction_t = \
-                self.load_step(params, problem, t, dt, state_old)
+                self.load_step(params, problem, t, dt, state_old, *args)
             pi = pi + pi_t
             R = R + R_t
             reaction = reaction + \
@@ -268,13 +275,16 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
             global_data_loss=reaction / len(problem.times)
         )
 
-    def path_independent_call(self, params, problem):
+    def path_independent_call(self, params, problem, *args):
         state_old = self.state_variable_init(problem)
         dt = problem.times[1] - problem.times[0]
+        in_axes = (None, None, 0, None, None) + len(args) * (None,)
         (pis, states_new), Rs, reactions = vmap(
             self.load_step,
-            in_axes=(None, None, 0, None, None))(
-            params, problem, problem.times, dt, state_old
+            # in_axes=(None, None, 0, None, None))(
+            in_axes=in_axes
+        )(
+            params, problem, problem.times, dt, state_old, *args
         )
         pi, R = jnp.sum(pis), jnp.sum(Rs) / len(problem.times)
         reaction_loss = \
@@ -289,10 +299,10 @@ class EnergyResidualAndReactionLoss(PhysicsLossFunction):
             global_data_loss=reaction_loss, reactions=reactions
         )
 
-    def load_step(self, params, problem, t, dt, state_old):
+    def load_step(self, params, problem, t, dt, state_old, *args):
         field, physics, state = params
         us = physics.vmap_field_values(field, problem.coords, t)
         return physics.potential_energy_residual_and_reaction_force(
             params, problem.domain, t, us, state_old, dt,
-            problem.global_data
+            problem.global_data, *args
         )

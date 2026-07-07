@@ -17,6 +17,7 @@ from .constitutive_models import \
     SimpleFeFv, \
     WLF
 from .data import FullFieldData, FullFieldDataLoader, GlobalData
+from .distance_functions import distance_function
 from .domains import \
     CollocationDataLoader, \
     CollocationDomain, \
@@ -97,6 +98,7 @@ import os
 __all__ = [
     # bcs
     "DirichletBC",
+    "distance_function",
     "NeumannBC",
     # bvps
     "SimpleShearLinearRamp",

@@ -1,15 +1,13 @@
-from jax import vmap
-from pancax.fem import (
-    construct_mesh_from_basic_data,
-    create_structured_mesh_data
-)
-from pancax.fem.surface import create_edges
-import jax.numpy as jnp
-
-
 def create_mesh_and_disp(
     Nx, Ny, xRange, yRange, initial_disp_func, setNamePostFix=""
 ):
+    from jax import vmap
+    from pancax.fem import (
+        construct_mesh_from_basic_data,
+        create_structured_mesh_data
+    )
+    from pancax.fem.surface import create_edges
+    import jax.numpy as jnp
     coords, conns = create_structured_mesh_data(Nx, Ny, xRange, yRange)
     tol = 1e-7
     nodeSets = {}

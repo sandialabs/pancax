@@ -1,6 +1,6 @@
 [project]
 name = 'pancax'
-version = '0.0.15'
+version = '0.0.16'
 authors = [
   {name = 'Craig M. Hamel, email = <chamel@sandia.gov>'}
 ]
@@ -16,13 +16,13 @@ dependencies = [
 [project.optional-dependencies]
 cpu = [
   'equinox~=0.13',
-  'jax~=0.8.1',
+  'jax~=0.10.2',
   'jaxtyping',
   'optax'
 ]
 cuda = [
   'equinox~=0.13',
-  'jax[cuda12]~=0.8.1',
+  'jax[cuda12]~=0.10.2',
   'jaxtyping',
   'optax'
 ]

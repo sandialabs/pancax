@@ -1,6 +1,3 @@
-# from pancax import GlobalData
-# from pathlib import Path
-# import os
 import pytest
 
 
@@ -83,7 +80,7 @@ def test_global_data_bad_reaction_dof():
 
 def test_global_data_times_not_unique_exception():
     from pancax import GlobalData
-    from pancax.data.global_data import \
+    from pancax.data import \
         GlobalDataTimesNotUniqueException
     from pathlib import Path
     import os
@@ -106,7 +103,7 @@ def test_global_data_times_not_unique_exception():
 
 def test_global_data_times_not_strictly_increasing():
     from pancax import GlobalData
-    from pancax.data.global_data import \
+    from pancax.data import \
         GlobalDataTimesNotStrictlyIncreasingException
     from pathlib import Path
     import os

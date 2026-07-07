@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from pancax.domains.variational_domain import VariationalDomain
 from typing import List
 import equinox as eqx
 import jax
@@ -260,7 +259,8 @@ class ExodusPostProcessor(BasePostProcessor):
         )
         # calculate something with state update at least once to update
         # state later
-        if type(problem.domain) is VariationalDomain:
+        # if type(problem.domain) is VariationalDomain:
+        if hasattr(problem.domain, "fspace"):
             _, state_new = physics.potential_energy(
                 params, problem.domain, time, us, state_old, dt
             )

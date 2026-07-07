@@ -1,9 +1,8 @@
-from pancax.math import math
-import jax
-import jax.numpy as jnp
-
-
 def test_safe_sqrt():
+    from pancax.math import math
+    import jax
+    import jax.numpy as jnp
+
     f = math.safe_sqrt(4.0)
     assert jnp.allclose(f, 2.0)
 
@@ -18,11 +17,16 @@ def test_safe_sqrt():
 
 
 def test_sum2():
+    from pancax.math import math
+    import jax.numpy as jnp
     a = jnp.arange(101)
     assert jnp.allclose(math.sum2(a), 100 * (100 + 1) / 2)
 
 
 def test_dot2():
+    from pancax.math import math
+    import jax
+    import jax.numpy as jnp
     key1 = jax.random.PRNGKey(0)
     key2 = jax.random.PRNGKey(1)
     a = jax.random.uniform(key1, (100,), minval=1e-8, maxval=10.0)

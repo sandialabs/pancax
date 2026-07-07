@@ -1,14 +1,4 @@
-# from sys import float_info
-# import jax
-# import jax.numpy as jnp
-# import pancax.math.scalar_root_find as ScalarRootFind
 import pytest
-
-# from scipy.optimize import minimize_scalar, root_scalar # for comparison
-# from scipy.optimize import OptimizeResult
-
-# from optimism import ScalarRootFind
-# from . import TestFixture
 
 
 def f(x):

@@ -7,10 +7,13 @@ import jax.numpy as jnp
 
 
 class MechanicsModel(ConstitutiveModel):
-    def cauchy_stress(self, grad_u: Tensor, theta, state_old, dt) -> Tensor:
+    def cauchy_stress(
+        self,
+        grad_u: Tensor, theta, state_old, dt, *args
+    ) -> Tensor:
         F = self.deformation_gradient(grad_u)
         J = self.jacobian(grad_u)
-        P, state_new = self.pk1_stress(grad_u, theta, state_old, dt)
+        P, state_new = self.pk1_stress(grad_u, theta, state_old, dt, *args)
         return (1.0 / J) * P @ F.T, state_new
 
     def deformation_gradient(self, grad_u: Tensor) -> Tensor:
@@ -18,7 +21,7 @@ class MechanicsModel(ConstitutiveModel):
         return F
 
     @abstractmethod
-    def energy(self, grad_u: Tensor, theta, state_old, dt) -> Scalar:
+    def energy(self, grad_u: Tensor, theta, state_old, dt, *args) -> Scalar:
         """
         This method returns the algorithmic strain energy density.
         """
@@ -106,9 +109,12 @@ class MechanicsModel(ConstitutiveModel):
         C = F.T @ F
         return tensor_math.mtk_log_sqrt(C)
 
-    def pk1_stress(self, grad_u: Tensor, theta, state_old, dt) -> Tensor:
+    def pk1_stress(
+        self,
+        grad_u: Tensor, theta, state_old, dt, *args
+    ) -> Tensor:
         return jax.jacfwd(self.energy, argnums=0)(
-            grad_u, theta, state_old, dt
+            grad_u, theta, state_old, dt, *args
         )
 
 
