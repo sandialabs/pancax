@@ -29,3 +29,4 @@ venv/
 dd_solver.dat
 krylov_solver.dat
 .vscode/
+Manifest.toml

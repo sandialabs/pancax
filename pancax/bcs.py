@@ -45,11 +45,6 @@ class DirichletBC(eqx.Module):
         return coords[nodes, :]
 
 
-# # DO we need this anymore?
-# class DirichletBCSet(eqx.Module):
-#     bcs: List[DirichletBC]
-
-
 class NeumannBC(eqx.Module):
     sideset: str
     function: Optional[BCFunc] = lambda x, t: 0.0
