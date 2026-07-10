@@ -18,13 +18,15 @@ cpu = [
   'equinox~=0.13',
   'jax~=0.10.2',
   'jaxtyping',
-  'optax'
+  'optax',
+  'optimistix'
 ]
 cuda = [
   'equinox~=0.13',
   'jax[cuda12]~=0.10.2',
   'jaxtyping',
-  'optax'
+  'optax',
+  'optimistix'
 ]
 dev = [
   'flake8',

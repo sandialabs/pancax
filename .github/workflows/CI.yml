@@ -10,10 +10,9 @@ jobs:
         os:
         - ubuntu-latest
         python-version:
-        - '3.10'
         - '3.11'
         - '3.12'
-        # - '3.13'
+        - '3.13'
     runs-on: ${{ matrix.os }}
     steps:
     - name: checkout
@@ -25,7 +24,7 @@ jobs:
       run: |
         python -m venv venv
         . venv/bin/activate
-        pip install .[cpu,dev,viz]
+        pip install .[cpu,dev]
         JAX_ENABLE_X64=true pytest test --cov=pancax --cov-report=xml --cov-report=term
     - name: codecov
       uses: codecov/codecov-action@v4

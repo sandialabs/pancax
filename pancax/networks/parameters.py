@@ -2,7 +2,8 @@ from .base import AbstractPancaxModel
 from .fields import Field
 from .mlp import MLP
 from jaxtyping import Array, Float
-from typing import Callable, Optional, Union
+from .trial_function import TrialFunction
+from typing import Callable, List, Optional, Union
 import equinox as eqx
 import jax.tree_util as jtu
 
@@ -107,6 +108,109 @@ class Parameters(AbstractPancaxModel):
         self.is_ensemble = is_ensemble
         self.n_ensemble = n_ensemble
         self.parameters = parameters
+
+    def __iter__(self):
+        return iter((self.fields, self.physics, self.state))
+
+    @property
+    def fields(self):
+        return self.parameters.fields
+
+    @property
+    def physics(self):
+        return self.parameters.physics
+
+    @property
+    def state(self):
+        return self.parameters.state
+
+    def freeze_fields_filter(self):
+        filter_spec = jtu.tree_map(lambda _: True, self)
+        fields_filter = jtu.tree_map(lambda _: False, self.parameters.fields)
+        filter_spec = eqx.tree_at(
+            lambda x: x.parameters.fields, filter_spec, fields_filter
+        )
+
+        # freeze normalization
+        filter_spec = eqx.tree_at(
+            lambda x: x.parameters.fields.x_mins, filter_spec, replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda x: x.parameters.fields.x_maxs, filter_spec, replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda x: x.parameters.fields.t_min, filter_spec, replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda x: x.parameters.fields.t_max, filter_spec, replace=False
+        )
+        return filter_spec
+
+    # Move some of below to actually network implementation
+    def freeze_physics_filter(self):
+        filter_spec = jtu.tree_map(lambda _: True, self)
+        physics_filter = jtu.tree_map(lambda _: False, self.parameters.physics)
+        filter_spec = eqx.tree_at(
+            lambda x: x.parameters.physics, filter_spec, physics_filter
+        )
+        return filter_spec
+
+    def freeze_physics_normalization_filter(self):
+        filter_spec = jtu.tree_map(lambda _: True, self)
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.parameters.fields.x_mins, filter_spec,
+            replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.parameters.fields.x_maxs, filter_spec,
+            replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.parameters.fields.t_min, filter_spec,
+            replace=False
+        )
+        filter_spec = eqx.tree_at(
+            lambda tree: tree.parameters.fields.t_max, filter_spec,
+            replace=False
+        )
+        return filter_spec
+
+
+class _Parameters_v2(AbstractPancaxModel):
+    fields: any
+    physics: eqx.Module
+    state: State
+
+    def __init__(self, physics, trial_function) -> None:
+        self.fields = trial_function
+        self.physics = physics
+        self.state = None
+
+    def __iter__(self):
+        return iter((self.fields, self.physics, self.state))
+
+
+class Parameters_v2(AbstractPancaxModel):
+    is_ensemble: bool = eqx.field(static=True)
+    n_ensemble: int = eqx.field(static=True)
+    parameters: Union[_Parameters, List[_Parameters]]
+
+    def __init__(self, key, problem, network) -> None:
+        if len(key.shape) == 2:
+            self.is_ensemble = True
+            self.n_ensemble = key.shape[0]
+
+            @eqx.filter_vmap
+            def vmap_func(p, n):
+                t = TrialFunction(problem, n)
+                return _Parameters_v2(p, t)
+
+            self.parameters = vmap_func(problem.physics, network)
+        else:
+            t = TrialFunction(problem, network)
+            self.is_ensemble = False
+            self.n_ensemble = 1
+            self.parameters = _Parameters_v2(problem.physics, t)
 
     def __iter__(self):
         return iter((self.fields, self.physics, self.state))

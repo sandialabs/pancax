@@ -78,11 +78,6 @@ class Field(AbstractPancaxModel):
     # def __call__(self, x):
     def __call__(self, x, t):
         x_norm = (x - self.x_mins) / (self.x_maxs - self.x_mins)
-
-        # if self.normalize_time:
-        #     t_norm = (t - self.t_min) / (self.t_max - self.t_min)
-        # else:
-        #     t_norm = t
         t_norm = jax.lax.cond(
             self.normalize_time,
             lambda z: (z - self.t_min) / (self.t_max - self.t_min),

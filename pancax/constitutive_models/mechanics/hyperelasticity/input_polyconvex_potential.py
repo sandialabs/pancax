@@ -119,7 +119,7 @@ class InputPolyConvexPotential(HyperelasticModel):
                 (jnp.log(u) - jnp.log(1 - u) + log_alpha) / self.beta
             )
             s_bar = (self.zeta - self.gamma) * s + self.gamma
-            z = jnp.clip(s, 0.0, 1.0)
+            z = jnp.clip(s_bar, 0.0, 1.0)
             theta = theta_bar * z
             return theta
 
@@ -132,11 +132,12 @@ class InputPolyConvexPotential(HyperelasticModel):
 
     def l0_regularization_gate_test(self, gate_key):
         params, static = eqx.partition(self.network, eqx.is_array)
-        
+
         def theta_func(theta_bar, log_alpha):
-            u = jax.random.uniform(gate_key, theta_bar.shape)
+            # u = jax.random.uniform(gate_key, theta_bar.shape)
             # log_alpha = 0.01 * jax.random.normal(gate_key, theta_bar.shape)
-            s = jax.nn.sigmoid(log_alpha) * (self.zeta - self.gamma) + self.gamma
+            s = jax.nn.sigmoid(log_alpha) *\
+                (self.zeta - self.gamma) + self.gamma
             z_hat = jnp.clip(s)
             return theta_bar * z_hat
 
@@ -149,10 +150,13 @@ class InputPolyConvexPotential(HyperelasticModel):
 
     def l0_regularization_term(self, gate_key, lambda_):
         params, _ = eqx.partition(self.network, eqx.is_array)
+
         def theta_func(theta_bar, log_alpha):
             # log_alpha = 0.01 * jax.random.normal(gate_key, theta_bar.shape)
-            return jax.nn.sigmoid(log_alpha - self.beta * jnp.log(-self.gamma / self.zeta))
-        
+            return jax.nn.sigmoid(
+                log_alpha - self.beta * jnp.log(-self.gamma / self.zeta)
+            )
+
         reg_terms = jax.tree.map(
             lambda x, y: theta_func(x, y),
             params, self.log_alpha
@@ -174,4 +178,3 @@ class InputPolyConvexPotential(HyperelasticModel):
             self.network.parameter_enforcement()
         )
         return self
-
