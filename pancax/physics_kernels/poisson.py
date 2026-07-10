@@ -6,10 +6,12 @@ import jax.numpy as jnp
 class Poisson(BaseEnergyFormPhysics, BaseStrongFormPhysics):
     field_value_names: tuple[str, ...] = "u"
     f: Callable
+    props: any
 
     def __init__(self, f: Callable) -> None:
         super().__init__(("u"))
         self.f = f
+        self.props = jnp.zeros(0)
 
     def energy(self, params, x, t, u, grad_u, state_old, dt, *args):
         f = self.f(x)

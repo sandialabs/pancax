@@ -7,6 +7,14 @@ import jax.numpy as jnp
 
 
 class BaseLossFunction(eqx.Module):
+    # @eqx.filter_vmap(in_axes=(eqx.if_array(0), None, None, None))
+    @eqx.filter_vmap
+    def filtered_ensemble_loss(
+        self, diff_params, static_params, *args, **kwargs
+    ):
+        params = eqx.combine(diff_params, static_params)
+        return self.__call__(params, *args, **kwargs)
+
     """
     Base class for loss functions.
     Currently does nothing but helps build a

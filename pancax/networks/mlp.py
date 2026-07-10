@@ -51,6 +51,7 @@ class MLP(AbstractPancaxModel):
 
     def __init__(
         self,
+        # key: jax.random.PRNGKey,
         n_inputs: int,
         n_outputs: int,
         n_neurons: int,

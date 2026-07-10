@@ -6,6 +6,7 @@ from .mlp import MLP
 from .mlp import MLPBasis
 from .parameters import Parameters
 from .resnet import ResNet
+from .trial_function import TrialFunction
 
 
 __all__ = [
@@ -16,5 +17,6 @@ __all__ = [
     "MLP",
     "MLPBasis",
     "Parameters",
-    "ResNet"
+    "ResNet",
+    "TrialFunction"
 ]

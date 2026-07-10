@@ -558,7 +558,8 @@ def get_boundary_entities(
 
                 if elem_type not in SIDE_NODES:
                     raise ValueError(
-                        f"Element type {elem_type} is not a supported 2D element."
+                        f"Element type {elem_type} is not a"
+                        " supported 2D element."
                     )
 
                 local_nodes = SIDE_NODES[elem_type][side_id]
@@ -587,7 +588,8 @@ def get_boundary_entities(
 
                 if elem_type not in SIDE_NODES:
                     raise ValueError(
-                        f"Element type {elem_type} is not a supported 3D element."
+                        f"Element type {elem_type} is not a"
+                        " supported 3D element."
                     )
 
                 local_nodes = SIDE_NODES[elem_type][side_id]
@@ -601,7 +603,9 @@ def get_boundary_entities(
                 elif len(face_nodes) == 4:
                     quad_faces.append(face_nodes)
                 else:
-                    raise ValueError("Only triangular and quadrilateral faces supported.")
+                    raise ValueError(
+                        "Only triangular and quadrilateral faces supported."
+                    )
 
             tri_faces = (
                 np.asarray(tri_faces, dtype=np.int64)
@@ -643,7 +647,8 @@ def distance_function(
     deduplicate: bool = True,
 ):
     """
-    Build a batched approximate distance function phi(X) for boundary side sets.
+    Build a batched approximate distance function phi(X)
+    for boundary side sets.
 
     Supports:
         2D:
@@ -714,11 +719,13 @@ def distance_function(
         tri_faces = None
         quad_faces = None
 
-        if entities.tri_faces_3d is not None and len(entities.tri_faces_3d) > 0:
+        if entities.tri_faces_3d is not None and \
+                len(entities.tri_faces_3d) > 0:
             tri_faces = coords[jnp.asarray(entities.tri_faces_3d), :]
             # shape (n_tri, 3, 3)
 
-        if entities.quad_faces_3d is not None and len(entities.quad_faces_3d) > 0:
+        if entities.quad_faces_3d is not None and \
+                len(entities.quad_faces_3d) > 0:
             quad_faces = coords[jnp.asarray(entities.quad_faces_3d), :]
             # shape (n_quad, 4, 3)
 
@@ -748,3 +755,269 @@ def distance_function(
 
     else:
         raise ValueError(f"Unsupported spatial dimension: {spatial_dim}")
+
+
+def make_dirichlet_extension_old(
+    domain,
+    dirichlet_bcs: List[DirichletBC],
+    deduplicate: bool = True,
+    r_equiv_m: float = 1.0,
+):
+    if len(dirichlet_bcs) == 0:
+        raise ValueError("At least one DirichletBC is required.")
+
+    # Build one phi_i per Dirichlet BC group.
+    phi_funs = []
+    mus = []
+
+    for bc in dirichlet_bcs:
+        assert bc.sset_name is not None, \
+            "Distance functions require dirichlet bcs to be set with sidesets"
+        phi_i = distance_function(
+            domain, [bc.sset_name],
+            m=r_equiv_m,
+            # side_set_format=side_set_format,
+            side_set_format="exodus",
+            deduplicate=deduplicate,
+        )
+        phi_funs.append(phi_i)
+        # mus.append(float(bc.mu))
+        mus.append(1.0)  # for interpolation stuff
+
+    mus = tuple(mus)
+
+    # If there is only one Dirichlet BC group, no interpolation is needed.
+    # Use its value function directly.
+    if len(dirichlet_bcs) == 1:
+        bc0 = dirichlet_bcs[0]
+
+        def g_ext_single(x, t=None):
+            return bc0.function(x, t)
+
+        return g_ext_single
+
+    def g_ext(x, t):
+        """
+        Pointwise transfinite interpolant.
+        """
+        # phis shape: (K,)
+        phis = jnp.stack([phi_fun(x) for phi_fun in phi_funs], axis=0)
+
+        # powers_i = phi_i^{mu_i}
+        powers = jnp.stack(
+            [
+                phis[i] ** mus[i]
+                for i in range(len(dirichlet_bcs))
+            ],
+            axis=0,
+        )
+
+        # Product-form Shepard/transfinite weights:
+        #
+        # numerator_i = product_{j != i} phi_j^{mu_j}
+        #
+        numerators = []
+
+        for i in range(len(dirichlet_bcs)):
+            prod_i = jnp.asarray(1.0)
+            for j in range(len(dirichlet_bcs)):
+                if j != i:
+                    prod_i = prod_i * powers[j]
+            numerators.append(prod_i)
+
+        numerators = jnp.stack(numerators, axis=0)
+
+        denom = jnp.sum(numerators)
+
+        weights = numerators / denom
+
+        values = jnp.stack(
+            [
+                # dirichlet_bcs[i].value(x, t)
+                dirichlet_bcs[i].function(x, t)
+                for i in range(len(dirichlet_bcs))
+            ],
+            axis=0,
+        )
+
+        return jnp.sum(weights * values, axis=0)
+
+    return g_ext
+
+
+def _as_sset_list(sset_name):
+    """
+    Allow bc.sset_name to be either a string or a list/tuple of strings.
+    """
+    if isinstance(sset_name, str):
+        return [sset_name]
+    elif isinstance(sset_name, (list, tuple)):
+        return list(sset_name)
+    else:
+        raise TypeError(
+            "bc.sset_name must be a string or a list/tuple of strings."
+        )
+
+
+def _weighted_sum_values(weights, values):
+    """
+    Compute sum_i weights_i values_i with broadcasting.
+
+    weights:
+        shape (K,)
+
+    values:
+        shape (K,) for scalar values, or (K, ncomp) for vector values,
+        or more generally (K, ...).
+
+    returns:
+        shape values.shape[1:]
+    """
+    w = weights
+
+    # Expand weights until compatible with values.
+    while w.ndim < values.ndim:
+        w = w[..., None]
+
+    return jnp.sum(w * values, axis=0)
+
+
+def make_dirichlet_extension(
+    domain,
+    dirichlet_bcs: List,
+    deduplicate: bool = True,
+    r_equiv_m: float = 1.0,
+    weight_mu: float = 1.0,
+    eps: float = 1.0e-10,
+    boundary_tol: float = 1.0e-12,
+):
+    """
+    Construct a robust pointwise Dirichlet extension g(x,t).
+
+    Parameters
+    ----------
+    domain:
+        Your domain object.
+
+    dirichlet_bcs:
+        List of Dirichlet BC objects. Each bc should have:
+            bc.sset_name
+            bc.function(x, t)
+
+        bc.sset_name may be a string or a list of strings.
+
+    deduplicate:
+        Passed to distance_function.
+
+    r_equiv_m:
+        m used inside each boundary-group distance function.
+
+    weight_mu:
+        Shepard/transfinite interpolation exponent mu.
+        Usually 1.0 for value interpolation.
+
+    eps:
+        Small positive floor used for inverse-distance weights.
+        For float32, 1e-10 or 1e-8 is often safer than 1e-12.
+
+    boundary_tol:
+        Tolerance used to detect active boundary pieces.
+
+    Returns
+    -------
+    g_ext:
+        Function g_ext(x, t=None).
+    """
+    if len(dirichlet_bcs) == 0:
+        raise ValueError("At least one DirichletBC is required.")
+
+    # Build one phi_i per Dirichlet BC group.
+    phi_funs = []
+
+    for bc in dirichlet_bcs:
+        assert bc.sset_name is not None, (
+            "Distance functions require Dirichlet BCs"
+            " to be associated with side sets."
+        )
+
+        ssets_i = _as_sset_list(bc.sset_name)
+
+        phi_i = distance_function(
+            domain,
+            ssets_i,
+            m=r_equiv_m,
+            side_set_format="exodus",
+            deduplicate=deduplicate,
+        )
+
+        phi_funs.append(phi_i)
+
+    # If there is only one Dirichlet BC group, use its value directly.
+    # No transfinite interpolation is needed.
+    if len(dirichlet_bcs) == 1:
+        bc0 = dirichlet_bcs[0]
+
+        def g_ext_single(x, t=None):
+            return bc0.function(x, t)
+
+        return g_ext_single
+
+    K = len(dirichlet_bcs)
+
+    def g_ext(x, t=None):
+        """
+        Pointwise robust transfinite interpolant.
+        """
+
+        # phis shape: (K,)
+        phis = jnp.stack(
+            [phi_fun(x) for phi_fun in phi_funs],
+            axis=0,
+        )
+
+        # values shape: (K,) for scalar output, or (K, ncomp) for output.
+        values = jnp.stack(
+            [dirichlet_bcs[i].function(x, t) for i in range(K)],
+            axis=0,
+        )
+
+        # ------------------------------------------------------------------
+        # Active-boundary branch.
+        #
+        # active_i = True if x is on Gamma_i.
+        # ------------------------------------------------------------------
+        active = phis <= boundary_tol
+        n_active = jnp.sum(active.astype(phis.dtype))
+
+        has_active = n_active > 0.0
+
+        active_weights = active.astype(phis.dtype) / jnp.maximum(n_active, 1.0)
+
+        g_active = _weighted_sum_values(active_weights, values)
+
+        # ------------------------------------------------------------------
+        # Interior inverse-distance weights.
+        #
+        # Use safe phis to avoid division by zero or log zero.
+        # ------------------------------------------------------------------
+        phi_safe = jnp.maximum(phis, eps)
+
+        # rho_i = phi_i^{-mu}
+        # Use exp/log form for slightly better numerical behavior.
+        rho = jnp.exp(-weight_mu * jnp.log(phi_safe))
+
+        rho_sum = jnp.sum(rho)
+
+        interior_weights = rho / rho_sum
+
+        g_interior = _weighted_sum_values(interior_weights, values)
+
+        # ------------------------------------------------------------------
+        # Select active boundary value if on any boundary group,
+        # otherwise use the interior transfinite interpolant.
+        #
+        # Both branches are finite by construction.
+        # ------------------------------------------------------------------
+        return jnp.where(has_active, g_active, g_interior)
+
+    return g_ext

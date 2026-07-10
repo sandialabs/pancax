@@ -1,5 +1,5 @@
 from jaxtyping import Array, Float
-from typing import Callable, List, Optional, Union
+from typing import Callable, Optional, Union
 import equinox as eqx
 
 
@@ -10,11 +10,12 @@ SetName = Union[None, str]
 # class BaseBC(eqx.Module):
 #     function: BCFunc
 
+
 class BCFunction(eqx.Module):
     func: BCFunc
 
     def __call__(self, x, t):
-        return self.bc_func(x, t)
+        return self.func(x, t)
 
 
 class DirichletBC(eqx.Module):

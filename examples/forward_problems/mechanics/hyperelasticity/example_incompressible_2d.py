@@ -1,4 +1,5 @@
 from pancax import *
+from pancax.networks.parameters import Parameters_v2
 
 ##################
 # for reproducibility
@@ -33,10 +34,10 @@ physics = SolidMechanics(model, PlaneStrain())
 # physics = SolidMechanics(model, PlaneStress())
 
 dirichlet_bcs = [
-  DirichletBC('nset_1', 0),
-  DirichletBC('nset_1', 1),
-  DirichletBC('nset_3', 0),
-  DirichletBC('nset_3', 1),
+  DirichletBC(component=0, nset_name="nset_1", sset_name="sset_1"),
+  DirichletBC(component=1, function=lambda x, t: 1.0 * t, nset_name="nset_1", sset_name="sset_1"),
+  DirichletBC(component=0, nset_name="nset_3", sset_name="sset_3"),
+  DirichletBC(component=1, nset_name="nset_3", sset_name="sset_3"),
 ]
 
 ##################
@@ -48,18 +49,22 @@ problem = ForwardProblem(domain, physics, dirichlet_bcs=dirichlet_bcs)
 # ML setup
 ##################
 loss_function = EnergyLoss()
-params = Parameters(
-  problem, key, 
-  dirichlet_bc_func=dirichlet_bc_func,
-  seperate_networks=False
-)
+network = ResNet(3, 2, 50, 5, jax.nn.tanh, key)
+# params = Parameters(
+#   problem, key, 
+#   dirichlet_bc_func=dirichlet_bc_func,
+#   seperate_networks=False
+# )
+params = Parameters_v2(key, problem, network)
 print(params)
 
 ##################
 # train network
 ##################
-opt = Adam(loss_function, learning_rate=1.0e-3, has_aux=True, clip_gradients=False)
-opt, opt_st = opt.init(params)
+opt = Adam(loss_function, learning_rate=1.0e-4, has_aux=True, clip_gradients=False)
+# opt = LBFGS(loss_function)
+# opt, opt_st = opt.init(params)
+opt_st = opt.init(params)
 
 for epoch in range(10000):
   params, opt_st, loss = opt.step(params, opt_st, problem)

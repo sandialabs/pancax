@@ -1,5 +1,5 @@
 from jaxtyping import Float
-from typing import Callable, Union
+from typing import Callable, List, Union
 import equinox as eqx
 import jax
 import jax.numpy as jnp
@@ -107,3 +107,20 @@ class AbstractPancaxModel(eqx.Module):
         file_name = f"{base_name}_{str(epoch).zfill(7)}.eqx"
         print(f"Serialising current parameters to {file_name}")
         eqx.tree_serialise_leaves(file_name, self)
+
+
+def create_ensemble(
+    type_name, requires_key, keys, *args, **kwargs
+) -> List[AbstractPancaxModel]:
+    # TODO check that keys is actually what we want
+
+    if requires_key:
+        @eqx.filter_vmap
+        def vmap_func(k):
+            return type_name(k, *args, **kwargs)
+    else:
+        @eqx.filter_vmap
+        def vmap_func(_):
+            return type_name(*args, **kwargs)
+
+    return vmap_func(keys)
