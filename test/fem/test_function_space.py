@@ -114,7 +114,8 @@ def test_linear_reproducing_single_point_quadrature(
     nElements = mesh.num_elements
     npts = quadratureRule.xigauss.shape[0]
     exact = jnp.tile(targetDispGrad, (nElements, npts, 1, 1))
-    assert jnp.allclose(dispGrads, exact)
+    result = jnp.allclose(dispGrads, exact).block_until_ready()
+    assert result
 
 
 def test_linear_reproducing_single_point_quadrature_na(
@@ -134,7 +135,8 @@ def test_linear_reproducing_single_point_quadrature_na(
     nElements = mesh.num_elements
     npts = quadratureRule.xigauss.shape[0]
     exact = jnp.tile(targetDispGrad, (nElements, npts, 1, 1))
-    assert jnp.allclose(dispGrads, exact)
+    result = jnp.allclose(dispGrads, exact).block_until_ready()
+    assert result
 
 
 def test_integrate_constant_field_single_point_quadrature(
@@ -297,7 +299,9 @@ def test_linear_reproducing_multi_point_quadrature(
     nElements = mesh.num_elements
     npts = quadratureRule.xigauss.shape[0]
     exact = jnp.tile(targetDispGrad, (nElements, npts, 1, 1))
-    assert jnp.allclose(dispGrads, exact)
+    result = jnp.allclose(dispGrads, exact)
+    result.block_until_ready()
+    assert result
 
 
 def test_linear_reproducing_multi_point_quadrature_na(

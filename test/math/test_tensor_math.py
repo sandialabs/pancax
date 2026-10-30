@@ -257,7 +257,9 @@ def test_sqrtm_jit():
     C = generate_n_random_symmetric_matrices(1)[0]
     sqrtm_jit = jax.jit(tensor_math.sqrtm)
     sqrtC = sqrtm_jit(C)
-    assert not jnp.isnan(sqrtC).any()
+    result = jnp.isnan(sqrtC).any()
+    # result.block_until_ready()
+    assert not result
 
 
 def test_sqrtm():

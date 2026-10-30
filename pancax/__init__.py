@@ -45,18 +45,19 @@ from .fem import \
     Tet4Element, \
     Tet10Element
 from .history_writer import EnsembleHistoryWriter, HistoryWriter
-from .loss_functions import \
-    DirichletBCLoss, \
-    NeumannBCLoss, \
-    FullFieldDataLoss, \
-    ICLossFunction, \
-    StrongFormResidualLoss, \
-    CombineLossFunctions, \
-    EnergyLoss, \
-    EnergyAndResidualLoss, \
-    EnergyResidualAndReactionLoss, \
-    ResidualMSELoss, \
-    UserDefinedLossFunction
+# from .loss_functions import \
+#     # DirichletBCLoss, \
+#     # NeumannBCLoss, \
+#     # FullFieldDataLoss, \
+#     # ICLossFunction, \
+#     # StrongFormResidualLoss, \
+#     # CombineLossFunctions, \
+#     EnergyLoss
+#     # EnergyAndResidualLoss, \
+#     # EnergyResidualAndReactionLoss, \
+#     # ResidualMSELoss, \
+#     # UserDefinedLossFunction
+from .loss_functions import EnergyLoss
 from .networks import \
     Field, \
     InputPolyconvexNN, \
@@ -155,17 +156,17 @@ __all__ = [
     "EnsembleHistoryWriter",
     "HistoryWriter",
     # loss functions
-    "DirichletBCLoss",
-    "NeumannBCLoss",
-    "FullFieldDataLoss",
-    "ICLossFunction",
-    "StrongFormResidualLoss",
-    "CombineLossFunctions",
+    # "DirichletBCLoss",
+    # "NeumannBCLoss",
+    # "FullFieldDataLoss",
+    # "ICLossFunction",
+    # "StrongFormResidualLoss",
+    # "CombineLossFunctions",
     "EnergyLoss",
-    "EnergyAndResidualLoss",
-    "EnergyResidualAndReactionLoss",
-    "ResidualMSELoss",
-    "UserDefinedLossFunction",
+    # "EnergyAndResidualLoss",
+    # "EnergyResidualAndReactionLoss",
+    # "ResidualMSELoss",
+    # "UserDefinedLossFunction",
     # networks
     "Field",
     "InputPolyconvexNN",
